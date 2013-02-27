@@ -12,7 +12,7 @@
        http://www.springframework.org/schema/tx 
        http://www.springframework.org/schema/tx/spring-tx-2.5.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
 
-    <bean id="loadBalancingPublicImpl" class="org.openstack.atlas.api.resource.RootResource" scope="request"/>
+    <bean id="loadBalancingPublicImpl" class="org.daylight.pathweaver.api.resource.RootResource" scope="request"/>
 
     <!--DOZER SETTINGS-->
     <bean id="dozerBeanMapper" class="org.dozer.DozerBeanMapper">
@@ -30,7 +30,7 @@
         </property>
         <property name="eventListeners">
             <list>
-                <bean class="org.openstack.atlas.api.mapper.dozer.EventListener"/>
+                <bean class="org.daylight.pathweaver.api.mapper.dozer.EventListener"/>
             </list>
         </property>
     </bean>

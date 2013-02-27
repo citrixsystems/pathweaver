@@ -5,8 +5,8 @@
           http://dozer.sourceforge.net/schema/beanmapping.xsd">
 
     <mapping map-null="false" wildcard="false">
-        <class-a>org.openstack.atlas.core.api.v1.VirtualIp</class-a>
-        <class-b>org.openstack.atlas.service.domain.entity.VirtualIp</class-b>
+        <class-a>org.daylight.pathweaver.core.api.v1.VirtualIp</class-a>
+        <class-b>org.daylight.pathweaver.service.domain.entity.VirtualIp</class-b>
         <field>
             <a>type</a>
             <b>vipType</b>
@@ -14,8 +14,8 @@
     </mapping>
 
     <mapping map-null="false" wildcard="false">
-        <class-a>org.openstack.atlas.service.domain.entity.LoadBalancerJoinVip</class-a>
-        <class-b>org.openstack.atlas.core.api.v1.VirtualIp</class-b>
+        <class-a>org.daylight.pathweaver.service.domain.entity.LoadBalancerJoinVip</class-a>
+        <class-b>org.daylight.pathweaver.core.api.v1.VirtualIp</class-b>
         <field>
             <a>virtualIp.address</a>
             <b>address</b>

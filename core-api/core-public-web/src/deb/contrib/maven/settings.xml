@@ -2,24 +2,24 @@
 <settings>
     <servers>
         <server>
-            <id>repos.openstack.atlas</id>
-            <username>openstack-atlas</username>
-            <password>atlas</password>
+            <id>repos.daylight.pathweaver</id>
+            <username>daylight-pathweaver</username>
+            <password>pathweaver</password>
         </server>
     </servers>
 
     <profiles>
         <profile>
-            <id>Openstack Atlas Development</id>
+            <id>daylight Pathweaver Development</id>
             <repositories>
                 <repository>
-                    <id>repos.openstack.atlas.public</id>
+                    <id>repos.daylight.pathweaver.public</id>
                     <url>http://50.57.100.173:80/m2/content/groups/public</url>
                 </repository>
             </repositories>
             <pluginRepositories>
                 <pluginRepository>
-                    <id>repos.openstack.atlas.public.plugins</id>
+                    <id>repos.daylight.pathweaver.public.plugins</id>
                     <url>http://50.57.100.173:80/m2/content/groups/public</url>
                 </pluginRepository>
             </pluginRepositories>
@@ -27,6 +27,6 @@
     </profiles>
 
     <activeProfiles>
-        <activeProfile>Openstack Atlas Development</activeProfile>
+        <activeProfile>daylight Pathweaver Development</activeProfile>
     </activeProfiles>
 </settings>

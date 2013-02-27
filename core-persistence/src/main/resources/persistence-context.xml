@@ -10,7 +10,7 @@
        http://www.springframework.org/schema/tx
        http://www.springframework.org/schema/tx/spring-tx-2.5.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
 
-    <context:component-scan base-package="org.openstack.atlas.service.domain"/>
+    <context:component-scan base-package="org.daylight.pathweaver.service.domain"/>
     <context:annotation-config/>
 
     <bean id="core_entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">

@@ -1,14 +1,14 @@
 Still a work in progress
 
-1.  Fork Atlas-lb
-Go to https://github.com/rackspace/atlas-lb and fork the project to your account.
+1.  Fork Pathweaver
+Go to https://github.com/daylight/pathweaver and fork the project to your account.
 
 2. Clone the repo to your machine
-git clone git@github.com:youraccount/atlas-lb.git
+git clone git@github.com:youraccount/pathweaver.git
 
 3. Add remote repository as upstream
-cd atlas-lb
-git remote add upstream git@github.com:rackspace/atlas-lb.git
+cd pathweaver
+git remote add upstream git@github.com:daylight/pathweaver.git
 
 4. Create a branch from master
 git checkout -b myfeature master
@@ -29,4 +29,4 @@ git checkout myfeature
 git rebase master
 git push origin master
 
-7. Issue a pull request from youraccount/atlas-lb:master to rackspace/atlas-lb:master
+7. Issue a pull request from youraccount/pathweaver:master to daylight/pathweaver:master

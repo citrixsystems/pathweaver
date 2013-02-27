@@ -15,14 +15,14 @@
     <!--<import resource="db-services.xml" />-->
     <!--<import resource="db-usage-services.xml" />-->
     <import resource="jms-queues.xml" />
-    <context:component-scan base-package="org.openstack.atlas.api"/>
+    <context:component-scan base-package="org.daylight.pathweaver.api"/>
 
     <context:annotation-config/>
     <aop:aspectj-autoproxy />
 
     <!--STANDALONE SPRING SETTINGS-->
     <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="location" value="file:/etc/openstack/atlas/public-api.conf"/>
+        <property name="location" value="file:/etc/daylight/pathweaver/public-api.conf"/>
     </bean>
 
     <bean id="jsonProvider" class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>

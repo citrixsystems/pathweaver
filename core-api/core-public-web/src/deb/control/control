@@ -1,10 +1,10 @@
-Package: openstack-atlas
+Package: daylight-pathweaver
 Version: [[version]]
 Section: libs
 Priority: optional
 Architecture: all
 Depends: python-software-properties, sun-java6-jdk, sun-java6-jre, unzip, mysql-server
-Maintainer: Jorge Miramontes <jorge.miramontes@rackspace.com>
-Description: Openstack Atlas Cloud Load Balancing solution
+Maintainer: Youcef Laribi <youcef.laribi@daylight.org>
+Description: daylight Pathweaver LBaaS solution
  that currently runs under the Glassfish web server
 Distribution: development

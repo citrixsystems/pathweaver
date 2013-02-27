@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <bindings version="2.1" xmlns="http://java.sun.com/xml/ns/jaxb">
 
-    <bindings scd="x-schema::tns" xmlns:tns="http://docs.openstack.org/atlas/api/v1.1">
+    <bindings scd="x-schema::tns" xmlns:tns="http://docs.daylight.org/pathweaver/api/v1.1">
         <schemaBindings map="true"/>
         
         <!--Bindings for classes-->

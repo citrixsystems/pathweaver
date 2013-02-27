@@ -1,0 +1,45 @@
+package org.daylight.pathweaver.service.domain.service;
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.junit.experimental.runners.Enclosed;
+import org.junit.runner.RunWith;
+import org.daylight.pathweaver.datamodel.CoreLoadBalancerStatus;
+import org.daylight.pathweaver.service.domain.entity.LoadBalancer;
+import org.daylight.pathweaver.service.domain.exception.EntityNotFoundException;
+import org.daylight.pathweaver.service.domain.exception.PersistenceServiceException;
+import org.daylight.pathweaver.service.domain.repository.VirtualIpRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+@RunWith(Enclosed.class)
+public class VirtualIpServiceITest {
+
+    @RunWith(SpringJUnit4ClassRunner.class)
+    public static class WhenRemovingAllVipsFromALoadBalancer extends Base {
+        @Autowired
+        private VirtualIpService virtualIpService;
+
+        @Autowired
+        private VirtualIpRepository virtualIpRepository;
+
+        @Before
+        public void setUp() throws PersistenceServiceException {
+            loadBalancer = loadBalancerService.create(loadBalancer);
+            loadBalancer = loadBalancerRepository.changeStatus(loadBalancer, CoreLoadBalancerStatus.ACTIVE);
+        }
+
+        @Test
+        public void shouldRemoveAllVips() throws EntityNotFoundException {
+            LoadBalancer savedLb = loadBalancerRepository.getByIdAndAccountId(loadBalancer.getId(), loadBalancer.getAccountId());
+            Assert.assertTrue(!savedLb.getLoadBalancerJoinVipSet().isEmpty() || !savedLb.getLoadBalancerJoinVipSet().isEmpty());
+
+            virtualIpService.removeAllVipsFromLoadBalancer(savedLb);
+            
+            savedLb = loadBalancerRepository.getById(savedLb.getId());
+            Assert.assertTrue(savedLb.getLoadBalancerJoinVipSet().isEmpty() && savedLb.getLoadBalancerJoinVipSet().isEmpty());
+        }
+    }
+}

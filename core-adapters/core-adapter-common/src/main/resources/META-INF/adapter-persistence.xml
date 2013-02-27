@@ -4,11 +4,11 @@
 
     <persistence-unit name="loadbalancingadapter" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
-        <class>org.openstack.atlas.adapter.common.entity.Cluster</class>
-        <class>org.openstack.atlas.adapter.common.entity.Host</class>
-        <class>org.openstack.atlas.adapter.common.entity.HostStatus</class>
-        <class>org.openstack.atlas.adapter.common.entity.VirtualIpv4</class>
-        <class>org.openstack.atlas.adapter.common.entity.VirtualIpv6</class>
+        <class>org.daylight.pathweaver.adapter.common.entity.Cluster</class>
+        <class>org.daylight.pathweaver.adapter.common.entity.Host</class>
+        <class>org.daylight.pathweaver.adapter.common.entity.HostStatus</class>
+        <class>org.daylight.pathweaver.adapter.common.entity.VirtualIpv4</class>
+        <class>org.daylight.pathweaver.adapter.common.entity.VirtualIpv6</class>
         <!-- Hibernate Properties -->
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect"/>

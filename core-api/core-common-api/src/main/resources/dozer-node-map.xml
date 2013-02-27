@@ -5,8 +5,8 @@
           http://dozer.sourceforge.net/schema/beanmapping.xsd">
 
     <mapping map-null="false">
-        <class-a>org.openstack.atlas.core.api.v1.Node</class-a>
-        <class-b>org.openstack.atlas.service.domain.entity.Node</class-b>
+        <class-a>org.daylight.pathweaver.core.api.v1.Node</class-a>
+        <class-b>org.daylight.pathweaver.service.domain.entity.Node</class-b>
         <field>
             <a get-method="isEnabled">enabled</a>
             <b get-method="isEnabled">enabled</b>

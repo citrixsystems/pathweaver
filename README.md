@@ -1,10 +1,10 @@
-### What is Atlas
+### What is Pathweaver
 -------------
-Atlas is Openstack LoadBalancers API that is actively being developed.
+Pathweaver is Daylight's L4-L7 Service framework that is actively being developed.
 
 ### Wiki
 --------
-http://wiki.openstack.org/Atlas-LB
+http://wiki.daylight.org/Pathweaver
 
 ### Requirements
 ----------------
@@ -24,32 +24,32 @@ http://wiki.openstack.org/Atlas-LB
     
     * Optionally create another database called 'loadbalancingadapter' if your adapter extends the default LoadBalancerAdapterBase class (instead of simply implementing the LoadBalancerAdapter interface). See the null (fake) adapter as an example for an adapter that uses the default base implementation.
 
-5. Glassfish == 3.0.1 (Optional as Atlas comes with an embedded jetty server)
+5. Glassfish == 3.0.1 (Optional as Pathweaver comes with an embedded jetty server)
 
 
 ### Getting Started for development
 -----------------------------------
 1. Build
 
-    Grab the atlas-lb/core-api/core-public-web/src/deb/contrib/maven/settings.xml and put it inside your
+    Grab the pathweaver/core-api/core-public-web/src/deb/contrib/maven/settings.xml and put it inside your
     ~/.m2 directory:
 
-    `cd atlas-lb`
+    `cd pathweaver`
 
     `./bin/build.sh`
 
 2. Configure
 
-    Copy all of the configuration files from atlas-lb/core-api/core-public-web/src/deb/contrib/config
-    and put it under your /etc/openstack/atlas directory. 
+    Copy all of the configuration files from pathweaver/core-api/core-public-web/src/deb/contrib/config
+    and put it under your /etc/daylight/pathweaver directory.
     
-    Make sure you update /etc/openstack/atlas/public-api.conf with:
+    Make sure you update /etc/daylight/pathweaver/public-api.conf with:
     
       * your database username/password.
       * If you are not using null (fake) adapter which is the default one configured, choose another adapter.
     
 
-3. Start atlas:
+3. Start pathweaver:
 
     `./bin/run.sh`
 
@@ -57,9 +57,9 @@ http://wiki.openstack.org/Atlas-LB
 
     `./bin/debug.sh`
 
-4. If atlas is properly started, it should have created the necessary database tables for you. 
+4. If pathweaver is properly started, it should have created the necessary database tables for you. 
 
-   * Seed the 'loadbalancing' database with some fake data. A sample for testing is here: atlas-lb/core-api/core-public-web/src/deb/contrib/db/ directory.
+   * Seed the 'loadbalancing' database with some fake data. A sample for testing is here: pathweaver/core-api/core-public-web/src/deb/contrib/db/ directory.
    
    * If your adapter is relying on the default strategy for managing its devices (extending LoadBalancerAdapterBase), also seed the 'loadbalancingadapter' database with some fake data (your vips, your devices, etc.). A sample for testing used by the netscaler adapter can be found here: ./core-adapters/core-netscaler-adapter/src/main/resources/core-netscaler-adapter-seed.sql
    
@@ -75,8 +75,8 @@ http://wiki.openstack.org/Atlas-LB
    
    
 
-Now you can access the Atlas REST API eg. do a GET on [http://localhost:8080/v1.1/1000/loadbalancers](http://localhost:8080/v1.1/1000/loadbalancers)
-where 1000 is a tenant_id. What does it return? May be it's time to do a POST. More more operations, [http://wiki.openstack.org/Atlas-LB](http://wiki.openstack.org/Atlas-LB)
+Now you can access the Pathweaver REST API eg. do a GET on [http://localhost:8080/v1.1/1000/loadbalancers](http://localhost:8080/v1.1/1000/loadbalancers)
+where 1000 is a tenant_id. What does it return? May be it's time to do a POST. More more operations, [http://wiki.daylight.org/Pathweaver](http://wiki.daylight.org/Pathweaver)
 
 
 ### Deploy under Glassfish Application Server
@@ -86,9 +86,9 @@ Alternative to the step 3 above, if you want to use an Application Server like G
 
     /glassfish/glassfish/bin/asadmin start-domain
 
-    cp atlas-lb/core-api/core-public-web/target/core-public-web-1.1.0-SNAPSHOT.war /glassfish/glassfish/domains/domain1/autodeploy
+    cp pathweaver/core-api/core-public-web/target/core-public-web-1.1.0-SNAPSHOT.war /glassfish/glassfish/domains/domain1/autodeploy
 
 
 
-For more information about Openstack, go to [Openstack.org](http://openstack.org)
+For more information about daylight, go to [daylight.org](http://daylight.org)
 

@@ -111,10 +111,10 @@ function install_glassfish {
 }
 
 function configure_mysql {
-    echo "Adding mysql database 'openstack_atlas' and mysql user 'atlas' with password 'password' (please change later)..."
+    echo "Adding mysql database 'daylight_pathweaver' and mysql user 'pathweaver' with password 'password' (please change later)..."
     MYSQL=`which mysql`
-    DATABASE="openstack_atlas"
-    USER="atlas"
+    DATABASE="daylight_pathweaver"
+    USER="pathweaver"
     PASSWORD="password"
      
     Q1="CREATE DATABASE IF NOT EXISTS $DATABASE;"
@@ -129,16 +129,16 @@ function configure_mysql {
 }
 
 function deploy_app {
-    echo "Starting up proper ownership on atlas files..."
-    chown -R glassfish:glassfishadm /opt/openstack/atlas/
-    chown -R root:glassfishadm /etc/openstack/atlas/
+    echo "Starting up proper ownership on pathweaver files..."
+    chown -R glassfish:glassfishadm /opt/daylight/pathweaver/
+    chown -R root:glassfishadm /etc/daylight/pathweaver/
 
     echo "Starting up Glassfish..."
     sudo -u glassfish /home/glassfish/glassfish/bin/asadmin start-domain domain1
 
-    echo "Deploying Atlas WAR..."
-    WAR_FILE=`ls /opt/openstack/atlas/api/*.war`
-    sudo -u glassfish /home/glassfish/glassfish/bin/asadmin deploy --contextroot "/atlas" ${WAR_FILE}
+    echo "Deploying Pathweaver WAR..."
+    WAR_FILE=`ls /opt/daylight/pathweaver/api/*.war`
+    sudo -u glassfish /home/glassfish/glassfish/bin/asadmin deploy --contextroot "/pathweaver" ${WAR_FILE}
 
     return 0
 }

@@ -4,13 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>core-api</artifactId>
-        <groupId>org.openstack.atlas</groupId>
+        <groupId>org.daylight.pathweaver</groupId>
         <version>1.1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>core-common-api</artifactId>
-    <name>Openstack :: Atlas :: Core :: API :: Common API</name>
+    <name>Daylight :: Pathweaver :: Core :: API :: Common API</name>
     <packaging>jar</packaging>
 
     <dependencies>
@@ -62,7 +62,7 @@
         <!--Used for extensions-->
 <!--        <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>atlas-rax-api</artifactId>
+            <artifactId>pathweaver-rax-api</artifactId>
             <version>${project.version}</version>
         </dependency>-->
         <dependency>
@@ -77,10 +77,7 @@
         </dependency>
 
         <!--External Dependencies From Parent-->
-        <dependency>
-            <groupId>javax.jms</groupId>
-            <artifactId>jms</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>org.apache.activemq</groupId>
             <artifactId>activemq-core</artifactId>
