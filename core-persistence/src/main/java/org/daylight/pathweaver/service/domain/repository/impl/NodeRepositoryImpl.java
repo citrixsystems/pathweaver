@@ -87,8 +87,7 @@ public class NodeRepositoryImpl implements NodeRepository {
         }
 
         for (Node node : loadBalancer.getNodes()) {
-            if (!node.getId().equals(nid)) {
-            } else {
+            if (node.getId().equals(nid)) {
                 return node;
             }
         }

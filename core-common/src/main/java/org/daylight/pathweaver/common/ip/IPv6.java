@@ -17,7 +17,6 @@ public class IPv6 implements Comparable<IPv6> {
     private static final BigInteger maxIp;
     private static final Pattern ipPattern;
     private static final BigInteger byte255;
-    private static final BigInteger max32bit;
     private static final BigInteger vipOctetMask;
 
     static {
@@ -26,7 +25,6 @@ public class IPv6 implements Comparable<IPv6> {
         ipPattern = Pattern.compile(ippatternstr);
         maxIp = new BigInteger("340282366920938463463374607431768211455");
         byte255 = new BigInteger("255");
-        max32bit = new BigInteger("2147483648");
         vipOctetMask = new BigInteger("18446744073709551615");
     }
 

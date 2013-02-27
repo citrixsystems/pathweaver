@@ -24,8 +24,10 @@ classes/
 *.log
 *.log.*
 tags
+sonar-project.properties
 
 ##other ignores
 .idea/*
+.sonar/*
 log.build
 log.txt

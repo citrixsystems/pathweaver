@@ -113,9 +113,7 @@ public class HostRepository {
                 if (mincount == 0) {
                     mincount = count;
                     hostWithMinimumLoadBalancers = host;
-                } else if (mincount <= count) {
-                    //do nothing
-                } else {
+                } else if (mincount > count) {
                     mincount = count;
                     hostWithMinimumLoadBalancers = host;
                 }

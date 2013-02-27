@@ -55,7 +55,7 @@ public class AbderaSupport implements MessageBodyWriter<Object>, MessageBodyRead
 
     public void writeTo(Object feedOrEntry, Class<?> aClass, Type type, Annotation[] annotations, MediaType mediaType, MultivaluedMap<String, Object> stringObjectMultivaluedMap, OutputStream outputStream) throws IOException, WebApplicationException {
         if (!(feedOrEntry instanceof Feed) && !(feedOrEntry instanceof Entry)) {
-            //TODO: Failcase goes here
+            throw new IOException("Unexpected object. Expecting a feed object or a feed entry object");
         }
 
         final Source elementSource = (Source) feedOrEntry;
