@@ -31,16 +31,16 @@ import java.util.Set;
 
 @Service
 public class NodeServiceImpl extends BaseService implements NodeService {
-    private final Log LOG = LogFactory.getLog(NodeServiceImpl.class);
+    private final Log logger = LogFactory.getLog(NodeServiceImpl.class);
 
     @Autowired
-    protected NodeRepository nodeRepository;
+    private NodeRepository nodeRepository;
 
     @Autowired
-    protected LoadBalancerRepository loadBalancerRepository;
+    private LoadBalancerRepository loadBalancerRepository;
 
     @Autowired
-    protected AccountLimitService accountLimitService;
+    private AccountLimitService accountLimitService;
 
     @Override
     @Transactional(value="core_transactionManager")
@@ -55,14 +55,14 @@ public class NodeServiceImpl extends BaseService implements NodeService {
             throw new BadRequestException(String.format("Nodes must not exceed %d per load balancer.", nodeLimit));
         }
 
-        LOG.debug("Verifying that there are no duplicate nodes...");
+        logger.debug("Verifying that there are no duplicate nodes...");
         if (detectDuplicateNodes(dbLoadBalancer, loadBalancer)) {
-            LOG.warn("Duplicate nodes found! Sending failure response back to client...");
+            logger.warn("Duplicate nodes found! Sending failure response back to client...");
             throw new UnprocessableEntityException("Duplicate nodes detected. One or more nodes already configured on load balancer.");
         }
 
         if (!areAddressesValidForUse(loadBalancer.getNodes(), dbLoadBalancer)) {
-            LOG.warn("Internal Ips found! Sending failure response back to client...");
+            logger.warn("Internal Ips found! Sending failure response back to client...");
             throw new BadRequestException("Invalid node address. The load balancer's virtual ip or host end point address cannot be used as a node address.");
         }
 
@@ -72,18 +72,18 @@ public class NodeServiceImpl extends BaseService implements NodeService {
                 throw new BadRequestException(String.format("Invalid node address. The address '%s' is currently not accepted for this request.", badNode.getAddress()));
             }
         } catch (IPStringConversionException1 ipe) {
-            LOG.warn("IPStringConversionException thrown. Sending error response to client...");
-            throw new BadRequestException("IP address was not converted properly, we are unable to process this request.");
+            logger.warn("IPStringConversionException thrown. Sending error response to client...");
+            throw new BadRequestException("IP address was not converted properly, we are unable to process this request.", ipe);
         } catch (IpTypeMissMatchException ipte) {
-            LOG.warn("EntityNotFoundException thrown. Sending error response to client...");
-            throw new BadRequestException("IP addresses type are mismatched, we are unable to process this request.");
+            logger.warn("EntityNotFoundException thrown. Sending error response to client...");
+            throw new BadRequestException("IP addresses type are mismatched, we are unable to process this request.", ipte);
         }
 
-        LOG.debug("Updating the lb status to pending_update");
+        logger.debug("Updating the lb status to pending_update");
         dbLoadBalancer.setStatus(CoreLoadBalancerStatus.PENDING_UPDATE);
 
-        LOG.debug("Current number of nodes for loadbalancer: " + dbLoadBalancer.getNodes().size());
-        LOG.debug("Number of new nodes to be added: " + loadBalancer.getNodes().size());
+        logger.debug("Current number of nodes for loadbalancer: " + dbLoadBalancer.getNodes().size());
+        logger.debug("Number of new nodes to be added: " + loadBalancer.getNodes().size());
         NodesHelper.setNodesToStatus(loadBalancer, CoreNodeStatus.ONLINE);
 
         for (Node newNode : loadBalancer.getNodes()) {
@@ -102,7 +102,7 @@ public class NodeServiceImpl extends BaseService implements NodeService {
 
         Node nodeToUpdate = loadBalancer.getNodes().iterator().next();
         if (!loadBalancerContainsNode(dbLoadBalancer, nodeToUpdate)) {
-            LOG.warn("Node to update not found. Sending response to client...");
+            logger.warn("Node to update not found. Sending response to client...");
             throw new EntityNotFoundException(String.format("Node with id #%d not found for loadbalancer #%d", nodeToUpdate.getId(),
                             loadBalancer.getId()));
         }
@@ -110,16 +110,16 @@ public class NodeServiceImpl extends BaseService implements NodeService {
         isLbActive(dbLoadBalancer);
 
         Node nodeBeingUpdated = loadBalancer.getNodes().iterator().next();
-        LOG.debug("Verifying that we have an at least one active node...");
+        logger.debug("Verifying that we have an at least one active node...");
         if (!activeNodeCheck(dbLoadBalancer, nodeBeingUpdated)) {
-            LOG.warn("No active nodes found! Sending failure response back to client...");
+            logger.warn("No active nodes found! Sending failure response back to client...");
             throw new UnprocessableEntityException("One or more nodes must remain ENABLED.");
         }
 
-        LOG.debug("Nodes on dbLoadbalancer: " + dbLoadBalancer.getNodes().size());
+        logger.debug("Nodes on dbLoadbalancer: " + dbLoadBalancer.getNodes().size());
         for (Node n : dbLoadBalancer.getNodes()) {
             if (n.getId().equals(nodeToUpdate.getId())) {
-                LOG.info("Node to be updated found: " + n.getId());
+                logger.info("Node to be updated found: " + n.getId());
                 if (nodeToUpdate.isEnabled() != null) {
                     n.setEnabled(nodeToUpdate.isEnabled());
                 }
@@ -139,7 +139,7 @@ public class NodeServiceImpl extends BaseService implements NodeService {
                 break;
             }
         }
-        LOG.debug("Updating the lb status to pending_update");
+        logger.debug("Updating the lb status to pending_update");
         dbLoadBalancer.setStatus(CoreLoadBalancerStatus.PENDING_UPDATE);
         dbLoadBalancer.setUserName(loadBalancer.getUserName());
 
@@ -191,7 +191,9 @@ public class NodeServiceImpl extends BaseService implements NodeService {
             ipAddressesAndPorts.add(dbNode.getAddress() + ":" + dbNode.getPort());
         }
         for (Node queueNode : queueLb.getNodes()) {
-            if   (!ipAddressesAndPorts.add(queueNode.getAddress() + ":" + queueNode.getPort())) return true;
+            if   (!ipAddressesAndPorts.add(queueNode.getAddress() + ":" + queueNode.getPort())) {
+                return true;
+            }
         }
         return false;
     }

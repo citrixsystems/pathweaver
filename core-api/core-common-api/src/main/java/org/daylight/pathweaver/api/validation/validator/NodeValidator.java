@@ -14,8 +14,8 @@ import static org.daylight.pathweaver.api.validation.ValidatorBuilder.build;
 @Component
 @Scope("request")
 public class NodeValidator implements ResourceValidator<Node> {
-    protected Validator<Node> validator;
-    protected NodeValidatorBuilder ruleBuilder;
+    private Validator<Node> validator;
+    private NodeValidatorBuilder ruleBuilder;
 
     @Autowired
     public NodeValidator(NodeValidatorBuilder ruleBuilder) {

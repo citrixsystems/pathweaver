@@ -19,10 +19,10 @@ import java.util.Set;
 
 @Service
 public class VirtualIpServiceImpl implements VirtualIpService {
-    private final Log LOG = LogFactory.getLog(VirtualIpServiceImpl.class);
+    private final Log logger = LogFactory.getLog(VirtualIpServiceImpl.class);
 
     @Autowired
-    protected VirtualIpRepository virtualIpRepository;
+    private VirtualIpRepository virtualIpRepository;
 
 
     @Override
@@ -66,7 +66,7 @@ public class VirtualIpServiceImpl implements VirtualIpService {
         // By default, we always allocate at least an IPv6 address if none is specified by the user or added by extensions
         if (loadBalancer.getLoadBalancerJoinVipSet().isEmpty())
         {
-            LOG.debug("Assigning the default IPV6 VIP to the loadbalancer");
+            logger.debug("Assigning the default IPV6 VIP to the loadbalancer");
             assignDefaultIPv6ToLoadBalancer(loadBalancer);
         }
 
@@ -129,7 +129,9 @@ public class VirtualIpServiceImpl implements VirtualIpService {
 
         Set<Integer> accountsInAccount = new HashSet<Integer>(virtualIpRepository.getAccountIdsAlreadyShaHashed());
 
-        if (accountsInAccount.contains(accountId)) return;
+        if (accountsInAccount.contains(accountId)) {
+            return;
+        }
 
         Account account = new Account();
         String accountIdStr = String.format("%d", accountId);
@@ -138,7 +140,7 @@ public class VirtualIpServiceImpl implements VirtualIpService {
         try {
             virtualIpRepository.persist(account);
         } catch (Exception e) {
-            LOG.warn("High concurrency detected. Ignoring...");
+            logger.warn("High concurrency detected. Ignoring...");
         }
     }
 
@@ -213,7 +215,7 @@ public class VirtualIpServiceImpl implements VirtualIpService {
 
     protected void reclaimVirtualIp(LoadBalancer lb, VirtualIp virtualIp) {
         if (!isVipAllocatedToAnotherLoadBalancer(lb, virtualIp)) {
-            LOG.debug("Deallocating an address");
+            logger.debug("Deallocating an address");
             virtualIpRepository.removeVirtualIp(virtualIp);
         }
     }
@@ -226,7 +228,7 @@ public class VirtualIpServiceImpl implements VirtualIpService {
 
         for (LoadBalancerJoinVip joinRecord : joinRecords) {
             if (!joinRecord.getLoadBalancer().getId().equals(lb.getId())) {
-                LOG.debug(String.format("Virtual ip '%d' is used by a load balancer other than load balancer '%d'.", virtualIp.getId(), lb.getId()));
+                logger.debug(String.format("Virtual ip '%d' is used by a load balancer other than load balancer '%d'.", virtualIp.getId(), lb.getId()));
                 return true;
             }
         }

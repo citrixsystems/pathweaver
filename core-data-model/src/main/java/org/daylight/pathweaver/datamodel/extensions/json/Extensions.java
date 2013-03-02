@@ -7,7 +7,9 @@ public class Extensions {
     private Collection<Extension> extensions;
 
     public Collection<Extension> getExtensions() {
-        if (extensions == null) extensions = new ArrayList<Extension>();
+        if (extensions == null) {
+            extensions = new ArrayList<Extension>();
+        }
         return extensions;
     }
 

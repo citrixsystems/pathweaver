@@ -14,14 +14,14 @@ import javax.jms.Session;
 
 @Service
 public class AsyncServiceImpl implements AsyncService {
-    private final Log LOG = LogFactory.getLog(AsyncServiceImpl.class);
+    private final Log logger = LogFactory.getLog(AsyncServiceImpl.class);
 
     @Autowired
     private JmsTemplate jmsTemplate;
 
     @Override
     public void callAsyncLoadBalancingOperation(String operation, final MessageDataContainer dataContainer) throws JMSException {
-        LOG.debug(String.format("Sending message to '%s' queue...", operation));
+        logger.debug(String.format("Sending message to '%s' queue...", operation));
         jmsTemplate.send(operation, new MessageCreator() {
             public Message createMessage(Session session) throws JMSException {
                 return session.createObjectMessage(dataContainer);

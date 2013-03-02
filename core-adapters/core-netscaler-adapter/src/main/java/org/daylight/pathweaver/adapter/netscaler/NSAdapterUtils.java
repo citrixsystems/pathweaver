@@ -30,7 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Service
 public class NSAdapterUtils
 {
-    public static Log LOG = LogFactory.getLog(NSAdapterUtils.class.getName());
+    private static Log logger = LogFactory.getLog(NSAdapterUtils.class.getName());
 
     @Autowired 
     private AdapterVirtualIpService adapterVirtualIpService;
@@ -70,9 +70,9 @@ public class NSAdapterUtils
     public String performRequest(String method, String urlStr, String requestBody)
            throws AdapterException
     {
-        LOG.debug(String.format("Service URL string: '%s'...", urlStr));
+        logger.debug(String.format("Service URL string: '%s'...", urlStr));
 		
-        LOG.debug(String.format("Load balancer request " + new Throwable().getStackTrace()[1].getMethodName() + ": '%s'...", requestBody));
+        logger.debug(String.format("Load balancer request " + new Throwable().getStackTrace()[1].getMethodName() + ": '%s'...", requestBody));
 	
         Map<String, String> headers = new HashMap<String, String>();
 		
@@ -90,9 +90,9 @@ public class NSAdapterUtils
             e.printStackTrace(new PrintWriter(sw));
             String stacktrace = sw.toString();
             
-            LOG.debug(e.getMessage());
-            LOG.debug(stacktrace);
-            throw new AdapterException("Exception occurred: " + e.getMessage(), new Error());
+            logger.debug(e.getMessage());
+            logger.debug(stacktrace);
+            throw new AdapterException("Exception occurred: " + e.getMessage(), e);
         }
     }
 
@@ -107,7 +107,6 @@ public class NSAdapterUtils
     public Object getResponseObject(String response)
            throws AdapterException
     {
-        String requestBody;
 	 	
         try 
         {
@@ -117,9 +116,8 @@ public class NSAdapterUtils
 		} 
         catch (JAXBException e) 
         {
-			System.out.println("error: " + e.toString());
-			e.printStackTrace();
-			throw new AdapterException("Failed to transform a XML Payload to JAXB object", new Error());   
+			logger.debug("error: " + e.toString());;
+			throw new AdapterException("Failed to transform a XML Payload to JAXB object", e);
 		}
 	}
 
@@ -139,12 +137,12 @@ public class NSAdapterUtils
             m.marshal(marshalObject, writer);
 	        requestBody = writer.toString();
 	
-	        LOG.debug("request body: " + requestBody);
+	        logger.debug("request body: " + requestBody);
 	    } 
         catch (JAXBException e) 
         {
-	        LOG.error("Failed during JAXB-> XML conversion : ", e);
-	        throw new AdapterException("Failed to transform a JAXB object to XML payload...", new Error());
+	        logger.error("Failed during JAXB-> XML conversion : ", e);
+	        throw new AdapterException("Failed to transform a JAXB object to XML payload...", e);
 	    }
 
     	return requestBody;
@@ -153,12 +151,6 @@ public class NSAdapterUtils
     public void populateNSLoadBalancerForUpdate(LoadBalancer lb, com.citrix.cloud.netscaler.pathweaver.docs.loadbalancers.api.v1.LoadBalancer nsLB)
            throws BadRequestException
     {
-        com.citrix.cloud.netscaler.pathweaver.docs.loadbalancers.api.v1.VirtualIp nsVIP = new com.citrix.cloud.netscaler.pathweaver.docs.loadbalancers.api.v1.VirtualIp();
-        com.citrix.cloud.netscaler.pathweaver.docs.loadbalancers.api.v1.HealthMonitor nsMon = new com.citrix.cloud.netscaler.pathweaver.docs.loadbalancers.api.v1.HealthMonitor();
-        com.citrix.cloud.netscaler.pathweaver.docs.loadbalancers.api.v1.SessionPersistence nsPersistence = new com.citrix.cloud.netscaler.pathweaver.docs.loadbalancers.api.v1.SessionPersistence();
-        com.citrix.cloud.netscaler.pathweaver.docs.loadbalancers.api.v1.ConnectionThrottle nsThrottle = new com.citrix.cloud.netscaler.pathweaver.docs.loadbalancers.api.v1.ConnectionThrottle();
-
-
     	String name = lb.getName();
     	String alg = lb.getAlgorithm().toString();
 
@@ -233,8 +225,9 @@ public class NSAdapterUtils
         nsLB.setAlgorithm(alg);
         nsLB.setVirtualIp(nsVIP);
 
-        if ((nsLB.getNodes() == null) || (nsLB.getNodes().getNodes().size() == 0))
+        if ((nsLB.getNodes() == null) || (nsLB.getNodes().getNodes().size() == 0)) {
             nsLB.setNodes(null);
+        }
 
         nsLB.setSessionPersistence(nsPersistence);   
         nsLB.setHealthMonitor(nsMon);   
@@ -289,7 +282,7 @@ public class NSAdapterUtils
 		   throw new BadRequestException("Missing attributes [ipAddress, port] from node element....", new Error());
 	   }
 
-	   LOG.debug(String.format("node %d: address:%s, port:%d ", nodeid, address, port));
+	   logger.debug(String.format("node %d: address:%s, port:%d ", nodeid, address, port));
 
 	   if(!forUpdate)
 	   {
@@ -320,7 +313,7 @@ public class NSAdapterUtils
 
     	if ((nodes != null) && (nodes.size() > 0))
         {
-            LOG.debug(String.format("This loadBalancer has got %d nodes", nodes.size()));
+            logger.debug(String.format("This loadBalancer has got %d nodes", nodes.size()));
 			boolean forUpdate = false;
             for (Node node : nodes)
     	    {

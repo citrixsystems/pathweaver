@@ -27,42 +27,46 @@ import static javax.ws.rs.core.MediaType.*;
 @Controller
 @Scope("request")
 public class LoadBalancersResource extends CommonDependencyProvider {
-    private final Logger LOG = Logger.getLogger(LoadBalancersResource.class);
+    private final Logger logger = Logger.getLogger(LoadBalancersResource.class);
     private HttpHeaders requestHeaders;
-    protected Integer accountId;
+    private Integer accountId;
 
     @Autowired
-    protected LoadBalancerValidator validator;
+    private LoadBalancerValidator validator;
     @Autowired
-    protected LoadBalancerService loadbalancerService;
+    private LoadBalancerService loadbalancerService;
+
     @Autowired
-    protected VirtualIpService virtualIpService;
+    private LoadBalancerRepository loadBalancerRepository;
     @Autowired
-    protected LoadBalancerRepository loadBalancerRepository;
-    @Autowired
-    protected LoadBalancerResource loadBalancerResource;
+    private LoadBalancerResource loadBalancerResource;
 
     @POST
     @Consumes({APPLICATION_XML, APPLICATION_JSON})
     public Response create(LoadBalancer _loadBalancer) {
+        logger.debug("Started processing a createLoadBalancer request");
         ValidatorResult result = validator.validate(_loadBalancer, HttpRequestType.POST);
 
         if (!result.passedValidation()) {
+            logger.debug("validation of input request failed...");
             return ResponseFactory.getValidationFaultResponse(result);
         }
 
+        logger.debug("validation of input request succeeded");
+
         try {
-            org.daylight.pathweaver.service.domain.entity.LoadBalancer loadBalancer = dozerMapper.map(_loadBalancer, org.daylight.pathweaver.service.domain.entity.LoadBalancer.class);
+            org.daylight.pathweaver.service.domain.entity.LoadBalancer loadBalancer = getDozerMapper().map(_loadBalancer, org.daylight.pathweaver.service.domain.entity.LoadBalancer.class);
             loadBalancer.setAccountId(accountId);
 
             loadBalancer = loadbalancerService.create(loadBalancer);
-            LOG.debug("Successfully created loadBalancer in DB");
+            logger.debug("Successfully created loadBalancer in DB");
             MessageDataContainer dataContainer = new MessageDataContainer();
             dataContainer.setLoadBalancer(loadBalancer);
 
-            asyncService.callAsyncLoadBalancingOperation(CoreOperation.CREATE_LOADBALANCER, dataContainer);
-            return Response.status(Response.Status.ACCEPTED).entity(dozerMapper.map(loadBalancer, LoadBalancer.class)).build();
+            getAsyncService().callAsyncLoadBalancingOperation(CoreOperation.CREATE_LOADBALANCER, dataContainer);
+            return Response.status(Response.Status.ACCEPTED).entity(getDozerMapper().map(loadBalancer, LoadBalancer.class)).build();
         } catch (Exception e) {
+            logger.debug("Caught an exception: " + e.toString());
             return ResponseFactory.getErrorResponse(e);
         }
     }
@@ -73,7 +77,7 @@ public class LoadBalancersResource extends CommonDependencyProvider {
         LoadBalancers _loadbalancers = new LoadBalancers();
         List<org.daylight.pathweaver.service.domain.entity.LoadBalancer> loadbalancers = loadBalancerRepository.getByAccountId(accountId);
         for (org.daylight.pathweaver.service.domain.entity.LoadBalancer loadBalancer : loadbalancers) {
-            _loadbalancers.getLoadBalancers().add(dozerMapper.map(loadBalancer, org.daylight.pathweaver.core.api.v1.LoadBalancer.class, "SIMPLE_LB"));
+            _loadbalancers.getLoadBalancers().add(getDozerMapper().map(loadBalancer, org.daylight.pathweaver.core.api.v1.LoadBalancer.class, "SIMPLE_LB"));
         }
         return Response.status(Response.Status.OK).entity(_loadbalancers).build();
 

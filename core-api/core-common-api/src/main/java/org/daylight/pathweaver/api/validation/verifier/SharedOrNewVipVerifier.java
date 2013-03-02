@@ -2,16 +2,15 @@ package org.daylight.pathweaver.api.validation.verifier;
 
 
 import org.daylight.pathweaver.core.api.v1.VirtualIp;
-import org.daylight.pathweaver.core.api.v1.VirtualIps;
 import org.daylight.pathweaver.api.validation.expectation.ValidationResult;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SharedOrNewVipVerifier implements Verifier<ArrayList<VirtualIp>> {
+public class SharedOrNewVipVerifier implements Verifier<List<VirtualIp>> {
 
     @Override
-    public VerifierResult verify(ArrayList<VirtualIp> virtualIps) {
+    public VerifierResult verify(List<VirtualIp> virtualIps) {
         List<ValidationResult> validationResults = new ArrayList<ValidationResult>();
 
         if (virtualIps == null || virtualIps.size() > 1) {

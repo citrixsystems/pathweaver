@@ -24,7 +24,7 @@ import static org.daylight.pathweaver.core.api.v1.VipType.PRIVATE;
 
 
 public class VirtualIpConverter implements CustomConverter {
-    private final Log LOG = LogFactory.getLog(VirtualIpConverter.class);
+    private final Log logger = LogFactory.getLog(VirtualIpConverter.class);
 
 
 
@@ -80,9 +80,9 @@ public class VirtualIpConverter implements CustomConverter {
         if (sourceFieldValue instanceof ArrayList) {
             ArrayList<org.daylight.pathweaver.core.api.v1.VirtualIp> vips = (ArrayList<org.daylight.pathweaver.core.api.v1.VirtualIp>) sourceFieldValue;
 
-            if (vips.size() > 1)
+            if (vips.size() > 1) {
                 throw new RuntimeException("Cannot specify more than one Virtual IP per loadBalancer");
-
+            }
             Set<LoadBalancerJoinVip> loadBalancerJoinVipSet = new HashSet<LoadBalancerJoinVip>();
 
             if (vips.size() > 0) {
@@ -114,8 +114,9 @@ public class VirtualIpConverter implements CustomConverter {
 
 
             for (VirtualIp vip : vips.getVirtualIps()) {
-                if (vip.getIpVersion() == null)
-                    throw new RuntimeException("Ip Version must be specified for dozer mapping to work.");
+                if (vip.getIpVersion() == null)  {
+                    vip.setIpVersion(IpVersion.IPV4);
+                }
 
                 if (vip.getIpVersion().equals(IpVersion.IPV4)) {
                     LoadBalancerJoinVip loadBalancerJoinVip = new LoadBalancerJoinVip();

@@ -27,7 +27,7 @@ import java.util.*;
 @Transactional(value="core_transactionManager")
 public class NodeRepositoryImpl implements NodeRepository {
 
-    private final Log LOG = LogFactory.getLog(NodeRepositoryImpl.class);
+    private final Log logger = LogFactory.getLog(NodeRepositoryImpl.class);
     @PersistenceContext(unitName = "loadbalancing")
     private EntityManager entityManager;
 
@@ -122,7 +122,7 @@ public class NodeRepositoryImpl implements NodeRepository {
         try {
             return new HashSet<Node>(entityManager.createQuery(criteria).getResultList());
         } catch (Exception e) {
-            LOG.error("Error executing query detected!", e);
+            logger.error("Error executing query detected!", e);
             throw new EntityNotFoundException(e);
         }
     }
@@ -146,7 +146,7 @@ public class NodeRepositoryImpl implements NodeRepository {
         try {
             return entityManager.createQuery(criteria).getSingleResult();
         } catch (Exception e) {
-            LOG.error("Error executing query detected!", e);
+            logger.error("Error executing query detected!", e);
             throw new EntityNotFoundException(e);
         }
     }

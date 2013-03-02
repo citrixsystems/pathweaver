@@ -23,7 +23,7 @@ import static org.daylight.pathweaver.service.domain.event.entity.EventType.SET_
 
 @Component
 public class SetSessionPersistenceListener extends BaseListener {
-    private final Log LOG = LogFactory.getLog(SetSessionPersistenceListener.class);
+    private final Log logger = LogFactory.getLog(SetSessionPersistenceListener.class);
 
     @Autowired
     private LoadBalancerRepository loadBalancerRepository;
@@ -32,8 +32,8 @@ public class SetSessionPersistenceListener extends BaseListener {
 
     @Override
     public void doOnMessage(final Message message) throws Exception {
-        LOG.debug("Entering " + getClass());
-        LOG.debug(message);
+        logger.debug("Entering " + getClass());
+        logger.debug(message);
         MessageDataContainer dataContainer = getDataContainerFromMessage(message);
         LoadBalancer queueLb = dataContainer.getLoadBalancer();
         LoadBalancer dbLoadBalancer;
@@ -42,20 +42,20 @@ public class SetSessionPersistenceListener extends BaseListener {
             dbLoadBalancer = loadBalancerRepository.getByIdAndAccountId(queueLb.getId(), queueLb.getAccountId());
         } catch (EntityNotFoundException enfe) {
             String alertDescription = String.format("Load balancer '%d' not found in database.", queueLb.getId());
-            LOG.error(alertDescription, enfe);
+            logger.error(alertDescription, enfe);
             notificationService.saveAlert(queueLb.getAccountId(), queueLb.getId(), enfe, DATABASE_FAILURE.name(), alertDescription);
             sendErrorToEventResource(queueLb);
             return;
         }
 
         try {
-            LOG.debug(String.format("Updating session persistence for load balancer '%d' in LB Device...", dbLoadBalancer.getId()));
-            reverseProxyLoadBalancerService.setSessionPersistence(dbLoadBalancer.getId(), dbLoadBalancer.getAccountId(), dbLoadBalancer.getSessionPersistence());
-            LOG.debug(String.format("Successfully updated session persistence for load balancer '%d' in LB Device...", dbLoadBalancer.getId()));
+            logger.debug(String.format("Updating session persistence for load balancer '%d' in LB Device...", dbLoadBalancer.getId()));
+            getReverseProxyLoadBalancerService().setSessionPersistence(dbLoadBalancer.getId(), dbLoadBalancer.getAccountId(), dbLoadBalancer.getSessionPersistence());
+            logger.debug(String.format("Successfully updated session persistence for load balancer '%d' in LB Device...", dbLoadBalancer.getId()));
         } catch (Exception e) {
             loadBalancerRepository.changeStatus(dbLoadBalancer, CoreLoadBalancerStatus.ERROR);
             String alertDescription = String.format("Error updating session persistence in LB Device for loadbalancer '%d'.", dbLoadBalancer.getId());
-            LOG.error(alertDescription, e);
+            logger.error(alertDescription, e);
             notificationService.saveAlert(dbLoadBalancer.getAccountId(), dbLoadBalancer.getId(), e, LBDEVICE_FAILURE.name(), alertDescription);
             sendErrorToEventResource(queueLb);
             return;
@@ -67,7 +67,7 @@ public class SetSessionPersistenceListener extends BaseListener {
         String atomSummary = String.format("Session persistence successfully updated to '%s'", dbLoadBalancer.getSessionPersistence().getPersistenceType());
         notificationService.saveSessionPersistenceEvent(queueLb.getUserName(), dbLoadBalancer.getAccountId(), dbLoadBalancer.getId(), UPDATE_PERSISTENCE_TITLE, atomSummary, SET_SESSION_PERSISTENCE, UPDATE, INFO);
 
-        LOG.info(String.format("Update session persistence operation complete for load balancer '%d'.", dbLoadBalancer.getId()));
+        logger.info(String.format("Update session persistence operation complete for load balancer '%d'.", dbLoadBalancer.getId()));
     }
 
     private void sendErrorToEventResource(LoadBalancer lb) {

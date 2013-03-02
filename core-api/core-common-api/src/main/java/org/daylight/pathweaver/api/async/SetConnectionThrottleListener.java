@@ -24,7 +24,7 @@ import static org.daylight.pathweaver.service.domain.event.entity.EventType.SET_
 
 @Component
 public class SetConnectionThrottleListener extends BaseListener {
-    private final Log LOG = LogFactory.getLog(SetConnectionThrottleListener.class);
+    private final Log logger = LogFactory.getLog(SetConnectionThrottleListener.class);
 
     @Autowired
     private LoadBalancerRepository loadBalancerRepository;
@@ -41,20 +41,20 @@ public class SetConnectionThrottleListener extends BaseListener {
             dbLoadBalancer = loadBalancerRepository.getByIdAndAccountId(queueLb.getId(), queueLb.getAccountId());
         } catch (EntityNotFoundException enfe) {
             String alertDescription = String.format("Load balancer '%d' not found in database.", queueLb.getId());
-            LOG.error(alertDescription, enfe);
+            logger.error(alertDescription, enfe);
             notificationService.saveAlert(queueLb.getAccountId(), queueLb.getId(), enfe, DATABASE_FAILURE.name(), alertDescription);
             sendErrorToEventResource(queueLb);
             return;
         }
 
         try {
-            LOG.debug(String.format("Updating connection throttle for load balancer '%d' in LB Device...", dbLoadBalancer.getId()));
-            reverseProxyLoadBalancerService.updateConnectionThrottle(dbLoadBalancer.getAccountId(), dbLoadBalancer.getId(), dbLoadBalancer.getConnectionThrottle());
-            LOG.debug(String.format("Successfully updated connection throttle for load balancer '%d' in LB Device...", dbLoadBalancer.getId()));
+            logger.debug(String.format("Updating connection throttle for load balancer '%d' in LB Device...", dbLoadBalancer.getId()));
+            getReverseProxyLoadBalancerService().updateConnectionThrottle(dbLoadBalancer.getAccountId(), dbLoadBalancer.getId(), dbLoadBalancer.getConnectionThrottle());
+            logger.debug(String.format("Successfully updated connection throttle for load balancer '%d' in LB Device...", dbLoadBalancer.getId()));
         } catch (Exception e) {
             loadBalancerRepository.changeStatus(dbLoadBalancer, CoreLoadBalancerStatus.ERROR);
             String alertDescription = String.format("Error updating connection throttle in LB Device for loadbalancer '%d'.", dbLoadBalancer.getId());
-            LOG.error(alertDescription, e);
+            logger.error(alertDescription, e);
             notificationService.saveAlert(dbLoadBalancer.getAccountId(), dbLoadBalancer.getId(), e, LBDEVICE_FAILURE.name(), alertDescription);
             sendErrorToEventResource(queueLb);
             return;
@@ -66,7 +66,7 @@ public class SetConnectionThrottleListener extends BaseListener {
         // Add atom entry
         notificationService.saveConnectionThrottleEvent(queueLb.getUserName(), dbLoadBalancer.getAccountId(), dbLoadBalancer.getId(), dbLoadBalancer.getConnectionThrottle().getId(), UPDATE_THROTTLE_TITLE, EntryHelper.createConnectionThrottleSummary(dbLoadBalancer), SET_CONNECTION_THROTTLE, UPDATE, INFO);
 
-        LOG.info(String.format("Update connection throttle operation complete for load balancer '%d'.", dbLoadBalancer.getId()));
+        logger.info(String.format("Update connection throttle operation complete for load balancer '%d'.", dbLoadBalancer.getId()));
     }
 
     private void sendErrorToEventResource(LoadBalancer lb) {

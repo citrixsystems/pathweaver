@@ -84,7 +84,9 @@ public class LoadBalancer extends Entity implements Serializable {
     }
 
     public Set<LoadBalancerJoinVip> getLoadBalancerJoinVipSet() {
-        if (loadBalancerJoinVipSet == null) loadBalancerJoinVipSet = new HashSet<LoadBalancerJoinVip>();
+        if (loadBalancerJoinVipSet == null) {
+            loadBalancerJoinVipSet = new HashSet<LoadBalancerJoinVip>();
+        }
         return loadBalancerJoinVipSet;
     }
 
@@ -177,7 +179,9 @@ public class LoadBalancer extends Entity implements Serializable {
     }
 
     public void setStatus(String status) {
-        if (!PathweaverTypeHelper.isValidLoadBalancerStatus(status)) throw new RuntimeException("Load balancer status not supported.");
+        if (!PathweaverTypeHelper.isValidLoadBalancerStatus(status)) {
+            throw new RuntimeException("Load balancer status not supported.");
+        }
         this.status = status;
     }
 
@@ -186,7 +190,9 @@ public class LoadBalancer extends Entity implements Serializable {
     }
 
     public void setCreatedOnAdapter(Boolean createdOnAdapter) {
-        if (!PathweaverTypeHelper.isValidLoadBalancerStatus(status)) throw new RuntimeException("Load balancer status not supported.");
+        if (!PathweaverTypeHelper.isValidLoadBalancerStatus(status)) {
+            throw new RuntimeException("Load balancer status not supported.");
+        }
         this.created_on_adapter = createdOnAdapter;
     }
 

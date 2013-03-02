@@ -35,7 +35,7 @@ public class IPUtils {
     public static Integer rndInt(int lo, int hi) {
         int ri = rnd.nextInt();
         ri = ri < 0 ? 0 - ri : ri;
-        return new Integer(ri % (hi - lo + 1) + lo);
+        return Integer.valueOf(ri % (hi - lo + 1) + lo);
     }
 
     public static Double rndDouble(double lo, double hi) {
@@ -46,12 +46,12 @@ public class IPUtils {
     public static Integer rndPosInt(int lo, int hi) {
         int ri = rnd.nextInt();
         ri = ri < 0 ? 0 - ri : ri;
-        return new Integer(ri % (hi - lo + 1) + lo);
+        return Integer.valueOf(ri % (hi - lo + 1) + lo);
     }
 
     public static String rndIp() {
-        String out = String.format("%s.%s.%s.%s", rndPosInt(0, 255), rndPosInt(0, 255), rndPosInt(0, 255), rndPosInt(0, 255));
-        return out;
+        return String.format("%s.%s.%s.%s", rndPosInt(0, 255), rndPosInt(0, 255), rndPosInt(0, 255), rndPosInt(0, 255));
+
     }
 
     public static Object rndChoice(List oList) {
@@ -74,7 +74,8 @@ public class IPUtils {
 
     /* Strips off extra bits and negative sign */
     public static final byte int2ubyte(int in) {
-        in = ((in < 0) ? in = 0 - in : in) % 256;
+
+        in = ((in < 0) ? 0 - in : in) % 256;
         return (in > 127) ? (byte) (in - 256) : (byte) in;
     }
 
@@ -234,7 +235,7 @@ public class IPUtils {
     public static String int16bit2hex(int i16) {
         String out;
         byte[] nibbles = new byte[4];
-        int i;
+
         if (i16 < 0x0000 || i16 > 0xffff) {
             return null;
         }

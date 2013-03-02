@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PluginConfiguration {
-    private static final Logger LOG = Logger.getLogger(PluginConfiguration.class);
+    private static final Logger logger = Logger.getLogger(PluginConfiguration.class);
 
     private static final String CLASSPATH = "classpath:";
 
@@ -25,8 +25,8 @@ public class PluginConfiguration {
      */
     public static String getExtensionPrefix() {
         Configuration configuration = new RestApiConfiguration();
-        String extensions = configuration.getString(PublicApiServiceConfigurationKeys.extensions);
-        return extensions;
+        return configuration.getString(PublicApiServiceConfigurationKeys.extensions);
+
     }
 
     /**
@@ -94,7 +94,7 @@ public class PluginConfiguration {
     public static void validateCoreContexts(List<String> contexts) {
         for (String context : contexts) {
             if (!doesContextExist(context)) {
-                LOG.warn("All of the core configuration files must exist.");
+                logger.warn("All of the core configuration files must exist.");
                 throw new RuntimeException("Missing a required Configuration file: " + context);
             }
         }
@@ -106,7 +106,7 @@ public class PluginConfiguration {
     public static void validateOptionalContexts(List<String> contexts) {
         for (String context : contexts) {
             if (!doesContextExist(context)) {
-                LOG.warn("Could not find the configuration file " + context + ". Quietly ignoring it .....");
+                logger.warn("Could not find the configuration file " + context + ". Quietly ignoring it .....");
             }
         }
     }

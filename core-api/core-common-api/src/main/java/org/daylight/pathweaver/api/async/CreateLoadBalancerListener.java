@@ -33,7 +33,7 @@ import static org.daylight.pathweaver.service.domain.event.entity.EventType.*;
 
 @Component
 public class CreateLoadBalancerListener extends BaseListener {
-    private final Log LOG = LogFactory.getLog(CreateLoadBalancerListener.class);
+    private final Log logger = LogFactory.getLog(CreateLoadBalancerListener.class);
 
     @Autowired
     private LoadBalancerService loadBalancerService;
@@ -54,8 +54,8 @@ public class CreateLoadBalancerListener extends BaseListener {
         LoadBalancer dbLoadBalancer = null;
 
 
-        LOG.debug("Entering " + getClass());
-        LOG.debug(message);
+        logger.debug("Entering " + getClass());
+        logger.debug(message);
 
         MessageDataContainer dataContainer = getDataContainerFromMessage(message);
 
@@ -67,27 +67,27 @@ public class CreateLoadBalancerListener extends BaseListener {
 
             dbLoadBalancer = loadBalancerRepository.getByIdAndAccountId(lbid, accountId);
         } catch (EntityNotFoundException e) {
-            LOG.error("Error retrieving loadbalancer from DB");
+            logger.error("Error retrieving loadbalancer from DB");
             String alertDescription = String.format("Load balancer '%d' not found in database.", queueLb.getId());
-            LOG.error(alertDescription, e);
+            logger.error(alertDescription, e);
             notificationService.saveAlert(accountId, lbid, e, DATABASE_FAILURE.name(), alertDescription);
             sendErrorToEventResource(dbLoadBalancer);
             return;
         }
 
         try {
-            LOG.debug(String.format("Creating load balancer '%d' via adapter...", lbid));
-            reverseProxyLoadBalancerService.createLoadBalancer(accountId, dbLoadBalancer);
-            LOG.debug("Successfully created a load balancer via adapter.");
+            logger.debug(String.format("Creating load balancer '%d' via adapter...", lbid));
+            getReverseProxyLoadBalancerService().createLoadBalancer(accountId, dbLoadBalancer);
+            logger.debug("Successfully created a load balancer via adapter.");
         } catch (Exception e) {
-            LOG.error(e.getMessage());
+            logger.error(e.getMessage());
             dbLoadBalancer.setStatus(ERROR);
             dbLoadBalancer.setCreatedOnAdapter(false);
             virtualIpService.removeAllVipsFromLoadBalancer(dbLoadBalancer);
             NodesHelper.setNodesToStatus(dbLoadBalancer, CoreNodeStatus.OFFLINE);
             loadBalancerRepository.update(dbLoadBalancer);
             String alertDescription = String.format("An error occurred while creating loadbalancer '%d' via adapter.", dbLoadBalancer.getId());
-            LOG.error(alertDescription, e);
+            logger.error(alertDescription, e);
             notificationService.saveAlert(dbLoadBalancer.getAccountId(), dbLoadBalancer.getId(), e, LBDEVICE_FAILURE.name(), alertDescription);
             sendErrorToEventResource(dbLoadBalancer);
             return;
@@ -112,7 +112,7 @@ public class CreateLoadBalancerListener extends BaseListener {
         // Notify usage processor
         notifyUsageProcessor(message, dbLoadBalancer, CoreUsageEventType.CREATE_LOAD_BALANCER);
 
-        LOG.info(String.format("Successfully created load balancer '%d'.", dbLoadBalancer.getId()));
+        logger.info(String.format("Successfully created load balancer '%d'.", dbLoadBalancer.getId()));
     }
 
     private void addAtomEntryForConnectionThrottle(LoadBalancer queueLb, org.daylight.pathweaver.service.domain.entity.LoadBalancer dbLoadBalancer) {

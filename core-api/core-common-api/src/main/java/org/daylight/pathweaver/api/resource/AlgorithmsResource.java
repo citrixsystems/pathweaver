@@ -16,7 +16,7 @@ import javax.ws.rs.core.Response;
 public class AlgorithmsResource {
 
     @Autowired
-    AlgorithmType algorithmType;
+    private AlgorithmType algorithmType;
 
     @GET
     public Response retrieveLoadBalancingAlgorithms() {

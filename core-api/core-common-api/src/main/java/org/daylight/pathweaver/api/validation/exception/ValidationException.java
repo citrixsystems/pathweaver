@@ -2,9 +2,15 @@ package org.daylight.pathweaver.api.validation.exception;
 
 public class ValidationException extends RuntimeException {
 
-    public ValidationException(String string, Throwable thrwbl) {
+    private String message;
+    private Throwable throwable;
+
+    public ValidationException(String message, Throwable thrwbl) {
+        this.message = message;
+        this.throwable = thrwbl;
     }
 
-    public ValidationException(String string) {
+    public ValidationException(String message) {
+        this.message = getMessage();
     }
 }

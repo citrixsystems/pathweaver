@@ -15,7 +15,7 @@ import static org.daylight.pathweaver.api.validation.context.HttpRequestType.POS
 @Component
 @Scope("request")
 public class VirtualIpsValidatorBuilder extends ValidatorBuilder<VirtualIps> {
-    protected final int MAX_VIPS = 1;
+    private final int MAX_VIPS = 1;
 
     @Autowired
     public VirtualIpsValidatorBuilder(VirtualIpValidatorBuilder virtualIpValidatorBuilder) {

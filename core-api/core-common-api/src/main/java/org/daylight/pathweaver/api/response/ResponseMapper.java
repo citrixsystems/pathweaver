@@ -1,15 +1,20 @@
 package org.daylight.pathweaver.api.response;
 
-
 import org.daylight.pathweaver.core.api.v1.exceptions.*;
 import org.daylight.pathweaver.service.domain.exception.*;
 import org.daylight.pathweaver.service.domain.operation.OperationResponse;
 import org.daylight.pathweaver.service.domain.operation.OperationResponse.ErrorReason;
 
 import javax.ws.rs.core.Response;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import org.apache.log4j.Logger;
 
 public class ResponseMapper {
+    private static final Logger logger = Logger.getLogger(ResponseMapper.class);
+
     private static final String CONTACT_SUPPORT = "An unknown exception has occurred. Please contact support.";
+
 
     public static LbaasException getFault(OperationResponse operationResponse, String message, String details) {
         return getFault(operationResponse.getErrorReason(), (message == null) ? operationResponse.getMessage() : message, details);
@@ -20,7 +25,9 @@ public class ResponseMapper {
         lbf.setMessage("");
         lbf.setDetails("");
 
-        if (errorReason == null) errorReason = ErrorReason.UNKNOWN;
+        if (errorReason == null) {
+            errorReason = ErrorReason.UNKNOWN;
+        }
 
         switch (errorReason) {
             case ENTITY_NOT_FOUND:
@@ -79,6 +86,10 @@ public class ResponseMapper {
         if (message == null) {
             message = e.getMessage();
         }
+
+        logger.debug("Fault: " + message);
+        LogStackTrace(e);
+
         if (e instanceof EntityNotFoundException) {
             return getFault(ErrorReason.ENTITY_NOT_FOUND, message, details);
         } else if (e instanceof OutOfVipsException) {
@@ -164,7 +175,9 @@ public class ResponseMapper {
 
     public static Integer getStatus(ErrorReason errorReason) {
         Integer status;
-        if (errorReason == null) errorReason = ErrorReason.UNKNOWN;
+        if (errorReason == null) {
+            errorReason = ErrorReason.UNKNOWN;
+        }
 
         switch (errorReason) {
             case OUT_OF_VIPS:
@@ -202,5 +215,14 @@ public class ResponseMapper {
                 break;
         }
         return status;
+    }
+
+
+    private static void LogStackTrace(Exception e) {
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        e.printStackTrace(pw);
+        String stackTraceString = sw.toString();
+        logger.debug(stackTraceString);
     }
 }

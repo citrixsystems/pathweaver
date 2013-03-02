@@ -29,7 +29,6 @@ public class ExtensionsResource {
             String extensions = extensionService.getExtensionsAsXml();
             return Response.status(Response.Status.OK).entity(extensions).build();
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseFactory.getErrorResponse(e);
         }
     }
@@ -41,7 +40,6 @@ public class ExtensionsResource {
             String extensions = extensionService.getExtensionsAsJson();
             return Response.status(Response.Status.OK).entity(extensions).build();
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseFactory.getErrorResponse(e);
         }
     }
@@ -55,7 +53,6 @@ public class ExtensionsResource {
             String extension = extensionService.getExtensionAsXml(alias);
             return Response.status(Response.Status.OK).entity(extension).build();
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseFactory.getErrorResponse(e);
         }
     }
@@ -68,7 +65,6 @@ public class ExtensionsResource {
             String extension = extensionService.getExtensionAsJson(alias);
             return Response.status(Response.Status.OK).entity(extension).build();
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseFactory.getErrorResponse(e);
         }
     }

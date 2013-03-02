@@ -64,12 +64,10 @@ public class IPv4ToolSet {
         long lo;
         long ipLong;
         long mask;
-        long i;
         int mask_bits = 0;
         final int loMaskLimit = 0;
         final int hiMaskLimit = 32;
 
-        List<String> ips = new ArrayList<String>();
         Pattern blockPattern = Pattern.compile("^(.*)/(.*)$");
         Matcher blockMatch = blockPattern.matcher(blockString);
         String parseError = String.format("Could not parse IP block \"%s\"", blockString);
@@ -88,7 +86,7 @@ public class IPv4ToolSet {
         } catch (IllegalArgumentException e) {
             String errorMsg = String.format("could not convert \"%s\" to an integer in block \"%s\"",
                     blockMatch.group(2), blockString);
-            throw new IPStringConversionException(errorMsg);
+            throw new IPStringConversionException(errorMsg, e);
         }
         lo = ipLong & mask;
         hi = (ipLong | ~mask) & 0xFFFFFFFFL;
@@ -96,12 +94,12 @@ public class IPv4ToolSet {
     }
 
     public static boolean isValid(String ip) {
-        long ipLong;
+
         if(ip==null) {
             return false;
         }
         try {
-            ipLong = ip2long(ip);
+            ip2long(ip);
         } catch (Exception ex) {
             return false;
         }
@@ -128,7 +126,7 @@ public class IPv4ToolSet {
                 }
             } catch (NumberFormatException e) {
                 String errMsg = String.format("Could not convert %s to integer in ip \"%s\"", ipMatch.group(i), ip);
-                throw new IPStringConversionException(errMsg);
+                throw new IPStringConversionException(errMsg, e);
             }
         } else {
             throw new IPStringConversionException(parseError);

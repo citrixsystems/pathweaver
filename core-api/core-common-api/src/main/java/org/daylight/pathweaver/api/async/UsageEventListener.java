@@ -17,14 +17,14 @@ import java.util.List;
 
 @Component
 public class UsageEventListener extends BaseListener {
-    private final Log LOG = LogFactory.getLog(UsageEventListener.class);
+    private final Log logger = LogFactory.getLog(UsageEventListener.class);
 
     @Autowired
-    protected UsageEventRepository usageEventRepository;
+    private UsageEventRepository usageEventRepository;
 
     @Override
     public void doOnMessage(final Message message) throws Exception {
-        LOG.info("Processing usage event...");
+        logger.info("Processing usage event...");
         Calendar eventTime = Calendar.getInstance();
         ObjectMessage object = (ObjectMessage) message;
         LoadBalancer loadBalancer = (LoadBalancer) object.getObject();
@@ -38,7 +38,10 @@ public class UsageEventListener extends BaseListener {
         newUsageEvent.setEvent(usageEventType);
         newUsages.add(newUsageEvent);
 
-        if (!newUsages.isEmpty()) usageEventRepository.batchCreate(newUsages);
-        LOG.info(String.format("'%s' usage event processed for load balancer '%d'.", usageEventType, loadBalancer.getId()));
+        if (!newUsages.isEmpty()) {
+            usageEventRepository.batchCreate(newUsages);
+        }
+
+        logger.info(String.format("'%s' usage event processed for load balancer '%d'.", usageEventType, loadBalancer.getId()));
     }
 }

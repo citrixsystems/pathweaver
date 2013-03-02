@@ -14,8 +14,8 @@ import static org.daylight.pathweaver.api.validation.context.HttpRequestType.POS
 @Component
 @Scope("request")
 public class NodesValidatorBuilder extends ValidatorBuilder<Nodes> {
-    protected final int MIN_NODES = 1;
-    protected final int MAX_NODES = 25;
+    private final int MIN_NODES = 1;
+    private final int MAX_NODES = 25;
 
     @Autowired
     public NodesValidatorBuilder(NodeValidatorBuilder nodeValidatorBuilder) {

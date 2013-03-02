@@ -24,9 +24,9 @@ import java.util.List;
 @Repository
 @Transactional(value="core_transactionManager")
 public class UsageRepositoryImpl implements UsageRepository {
-    final Log LOG = LogFactory.getLog(UsageRepositoryImpl.class);
+    private final Log logger = LogFactory.getLog(UsageRepositoryImpl.class);
     @PersistenceContext(unitName = "loadbalancing")
-    protected EntityManager entityManager;
+    private EntityManager entityManager;
 
     @Override
     public List<UsageRecord> getByLoadBalancerId(Integer loadBalancerId) throws EntityNotFoundException {
@@ -46,7 +46,9 @@ public class UsageRepositoryImpl implements UsageRepository {
 
     @Override
     public List<UsageRecord> getMostRecentUsageRecordsForLoadBalancers(Collection<Integer> lbIds) {
-        if (lbIds == null || lbIds.isEmpty()) return new ArrayList<UsageRecord>();
+        if (lbIds == null || lbIds.isEmpty()) {
+            return new ArrayList<UsageRecord>();
+        }
 
         Query query = entityManager.createNativeQuery("SELECT a.* " +
                 "FROM load_balancer_usage a, " +
@@ -55,7 +57,9 @@ public class UsageRepositoryImpl implements UsageRepository {
                 .setParameter("lbIds", lbIds);
 
         List<UsageRecord> usage = (List<UsageRecord>) query.getResultList();
-        if (usage == null) return new ArrayList<UsageRecord>();
+        if (usage == null) {
+            return new ArrayList<UsageRecord>();
+        }
 
         return usage;
     }
@@ -73,14 +77,14 @@ public class UsageRepositoryImpl implements UsageRepository {
 
     @Override
     public void batchCreate(List<UsageRecord> recordsToInsert) {
-        LOG.debug(String.format("batchCreate() called with %d records", recordsToInsert.size()));
+        logger.debug(String.format("batchCreate() called with %d records", recordsToInsert.size()));
         String query = generateBatchInsertQuery(recordsToInsert);
         entityManager.createNativeQuery(query).executeUpdate();
     }
 
     @Override
     public void batchUpdate(List<UsageRecord> recordsToUpdate) {
-        LOG.debug(String.format("batchUpdate() called with %d records", recordsToUpdate.size()));
+        logger.debug(String.format("batchUpdate() called with %d records", recordsToUpdate.size()));
         String query = generateBatchUpdateQuery(recordsToUpdate);
         entityManager.createNativeQuery(query).executeUpdate();
     }
@@ -109,10 +113,16 @@ public class UsageRepositoryImpl implements UsageRepository {
 
             sb.append("(");
             sb.append("'CORE'").append(",");
-            if (usage.getId() != null) sb.append(usage.getId()).append(",");
+            if (usage.getId() != null) {
+                sb.append(usage.getId()).append(",");
+            }
             sb.append(usage.getLoadBalancer().getId()).append(",");
-            if (usage.getEvent() != null) sb.append("'").append(usage.getEvent()).append("',");
-            else sb.append(usage.getEvent()).append(",");
+            if (usage.getEvent() != null) {
+                sb.append("'").append(usage.getEvent()).append("',");
+            }
+            else {
+                sb.append(usage.getEvent()).append(",");
+            }
             sb.append(usage.getTransferBytesIn()).append(",");
             sb.append(usage.getTransferBytesOut()).append(",");
             sb.append(usage.getLastBytesInCount()).append(",");

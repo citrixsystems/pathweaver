@@ -7,8 +7,8 @@ import org.daylight.pathweaver.datamodel.CoreProtocolType;
 import org.daylight.pathweaver.service.domain.entity.LoadBalancer;
 import org.daylight.pathweaver.service.domain.exception.BadRequestException;
 
-public class LoadBalancerCreateValidator {
-    private static final Log LOG = LogFactory.getLog(LoadBalancerCreateValidator.class);
+public final class LoadBalancerCreateValidator {
+    private static final Log logger = LogFactory.getLog(LoadBalancerCreateValidator.class);
 
     private LoadBalancerCreateValidator() {
 
@@ -16,7 +16,7 @@ public class LoadBalancerCreateValidator {
 
     public static void verifyTCPProtocolandPort(final LoadBalancer loadBalancer) throws BadRequestException {
         if (loadBalancer.getProtocol() != null && (loadBalancer.getProtocol().equals(CoreProtocolType.TCP))) {
-            LOG.info("TCP Protocol detected. Port must exists");
+            logger.info("TCP Protocol detected. Port must exists");
             if (loadBalancer.getPort() == null) {
                 throw new BadRequestException(ErrorMessages.TCP_PORT_REQUIRED);
             }
@@ -27,7 +27,7 @@ public class LoadBalancerCreateValidator {
         if (loadBalancer.getHealthMonitor() == null || loadBalancer.getHealthMonitor().getType() == null) {
             return;
         }
-        LOG.info("Health Monitor detected. Verifying that the load balancer's protocol matches the monitor type.");
+        logger.info("Health Monitor detected. Verifying that the load balancer's protocol matches the monitor type.");
         String type = loadBalancer.getHealthMonitor().getType();
         if (type.equals(CoreHealthMonitorType.HTTP)) {
             if (!(loadBalancer.getProtocol().equals(CoreProtocolType.HTTP))) {

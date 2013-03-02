@@ -34,14 +34,21 @@ public class LoadBalancerJoinVip implements Serializable {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
 
             Id id = (Id) o;
 
-            if (loadBalancerId != null ? !loadBalancerId.equals(id.loadBalancerId) : id.loadBalancerId != null)
+            if (loadBalancerId != null ? !loadBalancerId.equals(id.loadBalancerId) : id.loadBalancerId != null)  {
                 return false;
-            if (virtualIpId != null ? !virtualIpId.equals(id.virtualIpId) : id.virtualIpId != null) return false;
+            }
+            if (virtualIpId != null ? !virtualIpId.equals(id.virtualIpId) : id.virtualIpId != null) {
+                return false;
+            }
 
             return true;
         }

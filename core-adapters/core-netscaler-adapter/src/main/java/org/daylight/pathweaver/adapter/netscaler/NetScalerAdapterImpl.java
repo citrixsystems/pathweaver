@@ -24,12 +24,12 @@ import java.util.*;
 
 @Service
 public class NetScalerAdapterImpl extends LoadBalancerAdapterBase {
-    public static Log LOG = LogFactory.getLog(NetScalerAdapterImpl.class.getName());
+    private static Log logger = LogFactory.getLog(NetScalerAdapterImpl.class.getName());
 
 
 
     @Autowired
-    protected NSAdapterUtils nsAdapterUtils;
+    private NSAdapterUtils nsAdapterUtils;
 
 
 
@@ -102,7 +102,7 @@ public class NetScalerAdapterImpl extends LoadBalancerAdapterBase {
         Integer accountId = lb.getAccountId(); 
         Integer lbId = lb.getId();   
 
-        LOG.debug("NetScaler adapter preparing to delete loadbalancer with id " + lbId);
+        logger.debug("NetScaler adapter preparing to delete loadbalancer with id " + lbId);
 
         String resourceUrl = nsAdapterUtils.getLBURLStr(serviceUrl, accountId, resourceType, lbId);
 

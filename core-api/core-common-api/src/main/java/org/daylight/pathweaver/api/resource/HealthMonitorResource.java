@@ -24,22 +24,22 @@ import static javax.ws.rs.core.MediaType.*;
 @Controller
 @Scope("request")
 public class HealthMonitorResource extends CommonDependencyProvider {
-    private final Logger LOG = Logger.getLogger(HealthMonitorResource.class);
-    protected Integer accountId;
-    protected Integer loadBalancerId;
+    private final Logger logger = Logger.getLogger(HealthMonitorResource.class);
+    private Integer accountId;
+    private Integer loadBalancerId;
 
     @Autowired
-    protected HealthMonitorValidator validator;
+    private HealthMonitorValidator validator;
     @Autowired
-    protected HealthMonitorService service;
+    private HealthMonitorService service;
     @Autowired
-    protected HealthMonitorRepository repository;
+    private HealthMonitorRepository repository;
 
     @GET
     @Produces({APPLICATION_XML, APPLICATION_JSON, APPLICATION_ATOM_XML})
     public Response retrieveHealthMonitor() {
         try {
-            HealthMonitor healthMonitor = dozerMapper.map(repository.getByLoadBalancerId(loadBalancerId), HealthMonitor.class);
+            HealthMonitor healthMonitor = getDozerMapper().map(repository.getByLoadBalancerId(loadBalancerId), HealthMonitor.class);
             return Response.status(Response.Status.OK).entity(healthMonitor).build();
         } catch (Exception e) {
             return ResponseFactory.getErrorResponse(e);
@@ -62,10 +62,10 @@ public class HealthMonitorResource extends CommonDependencyProvider {
             loadBalancer.setId(loadBalancerId);
             data.setLoadBalancer(loadBalancer);
 
-            org.daylight.pathweaver.service.domain.entity.HealthMonitor healthMonitor = dozerMapper.map(_healthMonitor, org.daylight.pathweaver.service.domain.entity.HealthMonitor.class);
+            org.daylight.pathweaver.service.domain.entity.HealthMonitor healthMonitor = getDozerMapper().map(_healthMonitor, org.daylight.pathweaver.service.domain.entity.HealthMonitor.class);
             healthMonitor = service.update(loadBalancerId, healthMonitor);
-            asyncService.callAsyncLoadBalancingOperation(CoreOperation.UPDATE_HEALTH_MONITOR, data);
-            _healthMonitor = dozerMapper.map(healthMonitor, HealthMonitor.class);
+            getAsyncService().callAsyncLoadBalancingOperation(CoreOperation.UPDATE_HEALTH_MONITOR, data);
+            _healthMonitor = getDozerMapper().map(healthMonitor, HealthMonitor.class);
             return Response.status(Response.Status.ACCEPTED).entity(_healthMonitor).build();
         } catch (Exception e) {
             return ResponseFactory.getErrorResponse(e);
@@ -82,7 +82,7 @@ public class HealthMonitorResource extends CommonDependencyProvider {
             data.setLoadBalancer(loadBalancer);
 
             service.preDelete(loadBalancerId);
-            asyncService.callAsyncLoadBalancingOperation(CoreOperation.DELETE_HEALTH_MONITOR, data);
+            getAsyncService().callAsyncLoadBalancingOperation(CoreOperation.DELETE_HEALTH_MONITOR, data);
             return Response.status(Response.Status.ACCEPTED).build();
         } catch (Exception e) {
             return ResponseFactory.getErrorResponse(e);

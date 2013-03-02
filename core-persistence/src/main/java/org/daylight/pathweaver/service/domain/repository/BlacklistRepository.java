@@ -15,7 +15,7 @@ import java.util.List;
 @Repository
 @Transactional(value="core_transactionManager")
 public class BlacklistRepository {
-    final Log LOG = LogFactory.getLog(BlacklistRepository.class);
+    private final Log logger = LogFactory.getLog(BlacklistRepository.class);
 
     @PersistenceContext(unitName = "loadbalancing")
     private EntityManager entityManager;

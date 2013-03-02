@@ -7,6 +7,8 @@ public class HealthMonitorPathVerifier implements Verifier {
         char firstChar = obj.toString().charAt(0);
         String slashString = "/";
         char slash = slashString.charAt(0);
-        if (firstChar == slash) return new VerifierResult(true);
+        if (firstChar == slash) {
+            return new VerifierResult(true);
+        }
         return new VerifierResult(false);    }
 }

@@ -13,8 +13,8 @@ import static org.daylight.pathweaver.api.validation.ValidatorBuilder.build;
 @Component
 @Scope("request")
 public class VirtualIpsValidator implements ResourceValidator<VirtualIps> {
-    protected Validator<VirtualIps> validator;
-    protected VirtualIpsValidatorBuilder ruleBuilder;
+    private Validator<VirtualIps> validator;
+    private VirtualIpsValidatorBuilder ruleBuilder;
 
     @Autowired
     public VirtualIpsValidator(VirtualIpsValidatorBuilder ruleBuilder) {

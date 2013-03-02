@@ -26,8 +26,12 @@ public class EventListener implements DozerEventListener {
         if(dozerEvent.getDestinationObject() instanceof LoadBalancer) {
             LoadBalancer lb = (LoadBalancer) dozerEvent.getDestinationObject();
 
-            if(lb.getVirtualIps() != null && lb.getVirtualIps().getVirtualIps().isEmpty()) lb.setVirtualIps(null);
-            if(lb.getNodes() != null && lb.getNodes().getNodes().isEmpty()) lb.setNodes(null);
+            if(lb.getVirtualIps() != null && lb.getVirtualIps().getVirtualIps().isEmpty()) {
+                lb.setVirtualIps(null);
+            }
+            if(lb.getNodes() != null && lb.getNodes().getNodes().isEmpty()) {
+                lb.setNodes(null);
+            }
         }
     }
 }

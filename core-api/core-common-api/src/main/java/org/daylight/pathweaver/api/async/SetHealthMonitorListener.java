@@ -24,7 +24,7 @@ import static org.daylight.pathweaver.service.domain.event.entity.EventType.SET_
 
 @Component
 public class SetHealthMonitorListener extends BaseListener {
-    private final Log LOG = LogFactory.getLog(SetHealthMonitorListener.class);
+    private final Log logger = LogFactory.getLog(SetHealthMonitorListener.class);
 
     @Autowired
     private LoadBalancerRepository loadBalancerRepository;
@@ -41,20 +41,20 @@ public class SetHealthMonitorListener extends BaseListener {
             dbLoadBalancer = loadBalancerRepository.getByIdAndAccountId(queueLb.getId(), queueLb.getAccountId());
         } catch (EntityNotFoundException enfe) {
             String alertDescription = String.format("Load balancer '%d' not found in database.", queueLb.getId());
-            LOG.error(alertDescription, enfe);
+            logger.error(alertDescription, enfe);
             notificationService.saveAlert(queueLb.getAccountId(), queueLb.getId(), enfe, DATABASE_FAILURE.name(), alertDescription);
             sendErrorToEventResource(queueLb);
             return;
         }
 
         try {
-            LOG.debug(String.format("Updating health monitor for load balancer '%d' in LB Device...", dbLoadBalancer.getId()));
-            reverseProxyLoadBalancerService.updateHealthMonitor(dbLoadBalancer.getAccountId(), dbLoadBalancer.getId(), dbLoadBalancer.getHealthMonitor());
-            LOG.debug(String.format("Successfully updated health monitor for load balancer '%d' in LB Device...", dbLoadBalancer.getId()));
+            logger.debug(String.format("Updating health monitor for load balancer '%d' in LB Device...", dbLoadBalancer.getId()));
+            getReverseProxyLoadBalancerService().updateHealthMonitor(dbLoadBalancer.getAccountId(), dbLoadBalancer.getId(), dbLoadBalancer.getHealthMonitor());
+            logger.debug(String.format("Successfully updated health monitor for load balancer '%d' in LB Device...", dbLoadBalancer.getId()));
         } catch (Exception e) {
             loadBalancerRepository.changeStatus(dbLoadBalancer, CoreLoadBalancerStatus.ERROR);
             String alertDescription = String.format("Error updating health monitor in LB Device for loadbalancer '%d'.", dbLoadBalancer.getId());
-            LOG.error(alertDescription, e);
+            logger.error(alertDescription, e);
             notificationService.saveAlert(dbLoadBalancer.getAccountId(), dbLoadBalancer.getId(), e, LBDEVICE_FAILURE.name(), alertDescription);
             sendErrorToEventResource(queueLb);
             return;
@@ -66,7 +66,7 @@ public class SetHealthMonitorListener extends BaseListener {
         // Add atom entry
         notificationService.saveHealthMonitorEvent(queueLb.getUserName(), dbLoadBalancer.getAccountId(), dbLoadBalancer.getId(), dbLoadBalancer.getHealthMonitor().getId(), UPDATE_MONITOR_TITLE, EntryHelper.createHealthMonitorSummary(dbLoadBalancer), SET_HEALTH_MONITOR, UPDATE, INFO);
 
-        LOG.info(String.format("Update health monitor operation complete for load balancer '%d'.", dbLoadBalancer.getId()));
+        logger.info(String.format("Update health monitor operation complete for load balancer '%d'.", dbLoadBalancer.getId()));
     }
 
     private void sendErrorToEventResource(LoadBalancer lb) {

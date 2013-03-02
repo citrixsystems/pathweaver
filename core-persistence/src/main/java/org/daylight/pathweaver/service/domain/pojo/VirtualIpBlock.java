@@ -8,8 +8,8 @@ public class VirtualIpBlock implements Serializable {
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
-    protected String firstIp;
-    protected String lastIp;
+    private String firstIp;
+    private String lastIp;
 
     public String getFirstIp() {
         return firstIp;

@@ -14,8 +14,7 @@ import org.daylight.pathweaver.service.domain.exception.ServiceUnavailableExcept
 
 import org.daylight.pathweaver.adapter.common.entity.Cluster;
 import org.daylight.pathweaver.adapter.common.entity.VirtualIpv4;
-import org.daylight.pathweaver.service.domain.repository.VirtualIpRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,10 +33,10 @@ import java.util.*;
 @Repository
 @Transactional(value="adapter_transactionManager")
 public class AdapterVirtualIpRepository  {
-    private final Log LOG = LogFactory.getLog(AdapterVirtualIpRepository.class);
+    private final Log logger = LogFactory.getLog(AdapterVirtualIpRepository.class);
 
     @PersistenceContext(unitName = "loadbalancingadapter")
-    protected EntityManager entityManager;
+    private EntityManager entityManager;
 
 
 
@@ -58,7 +57,7 @@ public class AdapterVirtualIpRepository  {
             refCount++;
             vipIpv4.setRefCount(refCount);
             entityManager.merge(vipIpv4);
-            LOG.info(String.format("Virtual Ip '%d' refcount set to %d", vip.getId(), refCount));
+            logger.info(String.format("Virtual Ip '%d' refcount set to %d", vip.getId(), refCount));
             return vip.getAddress();
         }
 
@@ -80,7 +79,7 @@ public class AdapterVirtualIpRepository  {
             vipCandidates = entityManager.createQuery(criteria).setLockMode(LockModeType.PESSIMISTIC_WRITE).getResultList();
 
             if ((vipCandidates == null) || vipCandidates.isEmpty())  {
-                LOG.error(ErrorMessages.OUT_OF_VIPS);
+                logger.error(ErrorMessages.OUT_OF_VIPS);
                 throw new OutOfVipsException(ErrorMessages.OUT_OF_VIPS);
             }
 
@@ -94,17 +93,16 @@ public class AdapterVirtualIpRepository  {
                     vipCandidate.setRefCount(1);
 
                     entityManager.merge(vipCandidate);
-                    LOG.info(String.format("Virtual Ip '%d' refcount set to 1", vip.getId()));
+                    logger.info(String.format("Virtual Ip '%d' refcount set to 1", vip.getId()));
                     return vipCandidate.getAddress();
                 }
             }
         } catch (Exception e) {
-            LOG.debug("Caught an exception");
-            LOG.error(e);
-            throw new OutOfVipsException(ErrorMessages.OUT_OF_VIPS);
+            logger.debug("Caught an exception" + e.getMessage());
+            throw new OutOfVipsException(ErrorMessages.OUT_OF_VIPS, e);
         }
 
-        LOG.error(ErrorMessages.OUT_OF_VIPS);
+        logger.error(ErrorMessages.OUT_OF_VIPS);
         throw new OutOfVipsException(ErrorMessages.OUT_OF_VIPS);
     }
 
@@ -124,7 +122,7 @@ public class AdapterVirtualIpRepository  {
             refCount++;
             vipIpv4.setRefCount(refCount);
             entityManager.merge(vipIpv4);
-            LOG.info(String.format("Virtual Ip '%d' refcount set to %d", vip.getId(), refCount));
+            logger.info(String.format("Virtual Ip '%d' refcount set to %d", vip.getId(), refCount));
             return vip.getAddress();
         }
 
@@ -145,7 +143,7 @@ public class AdapterVirtualIpRepository  {
             vipIpv4Candidates = entityManager.createQuery(criteria).setLockMode(LockModeType.PESSIMISTIC_WRITE).getResultList();
 
             if ((vipIpv4Candidates == null) || vipIpv4Candidates.isEmpty())   {
-                LOG.error(ErrorMessages.OUT_OF_VIPS);
+                logger.error(ErrorMessages.OUT_OF_VIPS);
                 throw new OutOfVipsException(ErrorMessages.OUT_OF_VIPS);
             }
 
@@ -157,7 +155,7 @@ public class AdapterVirtualIpRepository  {
                     vipIpv4Candidate.setAllocated(true);
                     vipIpv4Candidate.setLastAllocation(Calendar.getInstance());
                     vipIpv4Candidate.setRefCount(1);
-                    LOG.info(String.format("Virtual Ip '%d' refcount set to 1", vip.getId()));
+                    logger.info(String.format("Virtual Ip '%d' refcount set to 1", vip.getId()));
                     entityManager.merge(vipIpv4Candidate);
 
                     return vipIpv4Candidate.getAddress();
@@ -165,11 +163,11 @@ public class AdapterVirtualIpRepository  {
             }
 
         } catch (Exception e) {
-            LOG.error(e);
-            throw new OutOfVipsException(ErrorMessages.OUT_OF_VIPS);
+            logger.debug("Caught an exception");
+            throw new OutOfVipsException(ErrorMessages.OUT_OF_VIPS, e);
         }
 
-        LOG.error(ErrorMessages.OUT_OF_VIPS);
+        logger.error(ErrorMessages.OUT_OF_VIPS);
         throw new OutOfVipsException(ErrorMessages.OUT_OF_VIPS);
     }
 
@@ -192,7 +190,7 @@ public class AdapterVirtualIpRepository  {
             vipIpv6.setRefCount(refCount);
             entityManager.merge(vipIpv6);
 
-            LOG.info(String.format("Virtual Ip '%d' refcount set to %d", vip.getId(), refCount));
+            logger.info(String.format("Virtual Ip '%d' refcount set to %d", vip.getId(), refCount));
             return vip.getAddress();
         }
 
@@ -207,10 +205,10 @@ public class AdapterVirtualIpRepository  {
         vipIpv6 = entityManager.merge(vipIpv6);
 
         try {
-            LOG.info(String.format("Virtual Ip '%d' refcount set to 1", vip.getId()));
+            logger.info(String.format("Virtual Ip '%d' refcount set to 1", vip.getId()));
             return vipIpv6.getDerivedIpString(c);
         } catch (IPStringConversionException1 e) {
-            LOG.error("Caught an exception while trying to convert IPv6 octets into a string");
+            logger.debug("Caught an exception while trying to convert IPv6 octets into a string");
             return null;
         }
     }
@@ -256,7 +254,7 @@ public class AdapterVirtualIpRepository  {
         vipIpv4.setRefCount(refCount);
         entityManager.merge(vipIpv4);
 
-        LOG.info(String.format("Virtual Ip '%d' refcount set to %d", vipId, refCount));
+        logger.info(String.format("Virtual Ip '%d' refcount set to %d", vipId, refCount));
     }
 
     private void resetIpv4VirtualIp(Integer vipId) {
@@ -274,7 +272,7 @@ public class AdapterVirtualIpRepository  {
         vipIpv4.setRefCount(refCount);
         entityManager.merge(vipIpv4);
 
-        LOG.info(String.format("Virtual Ip '%d' refcount set to %d", vipId, refCount));
+        logger.info(String.format("Virtual Ip '%d' refcount set to %d", vipId, refCount));
     }
 
     private void deallocateIpv6VirtualIp(Integer vipId) {
@@ -289,14 +287,14 @@ public class AdapterVirtualIpRepository  {
             entityManager.merge(vip6);
         }
 
-        LOG.info(String.format("Virtual Ip '%d' de-allocated.", vipId));
+        logger.info(String.format("Virtual Ip '%d' de-allocated.", vipId));
     }
 
     private void resetIpv6VirtualIp(Integer vipId) {
 
         deallocateIpv6VirtualIp(vipId);
 
-        LOG.info(String.format("Virtual Ip '%d' de-allocated.", vipId));
+        logger.info(String.format("Virtual Ip '%d' de-allocated.", vipId));
     }
 
     public VirtualIpv4 getVirtualIpv4(Integer vipId) {
@@ -304,7 +302,7 @@ public class AdapterVirtualIpRepository  {
         Query query = entityManager.createQuery(hqlStr).setParameter("vipId", vipId).setMaxResults(1);
         List<VirtualIpv4> results = query.getResultList();
         if (results.size() < 1) {
-            LOG.error(String.format("Error no Cluster found for VirtualIp id %d.", vipId));
+            logger.error(String.format("Error no Cluster found for VirtualIp id %d.", vipId));
             return null;
         }
         return results.get(0);
@@ -315,7 +313,7 @@ public class AdapterVirtualIpRepository  {
         Query query = entityManager.createQuery(hqlStr).setParameter("vipId", vipId).setMaxResults(1);
         List<VirtualIpv6> results = query.getResultList();
         if (results.size() < 1) {
-            LOG.error(String.format("Error no VirtualIpv6 found for VirtualIp id %d.", vipId));
+            logger.error(String.format("Error no VirtualIpv6 found for VirtualIp id %d.", vipId));
             return null;
         }
         return results.get(0);
@@ -327,7 +325,7 @@ public class AdapterVirtualIpRepository  {
         Query query = entityManager.createQuery(hqlStr).setParameter("vipId", vipId).setMaxResults(1);
         List<VirtualIpv6> results = query.getResultList();
         if (results.size() < 1) {
-            LOG.error(String.format("Error no VirtualIpv6 found with id %d.", vipId));
+            logger.error(String.format("Error no VirtualIpv6 found with id %d.", vipId));
             return null;
         }
         return results.get(0);
@@ -336,7 +334,7 @@ public class AdapterVirtualIpRepository  {
     
     public VirtualIpv4 createVirtualIpv4(VirtualIpv4 vipCluster)
     {
-        LOG.info("Create/Update a VirtualIpv4 " + vipCluster.getAddress() + "...");
+        logger.info("Create/Update a VirtualIpv4 " + vipCluster.getAddress() + "...");
         VirtualIpv4 dbVipIpv4 = entityManager.merge(vipCluster);
 
         return dbVipIpv4;
@@ -362,13 +360,15 @@ public class AdapterVirtualIpRepository  {
                 max++; // The next VipOctet
                 return max;
             } catch (PersistenceException e) {
-                LOG.warn(String.format("Deadlock detected. %d retries left.", retry_count));
-                if (retry_count <= 0) throw e;
+                logger.warn(String.format("Deadlock detected. %d retries left.", retry_count));
+                if (retry_count <= 0) {
+                    throw e;
+                }
 
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException e1) {
-                    e1.printStackTrace();
+                    continue;
                 }
             }
         }

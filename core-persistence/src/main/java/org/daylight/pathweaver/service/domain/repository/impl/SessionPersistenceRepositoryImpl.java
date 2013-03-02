@@ -20,7 +20,7 @@ import javax.persistence.criteria.Root;
 @Repository
 @Transactional(value="core_transactionManager")
 public class SessionPersistenceRepositoryImpl implements SessionPersistenceRepository {
-    final Log LOG = LogFactory.getLog(SessionPersistenceRepositoryImpl.class);
+    private final Log logger = LogFactory.getLog(SessionPersistenceRepositoryImpl.class);
     private static final String entityNotFound = "Session persistence not found";
     @PersistenceContext(unitName = "loadbalancing")
     private EntityManager entityManager;
@@ -41,16 +41,18 @@ public class SessionPersistenceRepositoryImpl implements SessionPersistenceRepos
         try {
             return entityManager.createQuery(criteria).setMaxResults(1).getSingleResult();
         } catch (NoResultException e) {
-            throw new EntityNotFoundException(entityNotFound);
+            throw new EntityNotFoundException(entityNotFound, e);
         } catch (NonUniqueResultException e) {
-            LOG.error("More than one session persistence detected!", e);
-            throw new EntityNotFoundException(entityNotFound);
+            logger.error("More than one session persistence detected!", e);
+            throw new EntityNotFoundException(entityNotFound, e);
         }
     }
 
     @Override
     public void delete(SessionPersistence sessionPersistence) throws EntityNotFoundException {
-        if (sessionPersistence == null) throw new EntityNotFoundException(entityNotFound);
+        if (sessionPersistence == null) {
+            throw new EntityNotFoundException(entityNotFound);
+        }
         sessionPersistence = entityManager.merge(sessionPersistence); // Re-attach hibernate instance
         entityManager.remove(sessionPersistence);
     }

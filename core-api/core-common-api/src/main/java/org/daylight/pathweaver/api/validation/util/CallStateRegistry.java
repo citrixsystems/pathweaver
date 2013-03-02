@@ -30,7 +30,7 @@ public class CallStateRegistry {
 
     //TODO: Validate whether or not this is really a good idea. Encapsulation extreme stylez D:
     private static class LastKnownCall {
-        public Method callInformation;
+        private Method callInformation;
 
         public LastKnownCall(Method callInformation) {
             this.callInformation = callInformation;

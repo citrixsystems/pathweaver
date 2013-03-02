@@ -20,12 +20,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class SessionPersistenceServiceImpl implements SessionPersistenceService {
-    private final Log LOG = LogFactory.getLog(SessionPersistenceServiceImpl.class);
+    private final Log logger = LogFactory.getLog(SessionPersistenceServiceImpl.class);
 
     @Autowired
-    protected LoadBalancerRepository loadBalancerRepository;
+    private LoadBalancerRepository loadBalancerRepository;
     @Autowired
-    protected SessionPersistenceRepository sessionPersistenceRepository;
+    private SessionPersistenceRepository sessionPersistenceRepository;
 
     @Override
     @Transactional(value="core_transactionManager", rollbackFor = {EntityNotFoundException.class, ImmutableEntityException.class, UnprocessableEntityException.class})
@@ -58,7 +58,9 @@ public class SessionPersistenceServiceImpl implements SessionPersistenceService 
         LoadBalancer dbLoadBalancer = loadBalancerRepository.getById(loadBalancerId);
 
 
-        if (dbLoadBalancer.getSessionPersistence() == null) throw new EntityNotFoundException("Session persistence not found");
+        if (dbLoadBalancer.getSessionPersistence() == null) {
+            throw new EntityNotFoundException("Session persistence not found");
+        }
 
 
         String status = dbLoadBalancer.getStatus();
@@ -84,8 +86,13 @@ public class SessionPersistenceServiceImpl implements SessionPersistenceService 
     }
 
     protected void setPropertiesForUpdate(final SessionPersistence requestPersistence, final SessionPersistence dbPersistence, SessionPersistence persistenceToUpdate) throws BadRequestException {
-        if (requestPersistence.getPersistenceType() != null) persistenceToUpdate.setPersistenceType(requestPersistence.getPersistenceType());
-        else if (dbPersistence != null) persistenceToUpdate.setPersistenceType(dbPersistence.getPersistenceType());
-        else throw new BadRequestException("Must provide a persistence type for the request");
+        if (requestPersistence.getPersistenceType() != null) {
+            persistenceToUpdate.setPersistenceType(requestPersistence.getPersistenceType());
+        } else if (dbPersistence != null) {
+            persistenceToUpdate.setPersistenceType(dbPersistence.getPersistenceType());
+        }
+        else {
+            throw new BadRequestException("Must provide a persistence type for the request");
+        }
     }
 }

@@ -7,7 +7,7 @@ public class BitConverters {
     public static String int16bit2hex(int i16) {
         String out;
         byte[] nibbles = new byte[4];
-        int i;
+
         if (i16 < 0x0000 || i16 > 0xffff) {
             return null;
         }
@@ -141,10 +141,10 @@ public class BitConverters {
     public static String byte2hex(byte ubyte) {
         byte[] nibbleBytes;
         String out;
-        int num;
+
         int lo;
         int hi;
-        num = ubyte2int(ubyte);
+
         lo = ubyte & 0x0f;
         hi = (ubyte & 0xf0) >> 4;
         nibbleBytes = new byte[]{int2Nibble(hi), int2Nibble(lo)};
@@ -173,8 +173,7 @@ public class BitConverters {
     public static String bytes2hex(byte[] bytes) {
         StringBuffer sb;
         int i;
-        int lo;
-        int hi;
+
         sb = new StringBuffer();
         for (i = 0; i < bytes.length; i++) {
             sb.append(byte2hex(bytes[i]));

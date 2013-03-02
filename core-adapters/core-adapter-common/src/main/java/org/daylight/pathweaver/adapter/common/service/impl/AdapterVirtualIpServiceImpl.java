@@ -38,14 +38,14 @@ import java.util.Set;
 @Service
 public class AdapterVirtualIpServiceImpl implements AdapterVirtualIpService {
 
-    private final Log LOG = LogFactory.getLog(AdapterVirtualIpServiceImpl.class);
+    private final Log logger = LogFactory.getLog(AdapterVirtualIpServiceImpl.class);
 
     @Autowired
-    protected AdapterVirtualIpRepository adapterVirtualIpRepository;
+    private AdapterVirtualIpRepository adapterVirtualIpRepository;
 
 
     @Autowired
-    protected HostRepository hostRepository;
+    private HostRepository hostRepository;
 
 
     @Override
@@ -54,8 +54,6 @@ public class AdapterVirtualIpServiceImpl implements AdapterVirtualIpService {
 
         if (!loadBalancer.getLoadBalancerJoinVipSet().isEmpty()) {
 
-            Set<LoadBalancerJoinVip> newVipConfig = new HashSet<LoadBalancerJoinVip>();
-
             for (LoadBalancerJoinVip loadBalancerJoinVip : loadBalancer.getLoadBalancerJoinVipSet()) {
                 // Add a new vip to set
 
@@ -63,8 +61,9 @@ public class AdapterVirtualIpServiceImpl implements AdapterVirtualIpService {
 
                 LoadBalancerHost lbHost = hostRepository.getLBHost(loadBalancer.getId());
 
-                if (lbHost == null)
+                if (lbHost == null)  {
                     throw new PersistenceServiceException(new Exception(String.format("Cannot find host of loadbalancer %d", loadBalancer.getId())));
+                }
 
                 Host host = lbHost.getHost();
 
@@ -98,13 +97,8 @@ public class AdapterVirtualIpServiceImpl implements AdapterVirtualIpService {
         try {
             return adapterVirtualIpRepository.allocateIpv4VipBeforeDate(virtualIp, cluster, timeConstraintForVipReuse);
         } catch (OutOfVipsException e) {
-            LOG.warn(String.format("Out of IPv4 virtual ips that were de-allocated before '%s'.", timeConstraintForVipReuse.getTime()));
-            try {
-                return adapterVirtualIpRepository.allocateIpv4VipAfterDate(virtualIp, cluster, timeConstraintForVipReuse);
-            } catch (OutOfVipsException e2) {
-                e2.printStackTrace();
-                throw e2;
-            }
+            logger.warn(String.format("Out of IPv4 virtual ips that were de-allocated before '%s'.", timeConstraintForVipReuse.getTime()));
+            return adapterVirtualIpRepository.allocateIpv4VipAfterDate(virtualIp, cluster, timeConstraintForVipReuse);
         }
     }
 

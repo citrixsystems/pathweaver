@@ -45,7 +45,7 @@ public class IPv6Cidr {
                 this.subnet = subnetint;
             } catch (NumberFormatException e) {
                 msg = String.format("Error converting %s to integer", subnetStr);
-                throw new IPStringConversionException1(msg);
+                throw new IPStringConversionException1(msg, e);
             }
             this.cidr = in;
             ipBytes = new IPv6(ipStr).getBytes();

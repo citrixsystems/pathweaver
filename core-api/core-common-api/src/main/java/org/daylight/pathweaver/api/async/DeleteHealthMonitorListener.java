@@ -22,7 +22,7 @@ import static org.daylight.pathweaver.service.domain.event.entity.EventType.DELE
 
 @Component
 public class DeleteHealthMonitorListener extends BaseListener {
-    private final Log LOG = LogFactory.getLog(DeleteHealthMonitorListener.class);
+    private final Log logger = LogFactory.getLog(DeleteHealthMonitorListener.class);
 
     @Autowired
     private LoadBalancerRepository loadBalancerRepository;
@@ -40,31 +40,31 @@ public class DeleteHealthMonitorListener extends BaseListener {
             dbLoadBalancer = loadBalancerRepository.getByIdAndAccountId(queueLb.getId(), queueLb.getAccountId());
         } catch (EntityNotFoundException enfe) {
             String alertDescription = String.format("Load balancer '%d' not found in database.", queueLb.getId());
-            LOG.error(alertDescription, enfe);
+            logger.error(alertDescription, enfe);
             notificationService.saveAlert(queueLb.getAccountId(), queueLb.getId(), enfe, DATABASE_FAILURE.name(), alertDescription);
             sendErrorToEventResource(queueLb);
             return;
         }
 
         try {
-            LOG.debug(String.format("Removing health monitor for load balancer '%d' in LB Device...", dbLoadBalancer.getId()));
-            reverseProxyLoadBalancerService.deleteHealthMonitor(dbLoadBalancer.getAccountId(), dbLoadBalancer.getId());
-            LOG.debug(String.format("Successfully removed health monitor for load balancer '%d' in LB Device.", dbLoadBalancer.getId()));
+            logger.debug(String.format("Removing health monitor for load balancer '%d' in LB Device...", dbLoadBalancer.getId()));
+            getReverseProxyLoadBalancerService().deleteHealthMonitor(dbLoadBalancer.getAccountId(), dbLoadBalancer.getId());
+            logger.debug(String.format("Successfully removed health monitor for load balancer '%d' in LB Device.", dbLoadBalancer.getId()));
         } catch (Exception e) {
             loadBalancerRepository.changeStatus(dbLoadBalancer, CoreLoadBalancerStatus.ERROR);
             String alertDescription = String.format("Error removing health monitor in LB Device for loadbalancer '%d'.", dbLoadBalancer.getId());
-            LOG.error(alertDescription, e);
+            logger.error(alertDescription, e);
             notificationService.saveAlert(dbLoadBalancer.getAccountId(), dbLoadBalancer.getId(), e, LBDEVICE_FAILURE.name(), alertDescription);
             sendErrorToEventResource(queueLb);
             return;
         }
 
         try {
-            LOG.debug(String.format("Removing health monitor for load balancer '%d' in database...", dbLoadBalancer.getId()));
+            logger.debug(String.format("Removing health monitor for load balancer '%d' in database...", dbLoadBalancer.getId()));
             healthMonitorService.delete(dbLoadBalancer.getId());
-            LOG.debug(String.format("Successfully removed health monitor for load balancer '%d' in database.", dbLoadBalancer.getId()));
+            logger.debug(String.format("Successfully removed health monitor for load balancer '%d' in database.", dbLoadBalancer.getId()));
         } catch (EntityNotFoundException e) {
-            LOG.debug(String.format("Health monitor for load balancer #%d already deleted in database. Ignoring...", dbLoadBalancer.getId()));
+            logger.debug(String.format("Health monitor for load balancer #%d already deleted in database. Ignoring...", dbLoadBalancer.getId()));
         }
 
         loadBalancerRepository.changeStatus(dbLoadBalancer, CoreLoadBalancerStatus.ACTIVE);
@@ -73,7 +73,7 @@ public class DeleteHealthMonitorListener extends BaseListener {
         String atomSummary = "Health monitor successfully deleted";
         notificationService.saveHealthMonitorEvent(queueLb.getUserName(), dbLoadBalancer.getAccountId(), dbLoadBalancer.getId(), dbLoadBalancer.getHealthMonitor().getId(), atomTitle, atomSummary, DELETE_HEALTH_MONITOR, DELETE, INFO);
 
-        LOG.info(String.format("Delete health monitor operation complete for load balancer '%d'.", dbLoadBalancer.getId()));
+        logger.info(String.format("Delete health monitor operation complete for load balancer '%d'.", dbLoadBalancer.getId()));
     }
 
     private void sendErrorToEventResource(LoadBalancer lb) {

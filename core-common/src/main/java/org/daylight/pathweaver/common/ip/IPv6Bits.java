@@ -7,7 +7,7 @@ import org.daylight.pathweaver.common.ip.exception.IPStringConversionException1;
 import java.math.BigInteger;
 
 public class IPv6Bits extends IPv6{
-    private BigInteger ipAsBigInt;
+
     private static final BigInteger maxIp;
     private static final BigInteger byte255;
 
@@ -24,7 +24,7 @@ public class IPv6Bits extends IPv6{
         IPv6 out;
         int byteInt;
         int i;
-        int j;
+
         byte[] bytesOut = new byte[16];
         BigInteger bigInt = new BigInteger(in.toByteArray());
         if (bigInt.compareTo(BigInteger.ZERO) == -1 || bigInt.compareTo(maxIp) == 1) {
@@ -39,7 +39,7 @@ public class IPv6Bits extends IPv6{
         try {
             out = new IPv6(bytesOut);
         } catch (IPStringConversionException1 ex) {
-            throw new IPBigIntegerConversionException("Impossible Exception Conditions where pre checked");
+            throw new IPBigIntegerConversionException("Impossible Exception Conditions where pre checked", ex);
         }
 
         return out;

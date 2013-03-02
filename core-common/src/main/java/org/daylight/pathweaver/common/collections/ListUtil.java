@@ -11,7 +11,9 @@ public class ListUtil {
         List<Integer> badList = new ArrayList<Integer>();
 
        for (Integer i : list1) {
-         if (!list2.contains(i)) badList.add(i);
+         if (!list2.contains(i)) {
+             badList.add(i);
+         }
        }
        return badList;
     }
@@ -23,7 +25,9 @@ public class ListUtil {
         List<Integer> returnList = new ArrayList<Integer>();
 
        for (Integer i : list1) {
-         if (list2.contains(i)) returnList.add(i);
+         if (list2.contains(i)) {
+             returnList.add(i);
+         }
        }
        return returnList;
     }

@@ -18,12 +18,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class HealthMonitorServiceImpl implements HealthMonitorService {
-    private final Log LOG = LogFactory.getLog(HealthMonitorServiceImpl.class);
+    private final Log logger = LogFactory.getLog(HealthMonitorServiceImpl.class);
 
     @Autowired
-    protected LoadBalancerRepository loadBalancerRepository;
+    private LoadBalancerRepository loadBalancerRepository;
     @Autowired
-    protected HealthMonitorRepository healthMonitorRepository;
+    private HealthMonitorRepository healthMonitorRepository;
 
     @Override
     @Transactional(value="core_transactionManager", rollbackFor = {EntityNotFoundException.class, ImmutableEntityException.class, UnprocessableEntityException.class})
@@ -55,7 +55,9 @@ public class HealthMonitorServiceImpl implements HealthMonitorService {
     public void preDelete(Integer loadBalancerId) throws PersistenceServiceException {
 
 
-        if (healthMonitorRepository.getByLoadBalancerId(loadBalancerId) == null) throw new EntityNotFoundException("Health monitor not found");
+        if (healthMonitorRepository.getByLoadBalancerId(loadBalancerId) == null) {
+            throw new EntityNotFoundException("Health monitor not found");
+        }
 
         LoadBalancer dbLoadBalancer =  loadBalancerRepository.getById(loadBalancerId);
 
@@ -107,29 +109,46 @@ public class HealthMonitorServiceImpl implements HealthMonitorService {
     protected void setHttpMonitorProperties(final HealthMonitor requestMonitor, final HealthMonitor dbMonitor, HealthMonitor monitorToUpdate) throws BadRequestException {
         setConnectMonitorProperties(requestMonitor, dbMonitor, monitorToUpdate);
 
-        if (requestMonitor.getPath() != null) monitorToUpdate.setPath(requestMonitor.getPath());
-        else if (dbMonitor != null && dbMonitor.getPath() != null && dbMonitor.getPath().length() > 0)
+        if (requestMonitor.getPath() != null) {
+            monitorToUpdate.setPath(requestMonitor.getPath());
+        } else if (dbMonitor != null && dbMonitor.getPath() != null && dbMonitor.getPath().length() > 0) {
             monitorToUpdate.setPath(dbMonitor.getPath());
-        else throw new BadRequestException("Must provide a path for the request");
+        } else {
+            throw new BadRequestException("Must provide a path for the request");
+        }
     }
 
     protected void setConnectMonitorProperties(final HealthMonitor requestMonitor, final HealthMonitor dbMonitor, HealthMonitor monitorToUpdate) throws BadRequestException {
-        if (requestMonitor.getType() != null) monitorToUpdate.setType(requestMonitor.getType());
-        else if (dbMonitor != null) monitorToUpdate.setType(dbMonitor.getType());
-        else throw new BadRequestException("Must provide a type for the request");
+        if (requestMonitor.getType() != null) {
+            monitorToUpdate.setType(requestMonitor.getType());
+        } else if (dbMonitor != null) {
+            monitorToUpdate.setType(dbMonitor.getType());
+        } else {
+            throw new BadRequestException("Must provide a type for the request");
+        }
 
-        if (requestMonitor.getDelay() != null) monitorToUpdate.setDelay(requestMonitor.getDelay());
-        else if (dbMonitor != null) monitorToUpdate.setDelay(dbMonitor.getDelay());
-        else throw new BadRequestException("Must provide a delay for the request");
+        if (requestMonitor.getDelay() != null) {
+            monitorToUpdate.setDelay(requestMonitor.getDelay());
+        } else if (dbMonitor != null) {
+            monitorToUpdate.setDelay(dbMonitor.getDelay());
+        } else {
+            throw new BadRequestException("Must provide a delay for the request");
+        }
 
-        if (requestMonitor.getTimeout() != null) monitorToUpdate.setTimeout(requestMonitor.getTimeout());
-        else if (dbMonitor != null) monitorToUpdate.setTimeout(dbMonitor.getTimeout());
-        else throw new BadRequestException("Must provide a timeout for the request");
+        if (requestMonitor.getTimeout() != null) {
+            monitorToUpdate.setTimeout(requestMonitor.getTimeout());
+        } else if (dbMonitor != null) {
+            monitorToUpdate.setTimeout(dbMonitor.getTimeout());
+        } else {
+            throw new BadRequestException("Must provide a timeout for the request");
+        }
 
-        if (requestMonitor.getAttemptsBeforeDeactivation() != null)
+        if (requestMonitor.getAttemptsBeforeDeactivation() != null) {
             monitorToUpdate.setAttemptsBeforeDeactivation(requestMonitor.getAttemptsBeforeDeactivation());
-        else if (dbMonitor != null)
+        } else if (dbMonitor != null) {
             monitorToUpdate.setAttemptsBeforeDeactivation(dbMonitor.getAttemptsBeforeDeactivation());
-        else throw new BadRequestException("Must provide attemptsBeforeActivation for the request");
+        } else {
+            throw new BadRequestException("Must provide attemptsBeforeActivation for the request");
+        }
     }
 }

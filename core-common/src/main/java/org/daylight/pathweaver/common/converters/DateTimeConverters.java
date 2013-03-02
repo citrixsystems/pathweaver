@@ -50,7 +50,7 @@ public class DateTimeConverters {
 
     public static String calToiso(Calendar cal) throws ConverterException {
         String out;
-        String msg;
+
         try {
             DateTime dateTime = new DateTime(cal);
             out = ISODateTimeFormat.dateTimeNoMillis().print(dateTime);

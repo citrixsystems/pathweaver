@@ -14,8 +14,8 @@ import static org.daylight.pathweaver.api.validation.ValidatorBuilder.build;
 @Component
 @Scope("request")
 public class LoadBalancerValidator implements ResourceValidator<LoadBalancer> {
-    protected Validator<LoadBalancer> validator;
-    protected LoadBalancerValidatorBuilder ruleBuilder;
+    private Validator<LoadBalancer> validator;
+    private LoadBalancerValidatorBuilder ruleBuilder;
 
     @Autowired
     public LoadBalancerValidator(LoadBalancerValidatorBuilder ruleBuilder) {

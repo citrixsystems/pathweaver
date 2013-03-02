@@ -8,4 +8,8 @@ public class IPStringConversionException extends Exception {
     public IPStringConversionException(String msg) {
         super(msg);
     }
+
+    public IPStringConversionException(String msg, Exception innerExcept) {
+        super(msg, innerExcept);
+    }
 }

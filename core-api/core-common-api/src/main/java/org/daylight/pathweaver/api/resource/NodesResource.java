@@ -34,24 +34,24 @@ import static javax.ws.rs.core.MediaType.*;
 @Controller
 @Scope("request")
 public class NodesResource extends CommonDependencyProvider {
-    private final Logger LOG = Logger.getLogger(NodesResource.class);
-    protected Integer accountId;
-    protected Integer loadBalancerId;
+    private final Logger logger = Logger.getLogger(NodesResource.class);
+    private Integer accountId;
+    private Integer loadBalancerId;
     private HttpHeaders requestHeaders;
 
 
     @Autowired
-    protected NodesValidator validator;
+    private NodesValidator validator;
     @Autowired
     private NodeResource nodeResource;
     @Autowired
-    protected NodeService nodeService;
+    private NodeService nodeService;
     @Autowired
-    protected NodeRepository nodeRepository;
+    private NodeRepository nodeRepository;
     @Autowired
-    protected LoadBalancerRepository loadBalancerRepository;
+    private LoadBalancerRepository loadBalancerRepository;
     @Autowired
-    protected LoadBalancerService loadBalancerService;
+    private LoadBalancerService loadBalancerService;
 
     @GET
     @Produces({APPLICATION_XML, APPLICATION_JSON, APPLICATION_ATOM_XML})
@@ -59,10 +59,11 @@ public class NodesResource extends CommonDependencyProvider {
         try {
             Nodes returnNodes = new Nodes();
             for (Node node : nodeRepository.getNodesByAccountIdLoadBalancerId(loadBalancerId, accountId)) {
-                returnNodes.getNodes().add(dozerMapper.map(node, org.daylight.pathweaver.core.api.v1.Node.class));
+                returnNodes.getNodes().add(getDozerMapper().map(node, org.daylight.pathweaver.core.api.v1.Node.class));
             }
             return Response.status(Response.Status.OK).entity(returnNodes).build();
         } catch (Exception e) {
+            logger.debug("Caught an exception: " + e.toString());
             return ResponseFactory.getErrorResponse(e);
         }
     }
@@ -80,8 +81,10 @@ public class NodesResource extends CommonDependencyProvider {
             loadBalancerRepository.getByIdAndAccountId(loadBalancerId, accountId);
 
             org.daylight.pathweaver.core.api.v1.LoadBalancer apiLb = new org.daylight.pathweaver.core.api.v1.LoadBalancer();
-            apiLb.getNodes().getNodes().addAll(_nodes.getNodes());
-            LoadBalancer domainLb = dozerMapper.map(apiLb, LoadBalancer.class);
+            Nodes nodes = new Nodes();
+            nodes.getNodes().addAll(_nodes.getNodes());
+            apiLb.setNodes(nodes);
+            LoadBalancer domainLb = getDozerMapper().map(apiLb, LoadBalancer.class);
             domainLb.setId(loadBalancerId);
             domainLb.setAccountId(accountId);
 
@@ -90,15 +93,16 @@ public class NodesResource extends CommonDependencyProvider {
             Nodes returnNodes = new Nodes();
             Set<Node> dbnodes = nodeService.createNodes(domainLb);
             for (Node node : dbnodes) {
-                returnNodes.getNodes().add(dozerMapper.map(node, org.daylight.pathweaver.core.api.v1.Node.class));
+                returnNodes.getNodes().add(getDozerMapper().map(node, org.daylight.pathweaver.core.api.v1.Node.class));
             }
 
             MessageDataContainer dataContainer = new MessageDataContainer();
             dataContainer.setLoadBalancer(domainLb);
 
-            asyncService.callAsyncLoadBalancingOperation(CoreOperation.CREATE_NODES, dataContainer);
+            getAsyncService().callAsyncLoadBalancingOperation(CoreOperation.CREATE_NODES, dataContainer);
             return Response.status(Response.Status.ACCEPTED).entity(returnNodes).build();
         } catch (Exception e) {
+            logger.debug("Caught an exception: " + e.toString());
             return ResponseFactory.getErrorResponse(e);
         }
     }
@@ -132,9 +136,10 @@ public class NodesResource extends CommonDependencyProvider {
             msg.setAccountId(accountId);
             msg.setLoadBalancerId(loadBalancerId);
             msg.setUserName(getUserName(requestHeaders));
-            asyncService.callAsyncLoadBalancingOperation(CoreOperation.DELETE_NODES, msg);
+            getAsyncService().callAsyncLoadBalancingOperation(CoreOperation.DELETE_NODES, msg);
             return Response.status(Response.Status.ACCEPTED).build();
         } catch (Exception ex) {
+            logger.debug("Caught an exception: " + ex.toString());
             return ResponseFactory.getErrorResponse(ex, null, null);
         }
     }

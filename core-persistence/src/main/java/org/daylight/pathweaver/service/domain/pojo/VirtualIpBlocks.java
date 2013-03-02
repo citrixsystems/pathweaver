@@ -8,8 +8,8 @@ import java.util.List;
 
 public class VirtualIpBlocks implements Serializable {
     private final static long serialVersionUID = 532512316L;
-    protected List<VirtualIpBlock> virtualIpBlocks;
-    protected VirtualIpType type;
+    private List<VirtualIpBlock> virtualIpBlocks;
+    private VirtualIpType type;
 
     public List<VirtualIpBlock> getVirtualIpBlocks() {
         if (virtualIpBlocks == null) {

@@ -19,7 +19,7 @@ public final class CryptoUtil {
 
     public static final String ENCODING = "UTF-8";
 
-    private static final Logger LOGGER = Logger.getLogger(CryptoUtil.class);
+    private static final Logger loggerGER = Logger.getLogger(CryptoUtil.class);
 
     private CryptoUtil() {
     }
@@ -84,8 +84,7 @@ public final class CryptoUtil {
                 number[i / 2] = (byte) (j & 0x000000ff);
             }
         } catch (StringIndexOutOfBoundsException ex) {
-            ex.printStackTrace();
-            throw new DecryptException("Invalid hex string");
+            throw new DecryptException("Invalid hex string", ex);
         }
 
         return number;
@@ -137,7 +136,7 @@ public final class CryptoUtil {
             return decryptAES(skeySpec, cipherMode, cipherPadding, encrypted);
         } catch (NoSuchAlgorithmException e) {
 
-            LOGGER.error("Could not instantiate keygen for AES decryption", e);
+            loggerGER.error("Could not instantiate keygen for AES decryption", e);
             throw new DecryptException("Could not instantiate keygen", e);
         }
     }
@@ -175,23 +174,23 @@ public final class CryptoUtil {
             return c.doFinal(encrypted);
 
         } catch (NoSuchAlgorithmException e) {
-            LOGGER.error("Could not instantiate cipher for AES decryption", e);
+            loggerGER.error("Could not instantiate cipher for AES decryption", e);
             throw new DecryptException("Could not instantiate cipher", e);
 
         } catch (NoSuchPaddingException e) {
-            LOGGER.error("Could not instantiate cipher for AES decryption", e);
+            loggerGER.error("Could not instantiate cipher for AES decryption", e);
             throw new DecryptException("Could not instantiate cipher", e);
 
         } catch (InvalidKeyException e) {
-            LOGGER.error("Invalid key for AES encryption", e);
+            loggerGER.error("Invalid key for AES encryption", e);
             throw new DecryptException("Invalid key for AES decryption", e);
 
         } catch (IllegalBlockSizeException e) {
-            LOGGER.error("Could not perform AES decryption on: " + new String(encrypted), e);
+            loggerGER.error("Could not perform AES decryption on: " + new String(encrypted), e);
             throw new DecryptException("Could not perform AES decryption on: " + new String(encrypted), e);
 
         } catch (BadPaddingException e) {
-            LOGGER.error("Could not perform AES decryption on: " + new String(encrypted), e);
+            loggerGER.error("Could not perform AES decryption on: " + new String(encrypted), e);
             throw new DecryptException("Could not perform AES decryption on: " + new String(encrypted), e);
         }
     }
@@ -223,11 +222,11 @@ public final class CryptoUtil {
             return encryptAES(skeySpec, cipherMode, cipherPadding, decrypted);
 
         } catch (NoSuchAlgorithmException e) {
-            LOGGER.error("Could not decrypt data", e);
+            loggerGER.error("Could not decrypt data", e);
             throw new EncryptException("Could not decrypt data", e);
 
         } catch (Exception e) {
-            LOGGER.error("Could not decrypt data", e);
+            loggerGER.error("Could not decrypt data", e);
             throw new EncryptException("Could not decrypt data", e);
         }
     }
@@ -266,27 +265,27 @@ public final class CryptoUtil {
             return c.doFinal(decrypted);
 
         } catch (NoSuchAlgorithmException e) {
-            LOGGER.error("Could not encrypt data", e);
+            loggerGER.error("Could not encrypt data", e);
             throw new EncryptException("Could not encrypt data", e);
 
         } catch (NoSuchPaddingException e) {
-            LOGGER.error("Could not encrypt data", e);
+            loggerGER.error("Could not encrypt data", e);
             throw new EncryptException("Could not encrypt data", e);
 
         } catch (InvalidKeyException e) {
-            LOGGER.error("Could not encrypt data", e);
+            loggerGER.error("Could not encrypt data", e);
             throw new EncryptException("Could not encrypt data", e);
 
         } catch (IllegalBlockSizeException e) {
-            LOGGER.error("Could not encrypt data", e);
+            loggerGER.error("Could not encrypt data", e);
             throw new EncryptException("Could not encrypt data", e);
 
         } catch (BadPaddingException e) {
-            LOGGER.error("Could not encrypt data", e);
+            loggerGER.error("Could not encrypt data", e);
             throw new EncryptException("Could not encrypt data", e);
 
         } catch (Exception e) {
-            LOGGER.error("Could not encrypt data", e);
+            loggerGER.error("Could not encrypt data", e);
             throw new EncryptException("Could not encrypt data", e);
         }
     }

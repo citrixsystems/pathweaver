@@ -120,7 +120,9 @@ public class EntryBuilder {
         Entry entry = AbderaSupport.getAbderaInstance().newEntry();
         entry.setTitle(event.getTitle());
         entry.setSummary(event.getDescription());
-        if(event.getAuthor() != null) entry.addAuthor(event.getAuthor());
+        if(event.getAuthor() != null) {
+            entry.addAuthor(event.getAuthor());
+        }
         entry.addLink(buildCompleteUri(event.getRelativeUri(), baseUri));
         entry.setId(generateEntryId(event));
         entry.addCategory(event.getCategory().toString());
@@ -133,14 +135,17 @@ public class EntryBuilder {
     }
 
     public String generateEntryId(Event event) {
-        if (event.getRelativeUri() == null || event.getRelativeUri().equals(""))
+        if (event.getRelativeUri() == null || event.getRelativeUri().equals(""))  {
             return generateIdCompatibleTimestamp(event.getCreated());
+        }
 
         String[] uriComponenets = event.getRelativeUri().split("/");
         String entryId = "";
 
         for (String uriComponenet : uriComponenets) {
-            if (!uriComponenet.equals("")) entryId = entryId + uriComponenet + "-";
+            if (!uriComponenet.equals("")) {
+                entryId = entryId + uriComponenet + "-";
+            }
         }
 
         entryId = entryId + (generateIdCompatibleTimestamp(event.getCreated()));

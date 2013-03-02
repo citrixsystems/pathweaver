@@ -26,13 +26,13 @@ import java.util.Set;
 
 @Service
 public class BaseService {
-    protected final Log LOG = LogFactory.getLog(BaseService.class);
+    private final Log logger= LogFactory.getLog(BaseService.class);
 
     @Autowired
-    protected LoadBalancerRepository loadBalancerRepository;
+    private LoadBalancerRepository loadBalancerRepository;
 
     @Autowired
-    protected BlacklistRepository blacklistRepository;
+    private BlacklistRepository blacklistRepository;
 
     public void isLbActive(LoadBalancer dbLoadBalancer) throws UnprocessableEntityException, ImmutableEntityException {
         if (dbLoadBalancer.getStatus().equals(CoreLoadBalancerStatus.DELETED)) {
@@ -41,7 +41,7 @@ public class BaseService {
 
         if (!dbLoadBalancer.getStatus().equals(CoreLoadBalancerStatus.ACTIVE)) {
             String message = StringHelper.immutableLoadBalancer(dbLoadBalancer);
-            LOG.warn(message);
+            logger.warn(message);
             throw new ImmutableEntityException(message);
         }
     }

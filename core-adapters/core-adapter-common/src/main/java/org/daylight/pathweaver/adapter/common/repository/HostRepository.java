@@ -21,7 +21,7 @@ import java.util.List;
 @Transactional(value="adapter_transactionManager")
 public class HostRepository {
 
-    final Log LOG = LogFactory.getLog(HostRepository.class);
+    private final Log logger = LogFactory.getLog(HostRepository.class);
 
     @PersistenceContext(unitName = "loadbalancingadapter")
     private EntityManager entityManager;
@@ -35,7 +35,7 @@ public class HostRepository {
         Query query = entityManager.createQuery(hqlStr).setParameter("clusterId", clusterId).setMaxResults(1);
         List<Host> results = query.getResultList();
         if (results.size() < 1) {
-            LOG.error(String.format("Error no more endpoints left for ClusterId %d.", clusterId));
+            logger.error(String.format("Error no more endpoints left for ClusterId %d.", clusterId));
             return null;
         }
         return results.get(0);
@@ -46,7 +46,7 @@ public class HostRepository {
         Query query = entityManager.createQuery(hqlStr).setParameter("loadBalancerId", lbId).setMaxResults(1);
         List<LoadBalancerHost> results = query.getResultList();
         if (results.size() < 1) {
-            LOG.error(String.format("Error no Host found for LoadBalancer id %d.", lbId));
+            logger.error(String.format("Error no Host found for LoadBalancer id %d.", lbId));
             return null;
         }
         return results.get(0);
@@ -56,7 +56,7 @@ public class HostRepository {
     
         entityManager.persist(lbHost);
 
-        LOG.info(String.format("Create/Update a LoadBalancerHost for loadbalancer id %d and host id %d", lbHost.getLoadBalancerId(), lbHost.getHost().getId()));
+        logger.info(String.format("Create/Update a LoadBalancerHost for loadbalancer id %d and host id %d", lbHost.getLoadBalancerId(), lbHost.getHost().getId()));
 
         return lbHost;
     }
@@ -68,7 +68,7 @@ public class HostRepository {
     }
 
     public Host update(Host host) {
-        LOG.info("Updating Host " + host.getId() + "...");
+        logger.info("Updating Host " + host.getId() + "...");
         host = entityManager.merge(host);
         entityManager.flush();
         return host;
@@ -78,16 +78,15 @@ public class HostRepository {
         String hql = "select h.name from Host h where h.hostStatus = 'FAILOVER' and h.cluster.id = :clusterId";
 
         Query query = entityManager.createQuery(hql).setParameter("clusterId", clusterId);
-        List<String> results = query.getResultList();
-        return results;
+        return query.getResultList();
+
     }
 
     public List<Host> getHosts() {
         String sql = "SELECT h from Host h";
 
         Query query = entityManager.createQuery(sql);
-        List<Host> hosts = query.getResultList();
-        return hosts;
+        return query.getResultList();
     }
 
 
@@ -96,9 +95,7 @@ public class HostRepository {
         String query = "select count(*) from LoadBalancerHost lbHost where lbHost.host.id = :id";
 
         List<Long> lbsInHost = entityManager.createQuery(query).setParameter("id", host.getId()).getResultList();
-        long count = lbsInHost.get(0).longValue();
-        return count;
-
+        return lbsInHost.get(0).longValue();
     }
 
     public Host getHostWithMinimumLoadBalancers(List<Host> hosts) {

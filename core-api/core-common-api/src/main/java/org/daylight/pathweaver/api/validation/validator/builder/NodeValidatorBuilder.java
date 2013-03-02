@@ -14,10 +14,10 @@ import static org.daylight.pathweaver.api.validation.context.HttpRequestType.PUT
 @Component
 @Scope("request")
 public class NodeValidatorBuilder extends ValidatorBuilder<Node> {
-    protected final int MIN_PORT = 1;
-    protected final int MAX_PORT = 65535;
-    protected final int MIN_WEIGHT = 1;
-    protected final int MAX_WEIGHT = 100;
+    private final int MIN_PORT = 1;
+    private final int MAX_PORT = 65535;
+    private final int MIN_WEIGHT = 1;
+    private final int MAX_WEIGHT = 100;
 
     public NodeValidatorBuilder() {
         super(Node.class);
@@ -53,11 +53,9 @@ public class NodeValidatorBuilder extends ValidatorBuilder<Node> {
                 } catch (NullPointerException ex) {
                     return new VerifierResult(true);   // This parameter is apparently optional.
                 }
-
                 if (ipLong >= 2130706432L && ipLong <= 2147483647L) {
                     return new VerifierResult(false); // ip is in the 127/8 block
                 }
-
                 if (ipLong == 0L || ipLong == 4294967295L) {
                     return new VerifierResult(false); // ip was 0.0.0.0 or 255.255.255.255
                 }

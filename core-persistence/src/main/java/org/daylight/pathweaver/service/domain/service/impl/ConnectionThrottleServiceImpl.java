@@ -19,12 +19,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ConnectionThrottleServiceImpl implements ConnectionThrottleService {
-    private final Log LOG = LogFactory.getLog(ConnectionThrottleServiceImpl.class);
+    private final Log logger = LogFactory.getLog(ConnectionThrottleServiceImpl.class);
 
     @Autowired
-    protected LoadBalancerRepository loadBalancerRepository;
+    private LoadBalancerRepository loadBalancerRepository;
     @Autowired
-    protected ConnectionThrottleRepository connectionThrottleRepository;
+    private ConnectionThrottleRepository connectionThrottleRepository;
 
     @Override
     @Transactional(value="core_transactionManager", rollbackFor = {EntityNotFoundException.class, ImmutableEntityException.class, UnprocessableEntityException.class})
@@ -60,9 +60,9 @@ public class ConnectionThrottleServiceImpl implements ConnectionThrottleService 
 
         LoadBalancer dbLoadBalancer = loadBalancerRepository.getById(loadBalancerId);
 
-        if (dbLoadBalancer.getConnectionThrottle() == null)
+        if (dbLoadBalancer.getConnectionThrottle() == null)  {
             throw new EntityNotFoundException("Connection throttle not found");
-
+        }
 
         String status = dbLoadBalancer.getStatus();
 
@@ -79,12 +79,16 @@ public class ConnectionThrottleServiceImpl implements ConnectionThrottleService 
     }
 
     protected void setPropertiesForUpdate(final ConnectionThrottle requestConnectionThrottle, final ConnectionThrottle dbConnectionThrottle) throws BadRequestException {
-        if (requestConnectionThrottle.getMaxRequestRate() != null)
+        if (requestConnectionThrottle.getMaxRequestRate() != null) {
             dbConnectionThrottle.setMaxRequestRate(requestConnectionThrottle.getMaxRequestRate());
-        else throw new BadRequestException("Must provide a max request rate for the request");
+        } else {
+            throw new BadRequestException("Must provide a max request rate for the request");
+        }
 
-        if (requestConnectionThrottle.getRateInterval() != null)
+        if (requestConnectionThrottle.getRateInterval() != null) {
             dbConnectionThrottle.setRateInterval(requestConnectionThrottle.getRateInterval());
-        else throw new BadRequestException("Must provide a rate interval for the request");
+        } else {
+            throw new BadRequestException("Must provide a rate interval for the request");
+        }
     }
 }

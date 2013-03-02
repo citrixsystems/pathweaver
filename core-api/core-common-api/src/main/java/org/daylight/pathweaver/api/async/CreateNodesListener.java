@@ -26,7 +26,7 @@ import static org.daylight.pathweaver.service.domain.event.entity.EventSeverity.
 
 @Component
 public class CreateNodesListener extends BaseListener {
-    private final Log LOG = LogFactory.getLog(CreateNodesListener.class);
+    private final Log logger = LogFactory.getLog(CreateNodesListener.class);
 
     @Autowired
     private NotificationService notificationService;
@@ -36,8 +36,8 @@ public class CreateNodesListener extends BaseListener {
 
     @Override
     public void doOnMessage(final Message message) throws Exception {
-        LOG.debug("Entering " + getClass());
-        LOG.debug(message);
+        logger.debug("Entering " + getClass());
+        logger.debug(message);
 
         LoadBalancer dbLoadBalancer;
 
@@ -48,22 +48,22 @@ public class CreateNodesListener extends BaseListener {
             dbLoadBalancer = loadBalancerRepository.getByIdAndAccountId(queueLb.getId(), queueLb.getAccountId());
         } catch (EntityNotFoundException enfe) {
             String alertDescription = String.format("Load balancer '%d' not found in database.", queueLb.getId());
-            LOG.error(alertDescription, enfe);
+            logger.error(alertDescription, enfe);
             notificationService.saveAlert(queueLb.getAccountId(), queueLb.getId(), enfe, DATABASE_FAILURE.name(), alertDescription);
             sendErrorToEventResource(queueLb);
             return;
         }
 
         try {
-            LOG.debug("Setting nodes in LBDevice...");
-            reverseProxyLoadBalancerService.createNodes(dbLoadBalancer.getAccountId(), dbLoadBalancer.getId(), dbLoadBalancer.getNodes());
-            LOG.debug("Nodes successfully set.");
+            logger.debug("Setting nodes in LBDevice...");
+            getReverseProxyLoadBalancerService().createNodes(dbLoadBalancer.getAccountId(), dbLoadBalancer.getId(), dbLoadBalancer.getNodes());
+            logger.debug("Nodes successfully set.");
         } catch (Exception e) {
             dbLoadBalancer.setStatus(ERROR);
             NodesHelper.setNodesToStatus(dbLoadBalancer, OFFLINE);
             loadBalancerRepository.update(dbLoadBalancer);
             String alertDescription = "Error setting nodes in LB Device for loadbalancer #" + dbLoadBalancer.getId();
-            LOG.error(alertDescription, e);
+            logger.error(alertDescription, e);
             notificationService.saveAlert(dbLoadBalancer.getAccountId(), dbLoadBalancer.getId(), e, LBDEVICE_FAILURE.name(), alertDescription);
             sendErrorToEventResource(queueLb);
             return;
@@ -77,13 +77,14 @@ public class CreateNodesListener extends BaseListener {
         // Add atom entries for new nodes only
         for (Node dbNode : dbLoadBalancer.getNodes()) {
             for (Node queueNode : queueLb.getNodes()) {
-                if (queueNode.getAddress().equals(dbNode.getAddress()) && queueNode.getPort().equals(dbNode.getPort()))
+                if (queueNode.getAddress().equals(dbNode.getAddress()) && queueNode.getPort().equals(dbNode.getPort()))  {
                     notificationService.saveNodeEvent(queueLb.getUserName(), dbLoadBalancer.getAccountId(), dbLoadBalancer.getId(),
                             dbNode.getId(), CREATE_NODE_TITLE, EntryHelper.createNodeSummary(dbNode), CREATE_NODE, CREATE, INFO);
+                }
             }
         }
 
-        LOG.info(String.format("Create nodes operation successfully completed for load balancer '%d'", dbLoadBalancer.getId()));
+        logger.info(String.format("Create nodes operation successfully completed for load balancer '%d'", dbLoadBalancer.getId()));
     }
 
     private void sendErrorToEventResource(LoadBalancer lb) {

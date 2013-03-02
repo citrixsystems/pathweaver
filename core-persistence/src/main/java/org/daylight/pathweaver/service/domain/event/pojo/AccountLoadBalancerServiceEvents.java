@@ -10,8 +10,8 @@ public class AccountLoadBalancerServiceEvents
 {
 
     private final static long serialVersionUID = 532512316L;
-    protected List<LoadBalancerServiceEvents> loadBalancerServiceEvents;
-    protected Integer accountId;
+    private List<LoadBalancerServiceEvents> loadBalancerServiceEvents;
+    private Integer accountId;
 
     public List<LoadBalancerServiceEvents> getLoadBalancerServiceEvents() {
         if (loadBalancerServiceEvents == null) {

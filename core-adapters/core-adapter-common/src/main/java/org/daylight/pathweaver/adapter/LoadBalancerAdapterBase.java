@@ -28,23 +28,19 @@ import java.util.Set;
 @Service
 public abstract class LoadBalancerAdapterBase implements LoadBalancerAdapter {
 
-    public static Log LOG = LogFactory.getLog(LoadBalancerAdapterBase.class.getName());
+    private static Log logger = LogFactory.getLog(LoadBalancerAdapterBase.class.getName());
 
     @Autowired
-    protected HostService hostService;
-
-
-    @Autowired
-    protected HostRepository hostRepository;
+    private HostService hostService;
 
 
     @Autowired
-    protected AdapterVirtualIpService virtualIpService;
+    private AdapterVirtualIpService virtualIpService;
 
 
-    protected String logFileLocation;
+    private String logFileLocation;
 
-    protected String adapterConfigFileLocation;
+    private String adapterConfigFileLocation;
 
     // Derived classes must implement the following methods
     protected abstract void doCreateLoadBalancer(LoadBalancer lb, LoadBalancerHost lbHost)  throws AdapterException;
@@ -73,7 +69,7 @@ public abstract class LoadBalancerAdapterBase implements LoadBalancerAdapter {
     private LoadBalancerHost  getLoadBalancerHost(Integer  lbId)
     {
         if (hostService == null) {
-            LOG.debug("hostService is null !");
+            logger.debug("hostService is null !");
         }
 
         LoadBalancerHost lbHost = hostService.getLoadBalancerHost(lbId);
@@ -89,7 +85,7 @@ public abstract class LoadBalancerAdapterBase implements LoadBalancerAdapter {
             hostService.removeLoadBalancerHost(lbHost);
             virtualIpService.undoAllVipsFromLoadBalancer(lb);
         } catch (PersistenceServiceException e) {
-            LOG.error(String.format("Failed to remove LoadBalancerHost for lbId %d: %s", lb.getId(), e.getMessage()));
+            logger.error(String.format("Failed to remove LoadBalancerHost for lbId %d: %s", lb.getId(), e.getMessage()));
         }
     }
 
@@ -100,7 +96,7 @@ public abstract class LoadBalancerAdapterBase implements LoadBalancerAdapter {
             hostService.removeLoadBalancerHost(lbHost);
             virtualIpService.removeAllVipsFromLoadBalancer(lb);
         } catch (PersistenceServiceException e) {
-            LOG.error(String.format("Failed to remove LoadBalancerHost for lbId %d: %s", lb.getId(), e.getMessage()));
+            logger.error(String.format("Failed to remove LoadBalancerHost for lbId %d: %s", lb.getId(), e.getMessage()));
         }
     }
 
@@ -112,21 +108,20 @@ public abstract class LoadBalancerAdapterBase implements LoadBalancerAdapter {
         // Choose a host for this new load Balancer
         Host host = hostService.getDefaultActiveHost();
 
-        if (host == null)
+        if (host == null)  {
             throw new AdapterException("Cannot retrieve default active host from persistence layer");
-
-        String serviceUrl = host.getEndpoint();
+        }
 
         LoadBalancerHost lbHost = new LoadBalancerHost(lb.getId(), host);
 
 
         try {
-            LOG.debug("Before calling hostService.createLoadBalancerHost()");
+            logger.debug("Before calling hostService.createLoadBalancerHost()");
             hostService.createLoadBalancerHost(lbHost);
             // Also assign the Virtual IP for this load balancer
             virtualIpService.assignVipsToLoadBalancer(lb);
         } catch (PersistenceServiceException e) {
-            throw new AdapterException("Cannot assign Vips to the loadBalancer : " + e.getMessage());
+            throw new AdapterException("Cannot assign Vips to the loadBalancer : " + e.getMessage(), e);
         }
 
 
@@ -136,7 +131,7 @@ public abstract class LoadBalancerAdapterBase implements LoadBalancerAdapter {
         } catch (Exception e) {
             // Undo creation on adapter of this loadbalancer if there is an error.
             undoCreateLoadBalancer(lb, lbHost);
-            throw new AdapterException("Error occurred while creating request or connecting to device : " + e.getMessage());
+            throw new AdapterException("Error occurred while creating request or connecting to device : " + e.getMessage(), e);
         }
     }
 

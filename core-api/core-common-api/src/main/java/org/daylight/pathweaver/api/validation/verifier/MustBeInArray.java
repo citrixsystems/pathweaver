@@ -5,7 +5,7 @@ public class MustBeInArray implements Verifier {
 
     public MustBeInArray(Object[] values) {
         try {
-            this.values = values;
+            this.values = values.clone();
         } catch (Exception ex) {
             this.values = new Object[values.length];
         }

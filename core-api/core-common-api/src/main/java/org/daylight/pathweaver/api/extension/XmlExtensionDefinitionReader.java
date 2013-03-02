@@ -1,5 +1,7 @@
 package org.daylight.pathweaver.api.extension;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
 import org.reflections.scanners.SubTypesScanner;
@@ -20,6 +22,8 @@ import java.util.regex.Pattern;
 
 public class XmlExtensionDefinitionReader {
 
+    private static Log logger = LogFactory.getLog(XmlExtensionDefinitionReader.class.getName());
+
     public static Document readAsXmlDocument(String file) {
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -29,7 +33,7 @@ public class XmlExtensionDefinitionReader {
 
             return doc;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.debug(String.format("Caught an exception on readAsXmlDocument of XmlExtensionDefinitionReader with file %s", file));
         }
         return null;
     }

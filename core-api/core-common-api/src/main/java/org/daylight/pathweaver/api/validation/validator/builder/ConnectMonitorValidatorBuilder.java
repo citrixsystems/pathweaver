@@ -13,9 +13,9 @@ import static org.daylight.pathweaver.api.validation.context.HttpRequestType.PUT
 @Component
 @Scope("request")
 public class ConnectMonitorValidatorBuilder extends ValidatorBuilder<HealthMonitor> {
-    public final int[] DELAY_RANGE = new int[]{1, 3600};
-    public final int[] TIMEOUT_RANGE = new int[]{1, 300};
-    public final int[] ATTEMPTS_BEFORE_DEACTIVATION_RANGE = new int[]{1, 10};
+    private final int[] DELAY_RANGE = new int[]{1, 3600};
+    private final int[] TIMEOUT_RANGE = new int[]{1, 300};
+    private final int[] ATTEMPTS_BEFORE_DEACTIVATION_RANGE = new int[]{1, 10};
 
     public ConnectMonitorValidatorBuilder() {
         super(HealthMonitor.class);

@@ -13,6 +13,11 @@ public class OutOfVipsException extends PersistenceServiceException {
         this.message = messages.toString();
     }
 
+
+    public OutOfVipsException(ErrorMessages messages, Exception innerExcept) {
+        super(messages.toString(), innerExcept);
+        this.message = messages.toString();
+    }
     @Override
     public String getMessage() {
         return message;

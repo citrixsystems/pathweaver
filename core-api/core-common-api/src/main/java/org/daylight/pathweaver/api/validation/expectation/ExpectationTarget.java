@@ -4,6 +4,8 @@
  */
 package org.daylight.pathweaver.api.validation.expectation;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.daylight.pathweaver.api.validation.exception.ValidationChainExecutionException;
 import org.daylight.pathweaver.api.validation.result.ExpectationResult;
 import org.daylight.pathweaver.api.validation.result.ExpectationResultBuilder;
@@ -15,6 +17,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ExpectationTarget<T> {
+    private final Log logger = LogFactory.getLog(ExpectationTarget.class);
+
 
     private final Method targetMethod;
     private final List<Expectation> expectations;
@@ -84,17 +88,17 @@ public class ExpectationTarget<T> {
         try {
             return m.invoke(object);
         } catch (IllegalAccessException iae) {
-            System.out.println("Fatal exception encountered during validation. Please verify your JVM security model.");
+            logger.debug("Fatal exception encountered during validation. Please verify your JVM security model.");
             throw new ValidationChainExecutionException("Fatal exception encountered during validation. Please verify your JVM security model.", iae);
         } catch (IllegalArgumentException iae) {
-            System.out.println("This shouldn't happen but if it does, you lose. Please report this as a bug.");
-            System.out.println("Object class is: " + object.getClass().getName());
-            System.out.println("method we are trying to call: " + m.getName());
+            logger.debug("This shouldn't happen but if it does, you lose. Please report this as a bug.");
+            logger.debug("Object class is: " + object.getClass().getName());
+            logger.debug("method we are trying to call: " + m.getName());
             throw new ValidationChainExecutionException("This shouldn't happen but if it does, you lose. Please report this as a bug.", iae);
         } catch (InvocationTargetException ite) {
-            System.out.println("encountered during validation chain execution. Pump cause for more details.");
+            logger.debug("encountered during validation chain execution. Pump cause for more details.");
             final Throwable t = ite.getTargetException();
-            System.out.println(t.toString());
+            logger.debug(t.toString());
             throw new ValidationChainExecutionException("Exception \""
                     + t.getMessage()
                     + "\" encountered during validation chain execution. Pump cause for more details.", t);

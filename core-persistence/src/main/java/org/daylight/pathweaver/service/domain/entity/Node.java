@@ -84,7 +84,9 @@ public class Node extends org.daylight.pathweaver.service.domain.entity.Entity i
     }
 
     public void setStatus(String status) {
-        if (!PathweaverTypeHelper.isValidNodeStatus(status)) throw new RuntimeException("Node status not supported.");
+        if (!PathweaverTypeHelper.isValidNodeStatus(status)) {
+            throw new RuntimeException("Node status not supported.");
+        }
         this.status = status;
     }
 

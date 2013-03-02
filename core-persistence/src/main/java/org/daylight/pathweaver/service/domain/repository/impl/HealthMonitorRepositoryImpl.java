@@ -20,7 +20,7 @@ import javax.persistence.criteria.Root;
 @Repository
 @Transactional(value="core_transactionManager")
 public class HealthMonitorRepositoryImpl implements HealthMonitorRepository {
-    final Log LOG = LogFactory.getLog(HealthMonitorRepositoryImpl.class);
+    private final Log logger = LogFactory.getLog(HealthMonitorRepositoryImpl.class);
     private static final String entityNotFound = "Health monitor not found";
     @PersistenceContext(unitName = "loadbalancing")
     private EntityManager entityManager;
@@ -41,16 +41,18 @@ public class HealthMonitorRepositoryImpl implements HealthMonitorRepository {
         try {
             return entityManager.createQuery(criteria).setMaxResults(1).getSingleResult();
         } catch (NoResultException e) {
-            throw new EntityNotFoundException(entityNotFound);
+            throw new EntityNotFoundException(entityNotFound, e);
         } catch (NonUniqueResultException e) {
-            LOG.error("More than one health monitor detected!", e);
-            throw new EntityNotFoundException(entityNotFound);
+            logger.error("More than one health monitor detected!", e);
+            throw new EntityNotFoundException(entityNotFound, e);
         }
     }
 
     @Override
     public void delete(HealthMonitor healthMonitor) throws EntityNotFoundException {
-        if (healthMonitor == null) throw new EntityNotFoundException(entityNotFound);
+        if (healthMonitor == null) {
+            throw new EntityNotFoundException(entityNotFound);
+        }
         healthMonitor = entityManager.merge(healthMonitor); // Re-attach hibernate instance
         entityManager.remove(healthMonitor);
     }

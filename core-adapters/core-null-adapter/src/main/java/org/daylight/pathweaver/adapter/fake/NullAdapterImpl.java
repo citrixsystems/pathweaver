@@ -18,7 +18,7 @@ import java.util.Set;
 @Service
 public class NullAdapterImpl extends LoadBalancerAdapterBase {
 
-    public static Log LOG = LogFactory.getLog(NullAdapterImpl.class.getName());
+    private static Log logger = LogFactory.getLog(NullAdapterImpl.class.getName());
 
 
     @Autowired
@@ -33,9 +33,9 @@ public class NullAdapterImpl extends LoadBalancerAdapterBase {
 
         // Now we can create the load balancer on the remote device
 
-       String serviceUrl = lbHost.getHost().getEndpoint();
+       //String serviceUrl = lbHost.getHost().getEndpoint();
 
-       LOG.info("createLoadBalancer"); // NOP
+       logger.info("createLoadBalancer"); // NOP
 
     }
 
@@ -43,89 +43,89 @@ public class NullAdapterImpl extends LoadBalancerAdapterBase {
     public void doUpdateLoadBalancer(LoadBalancer lb, LoadBalancerHost lbHost) throws AdapterException {
 
 
-        String serviceUrl = lbHost.getHost().getEndpoint();
+        //String serviceUrl = lbHost.getHost().getEndpoint();
 
-        LOG.info("updateLoadBalancer");// NOP
+        logger.info("updateLoadBalancer");// NOP
 
     }
 
     @Override
     public void doDeleteLoadBalancer(LoadBalancer lb, LoadBalancerHost lbHost) throws AdapterException {
 
-        String serviceUrl = lbHost.getHost().getEndpoint();
+        //String serviceUrl = lbHost.getHost().getEndpoint();
 
-        LOG.info("deleteLoadBalancer");// NOP
+        logger.info("deleteLoadBalancer");// NOP
 
     }
 
     @Override
     public void doCreateNodes(Integer accountId, Integer lbId, Set<Node> nodes, LoadBalancerHost lbHost) throws AdapterException {
 
-        String serviceUrl = lbHost.getHost().getEndpoint();
+        //String serviceUrl = lbHost.getHost().getEndpoint();
 
-        LOG.info("createNodes");// NOP
+        logger.info("createNodes");// NOP
     }
 
     @Override
     public void doDeleteNodes(Integer accountId, Integer lbId, Set<Node> nodes, LoadBalancerHost lbHost) throws AdapterException {
 
-        String serviceUrl = lbHost.getHost().getEndpoint();
+        //String serviceUrl = lbHost.getHost().getEndpoint();
 
-        LOG.info("deleteNodes");// NOP
+        logger.info("deleteNodes");// NOP
     }
 
     @Override
     public void doUpdateNode(Integer accountId, Integer lbId, Node node, LoadBalancerHost lbHost) throws AdapterException {
 
-        String serviceUrl = lbHost.getHost().getEndpoint();
+        //String serviceUrl = lbHost.getHost().getEndpoint();
 
-        LOG.info("updateNodes");// NOP
+        logger.info("updateNodes");// NOP
     }
 
     @Override
     public void doUpdateConnectionThrottle(Integer accountId, Integer lbId, ConnectionThrottle connectionThrottle, LoadBalancerHost lbHost) throws AdapterException {
 
-        String serviceUrl = lbHost.getHost().getEndpoint();
+        //String serviceUrl = lbHost.getHost().getEndpoint();
 
-        LOG.info("updateConnectionThrottle");// NOP
+        logger.info("updateConnectionThrottle");// NOP
     }
 
     @Override
     public void doDeleteConnectionThrottle(Integer accountId, Integer lbId, LoadBalancerHost lbHost) throws AdapterException {
 
-        String serviceUrl = lbHost.getHost().getEndpoint();
+        //String serviceUrl = lbHost.getHost().getEndpoint();
 
-        LOG.info("deleteConnectionThrottle");// NOP
+        logger.info("deleteConnectionThrottle");// NOP
     }
 
     @Override
     public void doUpdateHealthMonitor(Integer accountId, Integer lbId, HealthMonitor monitor, LoadBalancerHost lbHost) throws AdapterException {
 
-        String serviceUrl = lbHost.getHost().getEndpoint();
+        //String serviceUrl = lbHost.getHost().getEndpoint();
 
-        LOG.info("updateHealthMonitor");// NOP
+        logger.info("updateHealthMonitor");// NOP
     }
 
     @Override
     public void doDeleteHealthMonitor(Integer accountId, Integer lbId, LoadBalancerHost lbHost) throws AdapterException {
 
-        String serviceUrl = lbHost.getHost().getEndpoint();
+        //String serviceUrl = lbHost.getHost().getEndpoint();
 
-        LOG.info("deleteHealthMonitor");// NOP
+        logger.info("deleteHealthMonitor");// NOP
     }
 
     @Override
     public void doSetSessionPersistence(Integer accountId, Integer lbId, SessionPersistence sessionPersistence, LoadBalancerHost lbHost) throws AdapterException {
 
-        String serviceUrl = lbHost.getHost().getEndpoint();
+        //String serviceUrl = lbHost.getHost().getEndpoint();
 
-        LOG.info("setSessionPersistence");// NOP
+        logger.info("setSessionPersistence");// NOP
     }
 
     @Override
     public void doDeleteSessionPersistence(Integer accountId, Integer lbId, LoadBalancerHost lbHost) throws AdapterException {
-        String serviceUrl = lbHost.getHost().getEndpoint();
+        //String serviceUrl = lbHost.getHost().getEndpoint();
 
-        LOG.info("deleteSessionPersistence");// NOP
+        logger.info("deleteSessionPersistence");// NOP
     }
 }

@@ -31,17 +31,17 @@ import java.util.List;
 @Service
 public class EndpointUtils {
 
-    public static Log LOG = LogFactory.getLog(EndpointUtils.class.getName());
+    private static Log logger = LogFactory.getLog(EndpointUtils.class.getName());
 
 
     @Autowired
-    protected Configuration configuration;
+    private Configuration configuration;
 
     @Autowired
-    protected HostService hostService;
+    private HostService hostService;
 
     @Autowired
-    protected HostRepository hostRepository;
+    private HostRepository hostRepository;
 
 
     private static EndpointUtils endpointUtils;
@@ -64,7 +64,7 @@ public class EndpointUtils {
     private LoadBalancerEndpointConfiguration getConfigbyLoadBalancerIdInternal(Integer lbId) {
 
         if (hostService == null) {
-            LOG.debug("hostService is null !");
+            logger.debug("hostService is null !");
         }
 
         LoadBalancerHost lbHost = hostService.getLoadBalancerHost(lbId);
@@ -87,7 +87,7 @@ public class EndpointUtils {
             return new LoadBalancerEndpointConfiguration(endpointHost, cluster.getUsername(), CryptoUtil.decrypt(cluster.getPassword()), host, failoverHosts, logFileLocation);
         } catch(DecryptException except)
         {
-            LOG.error(String.format("Decryption exception: ", except.getMessage()));
+            logger.error(String.format("Decryption exception: ", except.getMessage()));
             return null;
         }
     }
@@ -109,7 +109,7 @@ public class EndpointUtils {
     private void checkAndSetIfEndPointBadInternal(LoadBalancerEndpointConfiguration config, Exception exc) throws AdapterException, Exception {
         Host badHost = config.getHost();
         if (isConnectionExcept(exc)) {
-            LOG.error(String.format("Endpoint %s went bad marking host[%d] as bad.", badHost.getEndpoint(), badHost.getId()));
+            logger.error(String.format("Endpoint %s went bad marking host[%d] as bad.", badHost.getEndpoint(), badHost.getId()));
             badHost.setEndpointActive(Boolean.FALSE);
             hostRepository.update(badHost);
         }

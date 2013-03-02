@@ -35,7 +35,9 @@ public class VirtualIp extends org.daylight.pathweaver.service.domain.entity.Ent
     private IpVersion ipVersion;
 
     public Set<LoadBalancerJoinVip> getLoadBalancerJoinVipSet() {
-        if(loadBalancerJoinVipSet == null) loadBalancerJoinVipSet = new HashSet<LoadBalancerJoinVip>();
+        if(loadBalancerJoinVipSet == null) {
+            loadBalancerJoinVipSet = new HashSet<LoadBalancerJoinVip>();
+        }
         return loadBalancerJoinVipSet;
     }
 

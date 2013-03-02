@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Aspect
 public class MethodLoggingInterceptor {
-    protected final Logger LOG = Logger.getLogger(MethodLoggingInterceptor.class);
+    private final Logger logger = Logger.getLogger(MethodLoggingInterceptor.class);
 
     @Pointcut("within(org.daylight.pathweaver.api.resource..*)")
     public void resources() {
@@ -52,9 +52,12 @@ public class MethodLoggingInterceptor {
         sb.append("(");
         Object[] args = pjp.getArgs();
         for (Object arg : args) {
-            if (arg == null) continue;
+            if (arg == null) {
+                continue;
+            }
+
             String fullParameterClassName = arg.getClass().getName();
-            String parameterClassName = fullParameterClassName.substring(fullParameterClassName.lastIndexOf(".") +1, fullParameterClassName.length());
+            String parameterClassName = fullParameterClassName.substring(fullParameterClassName.lastIndexOf('.') +1, fullParameterClassName.length());
             sb.append(parameterClassName).append(" ").append(arg);
             sb.append(", ");
         }
@@ -68,7 +71,7 @@ public class MethodLoggingInterceptor {
         }
 
         long start = System.currentTimeMillis();
-        LOG.debug("Entering: " + className + "." + methodName + arguments);
+        logger.debug("Entering: " + className + "." + methodName + arguments);
 
         // retrieve the methods parameter types (static):
         final Signature signature = pjp.getStaticPart().getSignature();
@@ -76,14 +79,14 @@ public class MethodLoggingInterceptor {
             final MethodSignature ms = (MethodSignature) signature;
             final Class<?>[] parameterTypes = ms.getParameterTypes();
             for (final Class<?> pt : parameterTypes) {
-                LOG.debug("Parameter type:" + pt);
+                logger.debug("Parameter type:" + pt);
             }
         }
 
 
         Object output = pjp.proceed();
         long elapsedTime = System.currentTimeMillis() - start;
-        LOG.debug("Leaving: " + className + "." + methodName + arguments + " Total Time taken in ms: " + elapsedTime);
+        logger.debug("Leaving: " + className + "." + methodName + arguments + " Total Time taken in ms: " + elapsedTime);
         return output;
     }
 

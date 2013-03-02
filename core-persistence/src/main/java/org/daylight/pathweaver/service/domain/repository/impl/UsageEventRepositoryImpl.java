@@ -20,9 +20,9 @@ import java.util.List;
 @Repository
 @Transactional(value="core_transactionManager")
 public class UsageEventRepositoryImpl implements UsageEventRepository {
-    final Log LOG = LogFactory.getLog(UsageEventRepositoryImpl.class);
+    private final Log logger = LogFactory.getLog(UsageEventRepositoryImpl.class);
     @PersistenceContext(unitName = "loadbalancing")
-    protected EntityManager entityManager;
+    private EntityManager entityManager;
 
     @Override
     public List<UsageEventRecord> getAllUsageEventEntries() {
@@ -36,7 +36,7 @@ public class UsageEventRepositoryImpl implements UsageEventRepository {
 
     @Override
     public void batchCreate(List<UsageEventRecord> usages) {
-        LOG.info(String.format("batchCreate() called with %d records", usages.size()));
+        logger.info(String.format("batchCreate() called with %d records", usages.size()));
         String query = generateBatchInsertQuery(usages);
         entityManager.createNativeQuery(query).executeUpdate();
     }

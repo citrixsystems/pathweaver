@@ -16,7 +16,7 @@ import javax.ws.rs.core.Response;
 public class ProtocolsResource {
 
     @Autowired
-    ProtocolType protocolType;
+    private ProtocolType protocolType;
 
     @GET
     public Response retrieveLoadBalancingAlgorithms() {

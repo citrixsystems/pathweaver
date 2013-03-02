@@ -54,7 +54,6 @@ public class CustomQuery {
     }
 
     public String getQueryString() {
-        String frm;
         String qStr;
         String out;
         int i;
@@ -109,8 +108,7 @@ public class CustomQuery {
 
     @Override
     public String toString() {
-        String out = getQueryString();
-        return out;
+        return getQueryString();
     }
 
     public Integer getLimit() {

@@ -10,7 +10,9 @@ public class ElementFactory implements ExtensionFactory {
     @Override
     public boolean handlesNamespace(String s) {
         for (String namespace : namespaces) {
-            if (s.equals(namespace)) return true;
+            if (s.equals(namespace)) {
+                return true;
+            }
         }
         return false;
     }

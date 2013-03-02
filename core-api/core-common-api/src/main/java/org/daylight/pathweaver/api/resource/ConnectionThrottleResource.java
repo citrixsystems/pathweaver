@@ -24,22 +24,22 @@ import static javax.ws.rs.core.MediaType.*;
 @Controller
 @Scope("request")
 public class ConnectionThrottleResource extends CommonDependencyProvider {
-    private final Logger LOG = Logger.getLogger(ConnectionThrottleResource.class);
-    protected Integer accountId;
-    protected Integer loadBalancerId;
+    private final Logger logger = Logger.getLogger(ConnectionThrottleResource.class);
+    private Integer accountId;
+    private Integer loadBalancerId;
 
     @Autowired
-    protected ConnectionThrottleValidator validator;
+    private ConnectionThrottleValidator validator;
     @Autowired
-    protected ConnectionThrottleService connectionThrottleService;
+    private ConnectionThrottleService connectionThrottleService;
     @Autowired
-    protected ConnectionThrottleRepository repository;
+    private ConnectionThrottleRepository repository;
 
     @GET
     @Produces({APPLICATION_XML, APPLICATION_JSON, APPLICATION_ATOM_XML})
     public Response retrieveConnectionThrottle() {
         try {
-            ConnectionThrottle connectionThrottle = dozerMapper.map(repository.getByLoadBalancerId(loadBalancerId), ConnectionThrottle.class);
+            ConnectionThrottle connectionThrottle = getDozerMapper().map(repository.getByLoadBalancerId(loadBalancerId), ConnectionThrottle.class);
             return Response.status(Response.Status.OK).entity(connectionThrottle).build();
         } catch (Exception e) {
             return ResponseFactory.getErrorResponse(e);
@@ -57,7 +57,7 @@ public class ConnectionThrottleResource extends CommonDependencyProvider {
 
         try {
 
-            org.daylight.pathweaver.service.domain.entity.ConnectionThrottle connectionThrottle = dozerMapper.map(_connectionThrottle, org.daylight.pathweaver.service.domain.entity.ConnectionThrottle.class);
+            org.daylight.pathweaver.service.domain.entity.ConnectionThrottle connectionThrottle = getDozerMapper().map(_connectionThrottle, org.daylight.pathweaver.service.domain.entity.ConnectionThrottle.class);
             connectionThrottle = connectionThrottleService.update(loadBalancerId, connectionThrottle);
 
             MessageDataContainer data = new MessageDataContainer();
@@ -67,8 +67,8 @@ public class ConnectionThrottleResource extends CommonDependencyProvider {
             loadBalancer.setConnectionThrottle(connectionThrottle);
             data.setLoadBalancer(loadBalancer);
 
-            asyncService.callAsyncLoadBalancingOperation(CoreOperation.UPDATE_CONNECTION_THROTTLE, data);
-            _connectionThrottle = dozerMapper.map(connectionThrottle, ConnectionThrottle.class);
+            getAsyncService().callAsyncLoadBalancingOperation(CoreOperation.UPDATE_CONNECTION_THROTTLE, data);
+            _connectionThrottle = getDozerMapper().map(connectionThrottle, ConnectionThrottle.class);
             return Response.status(Response.Status.ACCEPTED).entity(_connectionThrottle).build();
         } catch (Exception e) {
             return ResponseFactory.getErrorResponse(e);
@@ -85,7 +85,7 @@ public class ConnectionThrottleResource extends CommonDependencyProvider {
             data.setLoadBalancer(loadBalancer);
 
             connectionThrottleService.preDelete(loadBalancerId);
-            asyncService.callAsyncLoadBalancingOperation(CoreOperation.DELETE_CONNECTION_THROTTLE, data);
+            getAsyncService().callAsyncLoadBalancingOperation(CoreOperation.DELETE_CONNECTION_THROTTLE, data);
             return Response.status(Response.Status.ACCEPTED).build();
         } catch (Exception e) {
             return ResponseFactory.getErrorResponse(e);

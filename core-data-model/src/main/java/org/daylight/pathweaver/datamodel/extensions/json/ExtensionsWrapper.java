@@ -4,7 +4,9 @@ public class ExtensionsWrapper {
     private Extensions extensions;
 
     public Extensions getExtensions() {
-        if (extensions == null) extensions = new Extensions();
+        if (extensions == null) {
+            extensions = new Extensions();
+        }
         return extensions;
     }
 

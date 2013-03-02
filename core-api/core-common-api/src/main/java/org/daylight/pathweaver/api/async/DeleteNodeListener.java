@@ -30,7 +30,7 @@ import static org.daylight.pathweaver.service.domain.event.entity.EventType.DELE
 @Component
 public class DeleteNodeListener extends BaseListener {
 
-    private final Log LOG = LogFactory.getLog(DeleteNodeListener.class);
+    private final Log logger = LogFactory.getLog(DeleteNodeListener.class);
 
     @Autowired
     private NotificationService notificationService;
@@ -41,15 +41,15 @@ public class DeleteNodeListener extends BaseListener {
 
     @Override
     public void doOnMessage(final Message message) throws Exception {
-        LOG.debug("Entering " + getClass());
-        LOG.debug(message);
+        logger.debug("Entering " + getClass());
+        logger.debug(message);
         MessageDataContainer msg = getDataContainerFromMessage(message);
         LoadBalancer dbLoadBalancer;
         try {
             dbLoadBalancer = loadBalancerRepository.getByIdAndAccountId(msg.getLoadBalancerId(), msg.getAccountId());
         } catch (EntityNotFoundException enfe) {
             String alertDescription = String.format("Load balancer '%d' not found in database.", msg.getLoadBalancerId());
-            LOG.error(alertDescription, enfe);
+            logger.error(alertDescription, enfe);
             notificationService.saveAlert(msg.getAccountId(), msg.getLoadBalancerId(), enfe, DATABASE_FAILURE.name(), alertDescription);
             sendErrorToEventResource(msg);
             return;
@@ -58,18 +58,20 @@ public class DeleteNodeListener extends BaseListener {
         String nodesToDeleteIdString = StringConverter.integersAsString(msg.getIds());
         Set<Node> nodesToDelete = new HashSet<Node>();
         for (Node node : dbLoadBalancer.getNodes()) {
-            if (msg.getIds().contains(node.getId())) nodesToDelete.add(node);
+            if (msg.getIds().contains(node.getId())) {
+                nodesToDelete.add(node);
+            }
         }
 
         try {
-            LOG.debug(String.format("Removing nodes '[%s]' from load balancer '%d' in Adapter...", nodesToDeleteIdString, msg.getLoadBalancerId()));
-            reverseProxyLoadBalancerService.deleteNodes(msg.getAccountId(), msg.getLoadBalancerId(), nodesToDelete);
-            LOG.debug(String.format("Successfully removed nodes '[%s]' from load balancer '%d' in Adapter.", nodesToDeleteIdString, msg.getLoadBalancerId()));
+            logger.debug(String.format("Removing nodes '[%s]' from load balancer '%d' in Adapter...", nodesToDeleteIdString, msg.getLoadBalancerId()));
+            getReverseProxyLoadBalancerService().deleteNodes(msg.getAccountId(), msg.getLoadBalancerId(), nodesToDelete);
+            logger.debug(String.format("Successfully removed nodes '[%s]' from load balancer '%d' in Adapter.", nodesToDeleteIdString, msg.getLoadBalancerId()));
         } catch (Exception e) {
             dbLoadBalancer.setStatus(CoreLoadBalancerStatus.ERROR);
             loadBalancerRepository.update(dbLoadBalancer);
             String alertDescription = String.format("Error removing nodes '%s' in LB Device for loadbalancer '%d'.", nodesToDeleteIdString, msg.getLoadBalancerId());
-            LOG.error(alertDescription, e);
+            logger.error(alertDescription, e);
             notificationService.saveAlert(msg.getAccountId(), msg.getLoadBalancerId(), e, LBDEVICE_FAILURE.name(), alertDescription);
             sendErrorToEventResource(msg, msg.getIds());
             return;
@@ -77,11 +79,11 @@ public class DeleteNodeListener extends BaseListener {
 
         try {
             // Removes node from load balancer in DB
-            LOG.debug(String.format("Removing nodes '[%s]' from load balancer '%d' in LB Device...", nodesToDeleteIdString, msg.getLoadBalancerId()));
+            logger.debug(String.format("Removing nodes '[%s]' from load balancer '%d' in LB Device...", nodesToDeleteIdString, msg.getLoadBalancerId()));
             nodeRepository.deleteNodes(dbLoadBalancer, new HashSet<Integer>(msg.getIds()));
-            LOG.debug(String.format("Succesfully removed nodes '[%s]' from load balancer '%d' in LB Device...", nodesToDeleteIdString, msg.getLoadBalancerId()));
+            logger.debug(String.format("Succesfully removed nodes '[%s]' from load balancer '%d' in LB Device...", nodesToDeleteIdString, msg.getLoadBalancerId()));
         } catch (Exception ex) {
-            LOG.debug(String.format("Error removing nodes '[%s]' from load balancer '%d' in LB Device...", nodesToDeleteIdString, msg.getLoadBalancerId()));
+            logger.debug(String.format("Error removing nodes '[%s]' from load balancer '%d' in LB Device...", nodesToDeleteIdString, msg.getLoadBalancerId()));
         }
 
         // Update load balancer status in DB
@@ -93,7 +95,7 @@ public class DeleteNodeListener extends BaseListener {
         for (Integer doomedNodeId : msg.getIds()) {
             notificationService.saveNodeEvent(msg.getUserName(), msg.getAccountId(), msg.getLoadBalancerId(), doomedNodeId, atomTitle, atomSummary, DELETE_NODE, DELETE, INFO);
         }
-        LOG.info(String.format("Delete node operation complete for load balancer '%d'.", msg.getLoadBalancerId()));
+        logger.info(String.format("Delete node operation complete for load balancer '%d'.", msg.getLoadBalancerId()));
     }
 
     private void sendErrorToEventResource(MessageDataContainer msg) {

@@ -15,7 +15,7 @@ import javax.persistence.PersistenceContext;
 @Transactional(value="adapter_transactionManager")
 public class ClusterRepository {
 
-    final Log LOG = LogFactory.getLog(ClusterRepository.class);
+    private final Log logger = LogFactory.getLog(ClusterRepository.class);
 
     @PersistenceContext(unitName = "loadbalancingadapter")
     private EntityManager entityManager;
@@ -24,7 +24,7 @@ public class ClusterRepository {
         Cluster cl = entityManager.find(Cluster.class, id);
         if (cl == null) {
             String errMsg = String.format("Cannot access cluster {id=%d}", id);
-            LOG.warn(errMsg);
+            logger.warn(errMsg);
             throw new EntityNotFoundException(errMsg);
         }
         return cl;

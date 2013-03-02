@@ -19,8 +19,8 @@ public class LoadBalancerServiceEvents
 {
 
     private final static long serialVersionUID = 532512316L;
-    protected List<LoadBalancerServiceEvent> loadBalancerServiceEvents;
-    protected Integer loadbalancerId;
+    private List<LoadBalancerServiceEvent> loadBalancerServiceEvents;
+    private Integer loadbalancerId;
     public List<LoadBalancerServiceEvent> getLoadBalancerServiceEvents() {
         if (loadBalancerServiceEvents == null) {
             loadBalancerServiceEvents = new ArrayList<LoadBalancerServiceEvent>();

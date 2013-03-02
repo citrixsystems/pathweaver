@@ -23,7 +23,7 @@ import static org.daylight.pathweaver.service.domain.event.entity.EventType.DELE
 
 @Component
 public class DeleteLoadBalancerListener extends BaseListener {
-    private final Log LOG = LogFactory.getLog(DeleteLoadBalancerListener.class);
+    private final Log logger = LogFactory.getLog(DeleteLoadBalancerListener.class);
 
     @Autowired
     private LoadBalancerService loadBalancerService;
@@ -34,8 +34,8 @@ public class DeleteLoadBalancerListener extends BaseListener {
 
     @Override
     public void doOnMessage(final Message message) throws Exception {
-        LOG.debug("Entering " + getClass());
-        LOG.debug(message);
+        logger.debug("Entering " + getClass());
+        logger.debug(message);
 
         LoadBalancer queueLb = getDataContainerFromMessage(message).getLoadBalancer();
         LoadBalancer dbLoadBalancer;
@@ -44,7 +44,7 @@ public class DeleteLoadBalancerListener extends BaseListener {
             dbLoadBalancer = loadBalancerRepository.getByIdAndAccountId(queueLb.getId(), queueLb.getAccountId());
         } catch (EntityNotFoundException enfe) {
             String alertDescription = String.format("Load balancer '%d' not found in database.", queueLb.getId());
-            LOG.error(alertDescription, enfe);
+            logger.error(alertDescription, enfe);
             notificationService.saveAlert(queueLb.getAccountId(), queueLb.getId(), enfe, DATABASE_FAILURE.name(), alertDescription);
             sendErrorToEventResource(queueLb);
             return;
@@ -54,14 +54,14 @@ public class DeleteLoadBalancerListener extends BaseListener {
         // there is no delete needed on the adapter.
         if (dbLoadBalancer.isCreatedOnAdapter())    {
             try {
-                LOG.debug(String.format("Deleting load balancer '%d' in LB Device...", dbLoadBalancer.getId()));
-                reverseProxyLoadBalancerService.deleteLoadBalancer(dbLoadBalancer);
-                LOG.debug(String.format("Successfully deleted load balancer '%d' in LB Device.", dbLoadBalancer.getId()));
+                logger.debug(String.format("Deleting load balancer '%d' in LB Device...", dbLoadBalancer.getId()));
+                getReverseProxyLoadBalancerService().deleteLoadBalancer(dbLoadBalancer);
+                logger.debug(String.format("Successfully deleted load balancer '%d' in LB Device.", dbLoadBalancer.getId()));
             } catch (Exception e) {
                 loadBalancerRepository.changeStatus(dbLoadBalancer, CoreLoadBalancerStatus.ERROR);
-                LOG.error(String.format("LoadBalancer status before error was: '%s'", dbLoadBalancer.getStatus()));
+                logger.error(String.format("LoadBalancer status before error was: '%s'", dbLoadBalancer.getStatus()));
                 String alertDescription = String.format("Error deleting loadbalancer '%d' in LB Device.", dbLoadBalancer.getId());
-                LOG.error(alertDescription, e);
+                logger.error(alertDescription, e);
                 notificationService.saveAlert(dbLoadBalancer.getAccountId(), dbLoadBalancer.getId(), e, LBDEVICE_FAILURE.name(), alertDescription);
                 sendErrorToEventResource(queueLb);
                 return;
@@ -78,7 +78,7 @@ public class DeleteLoadBalancerListener extends BaseListener {
         // Notify usage processor with a usage event
         notifyUsageProcessor(message, dbLoadBalancer, CoreUsageEventType.DELETE_LOAD_BALANCER);
 
-        LOG.info(String.format("Load balancer '%d' successfully deleted.", dbLoadBalancer.getId()));
+        logger.info(String.format("Load balancer '%d' successfully deleted.", dbLoadBalancer.getId()));
     }
 
     private void sendErrorToEventResource(LoadBalancer lb) {

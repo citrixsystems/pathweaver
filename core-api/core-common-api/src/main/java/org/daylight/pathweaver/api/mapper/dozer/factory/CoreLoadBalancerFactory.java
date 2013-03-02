@@ -15,8 +15,7 @@ public class CoreLoadBalancerFactory implements BeanFactory {
         }
 
         if (sourceClass.equals(LoadBalancer.class)) {
-            org.daylight.pathweaver.service.domain.entity.LoadBalancer lb = new org.daylight.pathweaver.service.domain.entity.LoadBalancer();
-            return lb;
+            return new org.daylight.pathweaver.service.domain.entity.LoadBalancer();
         }
 
         return null;

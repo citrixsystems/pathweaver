@@ -12,4 +12,8 @@ public class IPStringConversionException extends IPStringException {
     public IPStringConversionException(String msg) {
         super(msg);
     }
+
+    public IPStringConversionException(String msg, Exception innerExcept) {
+        super(msg, innerExcept);
+    }
 }

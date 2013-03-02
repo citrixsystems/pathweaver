@@ -13,8 +13,8 @@ import static org.daylight.pathweaver.api.validation.ValidatorBuilder.build;
 @Component
 @Scope("request")
 public class SessionPersistenceValidator implements ResourceValidator<SessionPersistence> {
-    protected Validator<SessionPersistence> validator;
-    protected SessionPersistenceValidatorBuilder ruleBuilder;
+    private Validator<SessionPersistence> validator;
+    private SessionPersistenceValidatorBuilder ruleBuilder;
 
     @Autowired
     public SessionPersistenceValidator(SessionPersistenceValidatorBuilder ruleBuilder) {

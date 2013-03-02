@@ -14,18 +14,18 @@ import javax.jms.*;
 
 @Component
 public abstract class BaseListener implements MessageListener {
-    protected Log LOG = LogFactory.getLog(BaseListener.class);
+    private Log logger = LogFactory.getLog(BaseListener.class);
     @Autowired
-    protected JmsTemplate jmsTemplate;
+    private JmsTemplate jmsTemplate;
 
     @Autowired
-    protected ReverseProxyLoadBalancerService reverseProxyLoadBalancerService;
+    private ReverseProxyLoadBalancerService reverseProxyLoadBalancerService;
 
     public final void onMessage(Message message) {
         try {
             doOnMessage(message);
         } catch (Exception e) {
-            LOG.error("Error processing JMS message", e);
+            logger.error("Error processing JMS message", e);
         }
     }
 
@@ -37,7 +37,7 @@ public abstract class BaseListener implements MessageListener {
     }
 
     protected void notifyUsageProcessor(final Message message, final LoadBalancer loadBalancer, final String event) throws JMSException {
-        LOG.debug("Sending notification to usage processor...");
+        logger.debug("Sending notification to usage processor...");
         final String finalDestination = "USAGE_EVENT";
         jmsTemplate.send(finalDestination, new MessageCreator() {
 
@@ -48,5 +48,9 @@ public abstract class BaseListener implements MessageListener {
                 return response;
             }
         });
+    }
+
+    public ReverseProxyLoadBalancerService getReverseProxyLoadBalancerService() {
+        return reverseProxyLoadBalancerService;
     }
 }

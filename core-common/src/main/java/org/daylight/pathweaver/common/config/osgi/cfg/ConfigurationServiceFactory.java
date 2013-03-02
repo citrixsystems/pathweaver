@@ -11,7 +11,7 @@ import java.util.Properties;
 
 public class ConfigurationServiceFactory implements ServiceFactory {
 
-    private static final Log LOG = LogFactory.getLog(ConfigurationServiceFactory.class);
+    private static final Log logger = LogFactory.getLog(ConfigurationServiceFactory.class);
     private static final String DEFAULT_CONFIGURATION_LOCATION = "/etc/daylight/pathweaver/container.conf";
 
     @Override
@@ -23,7 +23,7 @@ public class ConfigurationServiceFactory implements ServiceFactory {
             properties.load(bundle.getResource("META-INF/rc-conf.properties").openStream());
             fileLocation = properties.getProperty("rc.config.location");
         } catch (Exception ioe) {
-            LOG.warn(ioe);
+            logger.warn(ioe);
         }
 
         return new ApacheCommonsConfiguration(fileLocation);

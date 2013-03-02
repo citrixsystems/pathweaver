@@ -20,9 +20,9 @@ public class CommonDependencyProvider {
     protected final static String VFAIL = "Validation Failure";
 
     @Autowired
-    protected DozerBeanMapper dozerMapper;
+    private DozerBeanMapper dozerMapper;
     @Autowired
-    protected AsyncService asyncService;
+    private AsyncService asyncService;
 
     public String getUserName(HttpHeaders headers){
         if(headers == null || headers.getRequestHeader(USERHEADERNAME).size()<1){
@@ -39,15 +39,22 @@ public class CommonDependencyProvider {
         List<String> vmessages = result.getValidationErrorMessages();
         int status = 400;
         BadRequest badreq = HttpResponseBuilder.buildBadRequestResponse(VFAIL, vmessages);
-        Response vresp = Response.status(status).entity(badreq).build();
-        return vresp;
+        return Response.status(status).entity(badreq).build();
     }
 
     public Response getValidationFaultResponse(List<String> errorStrs) {
         BadRequest badreq;
         int status = 400;
         badreq = HttpResponseBuilder.buildBadRequestResponse(VFAIL, errorStrs);
-        Response resp = Response.status(status).entity(badreq).build();
-        return resp;
+        return Response.status(status).entity(badreq).build();
     }
+
+    protected DozerBeanMapper getDozerMapper() {
+        return this.dozerMapper;
+    }
+
+    protected AsyncService getAsyncService() {
+        return asyncService;
+    }
+
 }

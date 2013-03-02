@@ -24,12 +24,12 @@ import static javax.ws.rs.core.MediaType.APPLICATION_XML;
 @Controller
 @Scope("request")
 public class UsageResource extends CommonDependencyProvider {
-    protected final Logger LOG = Logger.getLogger(UsageResource.class);
-    protected Integer accountId;
-    protected Integer loadBalancerId;
+    private final Logger logger = Logger.getLogger(UsageResource.class);
+    private Integer accountId;
+    private Integer loadBalancerId;
 
     @Autowired
-    protected UsageRepository usageRepository;
+    private UsageRepository usageRepository;
 
     @GET
     @Produces({APPLICATION_XML, APPLICATION_JSON, APPLICATION_ATOM_XML})
@@ -39,7 +39,7 @@ public class UsageResource extends CommonDependencyProvider {
             LoadBalancerUsageRecords loadBalancerUsageRecords = new LoadBalancerUsageRecords();
 
             for (UsageRecord usageRecord : usageRecordList) {
-                LoadBalancerUsageRecord loadBalancerUsageRecord = dozerMapper.map(usageRecord, LoadBalancerUsageRecord.class);
+                LoadBalancerUsageRecord loadBalancerUsageRecord = getDozerMapper().map(usageRecord, LoadBalancerUsageRecord.class);
                 loadBalancerUsageRecords.getLoadBalancerUsageRecords().add(loadBalancerUsageRecord);
             }
             

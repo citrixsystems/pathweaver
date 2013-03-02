@@ -20,7 +20,7 @@ import javax.persistence.criteria.Root;
 @Repository
 @Transactional(value="core_transactionManager")
 public class ConnectionThrottleRepositoryImpl implements ConnectionThrottleRepository {
-    final Log LOG = LogFactory.getLog(ConnectionThrottleRepositoryImpl.class);
+    private final Log logger = LogFactory.getLog(ConnectionThrottleRepositoryImpl.class);
     private static final String entityNotFound = "Connection throttle not found";
     @PersistenceContext(unitName = "loadbalancing")
     private EntityManager entityManager;
@@ -41,16 +41,18 @@ public class ConnectionThrottleRepositoryImpl implements ConnectionThrottleRepos
         try {
             return entityManager.createQuery(criteria).setMaxResults(1).getSingleResult();
         } catch (NoResultException e) {
-            throw new EntityNotFoundException(entityNotFound);
+            throw new EntityNotFoundException(entityNotFound, e);
         } catch (NonUniqueResultException e) {
-            LOG.error("More than one connection throttle detected!", e);
-            throw new EntityNotFoundException(entityNotFound);
+            logger.error("More than one connection throttle detected!", e);
+            throw new EntityNotFoundException(entityNotFound, e);
         }
     }
 
     @Override
     public void delete(ConnectionThrottle connectionThrottle) throws EntityNotFoundException {
-        if (connectionThrottle == null) throw new EntityNotFoundException(entityNotFound);
+        if (connectionThrottle == null) {
+            throw new EntityNotFoundException(entityNotFound);
+        }
         connectionThrottle = entityManager.merge(connectionThrottle); // Re-attach hibernate instance
         entityManager.remove(connectionThrottle);
     }

@@ -25,12 +25,12 @@ import static javax.ws.rs.core.MediaType.*;
 @Controller
 @Scope("request")
 public class VirtualIpsResource extends CommonDependencyProvider {
-    private final Logger LOG = Logger.getLogger(VirtualIpsResource.class);
-    protected Integer accountId;
-    protected Integer loadBalancerId;
+    private final Logger logger = Logger.getLogger(VirtualIpsResource.class);
+    private Integer accountId;
+    private Integer loadBalancerId;
 
     @Autowired
-    protected VirtualIpRepository virtualIpRepository;
+    private VirtualIpRepository virtualIpRepository;
 
     @GET
     @Produces({APPLICATION_XML, APPLICATION_JSON, APPLICATION_ATOM_XML})

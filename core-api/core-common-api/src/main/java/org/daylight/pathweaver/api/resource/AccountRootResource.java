@@ -14,16 +14,16 @@ import javax.ws.rs.core.HttpHeaders;
 @Path("{accountId: [-+]?[0-9][0-9]*}")
 public class AccountRootResource {
     @PathParam("accountId")
-    protected Integer accountId;
+    private Integer accountId;
     @Context
     private HttpHeaders requestHeaders;
 
     @Autowired
     private LoadBalancersResource loadBalancersResource;
     @Autowired
-    protected AlgorithmsResource algorithmsResource;
+    private AlgorithmsResource algorithmsResource;
     @Autowired
-    protected ProtocolsResource protocolsResource;
+    private ProtocolsResource protocolsResource;
     @Autowired
     private ExtensionsResource extensionsResource;
 

@@ -34,7 +34,7 @@ public class PrimitiveConverters {
             } catch (NumberFormatException ex) {
                 format = "Could not convert \"%s\" to Integer\n";
                 msg = String.format(format, splitInts[i]);
-                throw new ConverterException(msg);
+                throw new ConverterException(msg, ex);
             }
             out.add(currInt);
         }

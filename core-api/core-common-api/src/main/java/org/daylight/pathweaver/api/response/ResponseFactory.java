@@ -13,22 +13,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ResponseFactory {
-    private static final Log LOG = LogFactory.getLog(ResponseFactory.class);
+    private static final Log logger = LogFactory.getLog(ResponseFactory.class);
     protected final static String VALIDATION_FAILURE = "Validation Failure";
 
     public static Response getValidationFaultResponse(ValidatorResult result) {
         List<String> vmessages = result.getValidationErrorMessages();
         int status = 400;
         BadRequest badreq = buildBadRequestResponse(VALIDATION_FAILURE, vmessages);
-        Response vresp = Response.status(status).entity(badreq).build();
-        return vresp;
+        return Response.status(status).entity(badreq).build();
     }
 
     public static Response getValidationFaultResponse(List<String> messages) {
         int status = 400;
         BadRequest badreq = buildBadRequestResponse(VALIDATION_FAILURE, messages);
-        Response vresp = Response.status(status).entity(badreq).build();
-        return vresp;
+        return Response.status(status).entity(badreq).build();
     }
 
     public static Response getValidationFaultResponse(String errorStr){
@@ -72,7 +70,7 @@ public class ResponseFactory {
 
         if (code == 500) {
             errMsg = String.format("Exception Caught: %s", getExtendedStackTrace(e));
-            LOG.debug(errMsg);
+            logger.debug(errMsg);
         }
 
         return Response.status(code).entity(lbaasException).build();

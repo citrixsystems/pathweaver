@@ -33,7 +33,6 @@ public class MustDelegateTo implements Verifier<Object> {
             }
         } catch (Exception ex) {
             //TODO: Catch actual exception
-            ex.printStackTrace();
             validationResults.add(new ValidationResult(false, "Delegate context doesn't match."));
         }
 
@@ -48,8 +47,9 @@ public class MustDelegateTo implements Verifier<Object> {
 
         if (!validatorResult.passedValidation()) {
             for (ExpectationResult expectationResult : validatorResult.getValidationResults()) {
-                if (!expectationResult.expectationPassedValidation())
+                if (!expectationResult.expectationPassedValidation())  {
                     validationResults.add(new ValidationResult(false, expectationResult.getMessage()));
+                }
             }
         }
 

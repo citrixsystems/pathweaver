@@ -24,22 +24,22 @@ import static javax.ws.rs.core.MediaType.*;
 @Controller
 @Scope("request")
 public class SessionPersistenceResource extends CommonDependencyProvider {
-    private final Logger LOG = Logger.getLogger(SessionPersistenceResource.class);
+    private final Logger logger = Logger.getLogger(SessionPersistenceResource.class);
     private Integer accountId;
     private Integer loadBalancerId;
 
     @Autowired
-    protected SessionPersistenceValidator validator;
+    private SessionPersistenceValidator validator;
     @Autowired
-    protected SessionPersistenceService service;
+    private SessionPersistenceService service;
     @Autowired
-    protected SessionPersistenceRepository repository;
+    private SessionPersistenceRepository repository;
 
     @GET
     @Produces({APPLICATION_XML, APPLICATION_JSON, APPLICATION_ATOM_XML})
     public Response retrieveSessionPersistence() {
         try {
-            SessionPersistence sessionPersistence = dozerMapper.map(repository.getByLoadBalancerId(loadBalancerId), SessionPersistence.class);
+            SessionPersistence sessionPersistence = getDozerMapper().map(repository.getByLoadBalancerId(loadBalancerId), SessionPersistence.class);
             return Response.status(Response.Status.OK).entity(sessionPersistence).build();
         } catch (Exception e) {
             return ResponseFactory.getErrorResponse(e);
@@ -62,10 +62,10 @@ public class SessionPersistenceResource extends CommonDependencyProvider {
             loadBalancer.setId(loadBalancerId);
             data.setLoadBalancer(loadBalancer);
 
-            org.daylight.pathweaver.service.domain.entity.SessionPersistence sessionPersistence = dozerMapper.map(_sessionPersistence, org.daylight.pathweaver.service.domain.entity.SessionPersistence.class);
+            org.daylight.pathweaver.service.domain.entity.SessionPersistence sessionPersistence = getDozerMapper().map(_sessionPersistence, org.daylight.pathweaver.service.domain.entity.SessionPersistence.class);
             sessionPersistence = service.update(loadBalancerId, sessionPersistence);
-            asyncService.callAsyncLoadBalancingOperation(CoreOperation.UPDATE_SESSION_PERSISTENCE, data);
-            _sessionPersistence = dozerMapper.map(sessionPersistence, SessionPersistence.class);
+            getAsyncService().callAsyncLoadBalancingOperation(CoreOperation.UPDATE_SESSION_PERSISTENCE, data);
+            _sessionPersistence = getDozerMapper().map(sessionPersistence, SessionPersistence.class);
             return Response.status(Response.Status.ACCEPTED).entity(_sessionPersistence).build();
         } catch (Exception e) {
             return ResponseFactory.getErrorResponse(e);
@@ -82,7 +82,7 @@ public class SessionPersistenceResource extends CommonDependencyProvider {
             data.setLoadBalancer(loadBalancer);
             
             service.preDelete(loadBalancerId);
-            asyncService.callAsyncLoadBalancingOperation(CoreOperation.DELETE_SESSION_PERSISTENCE, data);
+            getAsyncService().callAsyncLoadBalancingOperation(CoreOperation.DELETE_SESSION_PERSISTENCE, data);
             return Response.status(Response.Status.ACCEPTED).build();
         } catch (Exception e) {
             return ResponseFactory.getErrorResponse(e);

@@ -17,14 +17,14 @@ public class UsageEventRecord extends org.daylight.pathweaver.service.domain.ent
 
     @ManyToOne
     @JoinColumn(name="load_balancer_id", nullable = false)
-    protected LoadBalancer loadBalancer;
+    private LoadBalancer loadBalancer;
 
     @Column(name = "event", nullable = true)
-    protected String event;
+    private String event;
 
     @Column(name = "start_time")
     @Temporal(TemporalType.TIMESTAMP)
-    protected Calendar startTime;
+    private Calendar startTime;
 
     public LoadBalancer getLoadBalancer() {
         return loadBalancer;

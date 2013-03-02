@@ -21,7 +21,7 @@ import java.util.Set;
 
 @Service
 public class BlacklistServiceImpl implements BlacklistService {
-    private final Log LOG = LogFactory.getLog(BlacklistServiceImpl.class);
+    private final Log logger = LogFactory.getLog(BlacklistServiceImpl.class);
 
     @Autowired
     private BlacklistRepository blacklistRepository;
@@ -53,10 +53,10 @@ public class BlacklistServiceImpl implements BlacklistService {
                 }
             }
         } catch (Exception e) {
-            throw new BadRequestException(String.format("Error while trying to validate the nodes."));
+            throw new BadRequestException(String.format("Error while trying to validate the nodes."), e);
         }
         if (badNode != null && badNode.getAddress() != null) {
-            LOG.info("Found a blacklisted node: " + badNode);
+            logger.info("Found a blacklisted node: " + badNode);
             throw new BadRequestException(String.format("Invalid node address. The address '%s' is currently not accepted for this request.", badNode.getAddress()));
         }
     }

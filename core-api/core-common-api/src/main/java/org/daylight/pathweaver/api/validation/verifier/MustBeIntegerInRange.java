@@ -11,7 +11,10 @@ public class MustBeIntegerInRange implements Verifier<Integer> {
 
     @Override
     public VerifierResult verify(Integer obj) {
-        if(obj == null) return new VerifierResult(false);
+        if(obj == null) {
+            return new VerifierResult(false);
+        }
+
         return new VerifierResult(floor <= obj && obj <= ceiling);
     }
 }

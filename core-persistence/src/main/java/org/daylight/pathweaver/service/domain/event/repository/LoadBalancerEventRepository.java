@@ -21,10 +21,11 @@ import java.util.*;
 @Transactional(value="core_transactionManager")
 public class LoadBalancerEventRepository {
 
-    final Log LOG = LogFactory.getLog(LoadBalancerEventRepository.class);
+    private final Log logger = LogFactory.getLog(LoadBalancerEventRepository.class);
     @PersistenceContext(unitName = "loadbalancing")
     private EntityManager entityManager;
     private final Integer PAGE_SIZE = 10;
+    private final Integer DAYS_DELETED_ITEMS_KEPT = 90;
 
     public LoadBalancerEventRepository() {
     }
@@ -306,49 +307,49 @@ public class LoadBalancerEventRepository {
 
     public void removeLoadBalancerServiceEventEntries() {
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -90);
+        cal.add(Calendar.DATE, -DAYS_DELETED_ITEMS_KEPT);
         entityManager.createQuery("DELETE FROM LoadBalancerServiceEvent a where a.created <= :days").setParameter("days", cal).executeUpdate();
     }
 
     public void removeNodeEventEntries() {
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -90);
+        cal.add(Calendar.DATE, -DAYS_DELETED_ITEMS_KEPT);
         entityManager.createQuery("DELETE FROM NodeEvent a where a.created <= :days").setParameter("days", cal).executeUpdate();
     }
 
     public void removeVirtualIpEventEntries() {
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -90);
+        cal.add(Calendar.DATE, -DAYS_DELETED_ITEMS_KEPT);
         entityManager.createQuery("DELETE FROM VirtualIpEvent a where a.created <= :days").setParameter("days", cal).executeUpdate();
     }
 
     public void removeHealthMonitorEventEntries() {
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -90);
+        cal.add(Calendar.DATE, -DAYS_DELETED_ITEMS_KEPT);
         entityManager.createQuery("DELETE FROM HealthMonitorEvent a where a.created <= :days").setParameter("days", cal).executeUpdate();
     }
 
     public void removeAccessListEventEntries() {
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -90);
+        cal.add(Calendar.DATE, -DAYS_DELETED_ITEMS_KEPT);
         entityManager.createQuery("DELETE FROM AccessListEvent a where a.created <= :days").setParameter("days", cal).executeUpdate();
     }
 
     public void removeConnectionLimitEventEntries() {
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -90);
+        cal.add(Calendar.DATE, -DAYS_DELETED_ITEMS_KEPT);
         entityManager.createQuery("DELETE FROM ConnectionLimitEvent a where a.created <= :days").setParameter("days", cal).executeUpdate();
     }
 
     public void removeSessionPersistenceEventEntries() {
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -90);
+        cal.add(Calendar.DATE, -DAYS_DELETED_ITEMS_KEPT);
         entityManager.createQuery("DELETE FROM SessionPersistenceEvent a where a.created <= :days").setParameter("days", cal).executeUpdate();
     }
 
     public void removeLoadBalancerEventEntries() {
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -90);
+        cal.add(Calendar.DATE, -DAYS_DELETED_ITEMS_KEPT);
         entityManager.createQuery("DELETE FROM LoadBalancerEvent a where a.created <= :days").setParameter("days", cal).executeUpdate();
     }
 }

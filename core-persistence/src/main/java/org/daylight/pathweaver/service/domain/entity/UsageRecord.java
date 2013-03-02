@@ -17,30 +17,30 @@ public class UsageRecord extends org.daylight.pathweaver.service.domain.entity.E
 
     @ManyToOne
     @JoinColumn(name="load_balancer_id", nullable = false)
-    protected LoadBalancer loadBalancer;
+    private LoadBalancer loadBalancer;
 
     @Column(name = "event", nullable = true)
-    protected String event;
+    private String event;
 
     @Column(name = "transfer_bytes_in", nullable = false)
-    protected Long transferBytesIn;
+    private Long transferBytesIn;
 
     @Column(name = "transfer_bytes_out", nullable = false)
-    protected Long transferBytesOut;
+    private Long transferBytesOut;
 
     @Column(name = "last_bytes_in_count", nullable = false)
-    protected Long lastBytesInCount;
+    private Long lastBytesInCount;
 
     @Column(name = "last_bytes_out_count", nullable = false)
-    protected Long lastBytesOutCount;
+    private Long lastBytesOutCount;
 
     @Column(name = "start_time")
     @Temporal(TemporalType.TIMESTAMP)
-    protected Calendar startTime;
+    private Calendar startTime;
 
     @Column(name = "end_time")
     @Temporal(TemporalType.TIMESTAMP)
-    protected Calendar endTime;
+    private Calendar endTime;
 
     public LoadBalancer getLoadBalancer() {
         return loadBalancer;

@@ -19,22 +19,22 @@ public class HealthMonitor extends org.daylight.pathweaver.service.domain.entity
 
     @OneToOne
     @JoinColumn(name = "load_balancer_id")
-    protected LoadBalancer loadBalancer;
+    private LoadBalancer loadBalancer;
 
     @JoinColumn(name = "type", nullable = false)
-    protected String type = CoreHealthMonitorType.CONNECT;
+    private String type = CoreHealthMonitorType.CONNECT;
 
     @Column(name = "delay", nullable = false)
-    protected Integer delay = 3600;
+    private Integer delay = 3600;
 
     @Column(name = "timeout", nullable = false)
-    protected Integer timeout = 300;
+    private Integer timeout = 300;
 
     @Column(name = "attempts_before_deactivation", nullable = false)
-    protected Integer attemptsBeforeDeactivation = 10;
+    private Integer attemptsBeforeDeactivation = 10;
 
     @Column(name = "path", length = 128, nullable = true)
-    protected String path = "/";
+    private String path = "/";
 
     public LoadBalancer getLoadBalancer() {
         return loadBalancer;
@@ -49,7 +49,9 @@ public class HealthMonitor extends org.daylight.pathweaver.service.domain.entity
     }
 
     public void setType(String type) {
-        if (!PathweaverTypeHelper.isValidHealthMonitorType(type)) throw new RuntimeException("Health monitor type not supported.");
+        if (!PathweaverTypeHelper.isValidHealthMonitorType(type)) {
+            throw new RuntimeException("Health monitor type not supported.");
+        }
         this.type = type;
     }
 
@@ -78,7 +80,9 @@ public class HealthMonitor extends org.daylight.pathweaver.service.domain.entity
     }
 
     public String getPath() {
-        if (CoreHealthMonitorType.CONNECT.equals(type)) return null;
+        if (CoreHealthMonitorType.CONNECT.equals(type)) {
+            return null;
+        }
         return path;
     }
 

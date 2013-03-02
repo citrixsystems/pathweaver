@@ -20,7 +20,7 @@ import java.util.List;
 
 @Service
 public class AccountLimitServiceImpl implements AccountLimitService {
-    private final Log LOG = LogFactory.getLog(AccountLimitServiceImpl.class);
+    private final Log logger = LogFactory.getLog(AccountLimitServiceImpl.class);
 
     @Autowired
     private AccountLimitRepository accountLimitRepository;
@@ -47,7 +47,7 @@ public class AccountLimitServiceImpl implements AccountLimitService {
         final Integer numNonDeletedLoadBalancers = loadBalancerRepository.getNumNonDeletedLoadBalancersForAccount(accountId);
         boolean limitReached = (numNonDeletedLoadBalancers >= limit);
         if (limitReached) {
-            LOG.error("Load balancer limit reached. Sending error response to client...");
+            logger.error("Load balancer limit reached. Sending error response to client...");
             throw new LimitReachedException(String.format("Load balancer limit reached. "
                     + "Limit is set to '%d'. Contact support if you would like to increase your limit.",
                     limit));

@@ -8,9 +8,9 @@ public class LBDeviceEvent
 
     private final static long serialVersionUID = 532512316L;
 
-    protected String eventType;
+    private String eventType;
 
-    protected String paramLine;
+    private String paramLine;
 
 
     public String getEventType() {

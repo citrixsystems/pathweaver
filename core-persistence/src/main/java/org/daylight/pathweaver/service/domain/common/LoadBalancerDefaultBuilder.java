@@ -4,7 +4,7 @@ import org.daylight.pathweaver.datamodel.CoreLoadBalancerStatus;
 import org.daylight.pathweaver.datamodel.CoreNodeStatus;
 import org.daylight.pathweaver.service.domain.entity.*;
 
-public class LoadBalancerDefaultBuilder {
+public final class LoadBalancerDefaultBuilder {
 
 
     private LoadBalancerDefaultBuilder() {

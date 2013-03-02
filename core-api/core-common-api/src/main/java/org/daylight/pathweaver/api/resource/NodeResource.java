@@ -29,23 +29,23 @@ import static javax.ws.rs.core.MediaType.*;
 @Controller
 @Scope("request")
 public class NodeResource extends CommonDependencyProvider {
-    private final Logger LOG = Logger.getLogger(NodeResource.class);
+    private final Logger logger = Logger.getLogger(NodeResource.class);
     private int id;
     private Integer accountId;
     private Integer loadBalancerId;
     private HttpHeaders requestHeaders;
 
     @Autowired
-    protected NodeValidator validator;
+    private NodeValidator validator;
 
     @Autowired
-    protected NodeService nodeService;
+    private NodeService nodeService;
 
     @Autowired
-    protected NodeRepository nodeRepository;
+    private NodeRepository nodeRepository;
 
     @Autowired
-    protected LoadBalancerRepository loadBalancerRepository;
+    private LoadBalancerRepository loadBalancerRepository;
 
     @GET
     @Produces({APPLICATION_XML, APPLICATION_JSON, APPLICATION_ATOM_XML})
@@ -54,7 +54,7 @@ public class NodeResource extends CommonDependencyProvider {
         org.daylight.pathweaver.core.api.v1.Node rnode;
         try {
             dnode = nodeRepository.getNodesByLoadBalancer(loadBalancerRepository.getByIdAndAccountId(loadBalancerId, accountId), id);
-            rnode = dozerMapper.map(dnode, org.daylight.pathweaver.core.api.v1.Node.class);
+            rnode = getDozerMapper().map(dnode, org.daylight.pathweaver.core.api.v1.Node.class);
             return Response.status(200).entity(rnode).build();
         } catch (Exception e) {
             return ResponseFactory.getErrorResponse(e);
@@ -74,18 +74,22 @@ public class NodeResource extends CommonDependencyProvider {
             _node.setId(id);
             org.daylight.pathweaver.core.api.v1.LoadBalancer apiLb = new org.daylight.pathweaver.core.api.v1.LoadBalancer();
 
-            apiLb.getNodes().getNodes().add(_node);
-            LoadBalancer domainLb = dozerMapper.map(apiLb, LoadBalancer.class);
+            org.daylight.pathweaver.core.api.v1.Nodes nodes = new org.daylight.pathweaver.core.api.v1.Nodes();
+            nodes.getNodes().add(_node);
+            apiLb.setNodes(nodes);
+            LoadBalancer domainLb = getDozerMapper().map(apiLb, LoadBalancer.class);
             domainLb.setId(loadBalancerId);
             domainLb.setAccountId(accountId);
-            if (requestHeaders != null) domainLb.setUserName(requestHeaders.getRequestHeader("X-PP-User").get(0));
+            if (requestHeaders != null) {
+                domainLb.setUserName(requestHeaders.getRequestHeader("X-PP-User").get(0));
+            }
 
             LoadBalancer dbLb = nodeService.updateNode(domainLb);
 
             MessageDataContainer dataContainer = new MessageDataContainer();
             dataContainer.setLoadBalancer(dbLb);
 
-            asyncService.callAsyncLoadBalancingOperation(CoreOperation.UPDATE_NODE, dataContainer);
+            getAsyncService().callAsyncLoadBalancingOperation(CoreOperation.UPDATE_NODE, dataContainer);
             return Response.status(Response.Status.ACCEPTED).build();
         } catch (Exception e) {
             return ResponseFactory.getErrorResponse(e);
@@ -103,7 +107,7 @@ public class NodeResource extends CommonDependencyProvider {
             ids.add(id);
             dataContainer.setIds(ids);
 
-            asyncService.callAsyncLoadBalancingOperation(CoreOperation.DELETE_NODES, dataContainer);
+            getAsyncService().callAsyncLoadBalancingOperation(CoreOperation.DELETE_NODES, dataContainer);
             return Response.status(Response.Status.ACCEPTED).build();
         } catch (Exception e) {
             return ResponseFactory.getErrorResponse(e);

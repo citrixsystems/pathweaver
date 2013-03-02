@@ -10,8 +10,7 @@ import java.io.StringWriter;
 public class AlertHelper {
 
     public static Alert createAlert(LoadBalancer lb, Exception e, String alertType, String messageName) {
-        Alert alert = createAlert(lb.getAccountId(), lb.getId(), e, alertType, messageName);
-        return alert;
+        return createAlert(lb.getAccountId(), lb.getId(), e, alertType, messageName);
     }
 
     public static Alert createAlert(Integer accountId, Integer lbId, Exception e, String alertType, String messageName) {

@@ -23,7 +23,6 @@ import org.springframework.stereotype.Controller;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
-import java.util.List;
 import java.util.Set;
 
 import static javax.ws.rs.core.MediaType.*;
@@ -31,37 +30,38 @@ import static javax.ws.rs.core.MediaType.*;
 @Controller
 @Scope("request")
 public class LoadBalancerResource extends CommonDependencyProvider {
-    protected final Logger LOG = Logger.getLogger(LoadBalancerResource.class);
-    protected Integer id;
-    protected Integer accountId;
+    private final Logger logger = Logger.getLogger(LoadBalancerResource.class);
+    private Integer id;
+    private Integer accountId;
 
     @Autowired
-    protected LoadBalancerRepository loadBalancerRepository;
+    private LoadBalancerRepository loadBalancerRepository;
     @Autowired
-    protected LoadBalancerValidator validator;
+    private LoadBalancerValidator validator;
     @Autowired
-    protected LoadBalancerService loadBalancerService;
+    private LoadBalancerService loadBalancerService;
     @Autowired
-    protected VirtualIpsResource virtualIpsResource;
+    private VirtualIpsResource virtualIpsResource;
     @Autowired
-    protected NodesResource nodesResource;
+    private NodesResource nodesResource;
     @Autowired
-    protected HealthMonitorResource healthMonitorResource;
+    private HealthMonitorResource healthMonitorResource;
     @Autowired
-    protected ConnectionThrottleResource connectionThrottleResource;
+    private ConnectionThrottleResource connectionThrottleResource;
     @Autowired
-    protected SessionPersistenceResource sessionPersistenceResource;
+    private SessionPersistenceResource sessionPersistenceResource;
     @Autowired
-    protected UsageResource usageResource;
+    private UsageResource usageResource;
 
     @GET
     @Produces({APPLICATION_XML, APPLICATION_JSON, APPLICATION_ATOM_XML})
     public Response get() {
         try {
             org.daylight.pathweaver.service.domain.entity.LoadBalancer loadBalancer = loadBalancerRepository.getByIdAndAccountId(id, accountId);
-            LoadBalancer _loadBalancer = dozerMapper.map(loadBalancer, LoadBalancer.class);
+            LoadBalancer _loadBalancer = getDozerMapper().map(loadBalancer, LoadBalancer.class);
             return Response.status(Response.Status.OK).entity(_loadBalancer).build();
         } catch (Exception e) {
+            logger.debug("Caught an exception: " + e.toString());
             return ResponseFactory.getErrorResponse(e);
         }
     }
@@ -76,7 +76,7 @@ public class LoadBalancerResource extends CommonDependencyProvider {
         }
 
         try {
-            org.daylight.pathweaver.service.domain.entity.LoadBalancer loadBalancer = dozerMapper.map(_loadBalancer, org.daylight.pathweaver.service.domain.entity.LoadBalancer.class);
+            org.daylight.pathweaver.service.domain.entity.LoadBalancer loadBalancer = getDozerMapper().map(_loadBalancer, org.daylight.pathweaver.service.domain.entity.LoadBalancer.class);
             loadBalancer.setId(id);
             loadBalancer.setAccountId(accountId);
 
@@ -85,9 +85,10 @@ public class LoadBalancerResource extends CommonDependencyProvider {
             MessageDataContainer msg = new MessageDataContainer();
             msg.setLoadBalancer(loadBalancer);
 
-            asyncService.callAsyncLoadBalancingOperation(CoreOperation.UPDATE_LOADBALANCER, msg);
+            getAsyncService().callAsyncLoadBalancingOperation(CoreOperation.UPDATE_LOADBALANCER, msg);
             return Response.status(Response.Status.ACCEPTED).build();
         } catch (Exception e) {
+            logger.debug("Caught an exception: " + e.toString());
             return ResponseFactory.getErrorResponse(e);
         }
     }
@@ -104,9 +105,10 @@ public class LoadBalancerResource extends CommonDependencyProvider {
             MessageDataContainer data = new MessageDataContainer();
             data.setLoadBalancer(loadBalancer);
 
-            asyncService.callAsyncLoadBalancingOperation(CoreOperation.DELETE_LOADBALANCER, data);
+            getAsyncService().callAsyncLoadBalancingOperation(CoreOperation.DELETE_LOADBALANCER, data);
             return Response.status(Response.Status.ACCEPTED).build();
         } catch (Exception e) {
+            logger.debug("Caught an exception: " + e.toString());
             return ResponseFactory.getErrorResponse(e);
         }
     }

@@ -8,12 +8,13 @@ import org.daylight.pathweaver.service.domain.exception.NoMappableConstantExcept
 
 import org.dozer.CustomConverter;
 
-import java.util.ArrayList;
+
 import java.util.HashSet;
+import java.util.Set;
 
 
 public class NodeConverter implements CustomConverter {
-    private final Log LOG = LogFactory.getLog(NodeConverter.class);
+    private final Log logger = LogFactory.getLog(NodeConverter.class);
 
 
 
@@ -25,9 +26,9 @@ public class NodeConverter implements CustomConverter {
         }
 
 
-        if (sourceFieldValue instanceof HashSet) {
+        if ((sourceFieldValue instanceof Set)) {
 
-            HashSet<org.daylight.pathweaver.service.domain.entity.Node> domainNodes = (HashSet<org.daylight.pathweaver.service.domain.entity.Node>) sourceFieldValue;
+            Set<org.daylight.pathweaver.service.domain.entity.Node> domainNodes = (Set<org.daylight.pathweaver.service.domain.entity.Node>) sourceFieldValue;
             Nodes nodes = new org.daylight.pathweaver.core.api.v1.Nodes();
 
              try {
@@ -62,9 +63,9 @@ public class NodeConverter implements CustomConverter {
                 org.daylight.pathweaver.service.domain.entity.Node domainNode = new  org.daylight.pathweaver.service.domain.entity.Node();
                 domainNode.setId(node.getId());
                 domainNode.setAddress(node.getAddress());
-                domainNode.setEnabled(node.isEnabled());
+                domainNode.setEnabled(node.isEnabled() == null ? true : node.isEnabled());
                 domainNode.setPort(node.getPort());
-                domainNode.setWeight(node.getWeight());
+                domainNode.setWeight(node.getWeight() == null ? 1 : node.getWeight());
 
                 domainNodes.add(domainNode);
             }

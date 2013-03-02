@@ -75,7 +75,7 @@ public class IPv4 {
                 } catch (NumberFormatException e) {
                     String format = "Error ipv4 octet[%d] is not a valid integer in ip %s";
                     String msg = String.format(format, i, ip);
-                    throw new IPStringConversionException1(msg);
+                    throw new IPStringConversionException1(msg, e);
                 }
                 if (octet < 0 || octet > 255) {
                     String format = "Error ipv4 octet[%d](%d) is not in range 0 - 255 in ip %s";

@@ -22,7 +22,7 @@ import java.util.List;
 @Repository
 @Transactional(value="core_transactionManager")
 public class AccountLimitRepositoryImpl implements AccountLimitRepository {
-    final Log LOG = LogFactory.getLog(AccountLimitRepositoryImpl.class);
+    private final Log logger = LogFactory.getLog(AccountLimitRepositoryImpl.class);
     private static final String entityNotFound = "Account limit not found";
     @PersistenceContext(unitName = "loadbalancing")
     private EntityManager entityManager;
@@ -78,7 +78,7 @@ public class AccountLimitRepositoryImpl implements AccountLimitRepository {
         LimitType limitType = entityManager.createQuery(criteria).getSingleResult();
         if (limitType == null) {
             String message = String.format("No limit type found for '%s'", accountLimitType.name());
-            LOG.error(message);
+            logger.error(message);
             throw new EntityNotFoundException(message);
         }
         return limitType;
@@ -98,13 +98,15 @@ public class AccountLimitRepositoryImpl implements AccountLimitRepository {
         try {
             return entityManager.createQuery(criteria).getResultList();
         } catch (NoResultException e) {
-            throw new EntityNotFoundException(entityNotFound);
+            throw new EntityNotFoundException(entityNotFound, e);
         }
     }
 
     @Override
     public void delete(AccountLimit accountLimit) throws EntityNotFoundException {
-        if (accountLimit == null) throw new EntityNotFoundException(entityNotFound);
+        if (accountLimit == null) {
+            throw new EntityNotFoundException(entityNotFound);
+        }
         accountLimit = entityManager.merge(accountLimit); // Re-attach hibernate instance
         entityManager.remove(accountLimit);
     }

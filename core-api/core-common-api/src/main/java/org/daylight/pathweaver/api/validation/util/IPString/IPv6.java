@@ -122,6 +122,7 @@ public class IPv6 {
             // Then do right Expand
             j = 0;
             i = 0;
+
             while (vals[i] != -1) {
                 out[i] = vals[j];
                 i++;
@@ -163,7 +164,6 @@ public class IPv6 {
 
     public static byte[] IpString2bytes(String ipStr) throws IPStringConversionException {
         int i;
-        int j;
         int val;
         byte[] out;
         String expanded_ipStr;
@@ -178,8 +178,6 @@ public class IPv6 {
             }
             IPv4 ipv4 = new IPv4(ip4_part);
             byte[] ipv4_bytes = ipv4.getBytes();
-            byte[] hex_bytes = hex_part.getBytes();
-            int last = hex_bytes.length - 1;
             int hi_word = (IPUtils.ubyte2int(ipv4_bytes[0]) << 8) + (IPUtils.ubyte2int(ipv4_bytes[1]));
             int lo_word = (IPUtils.ubyte2int(ipv4_bytes[2]) << 8) + (IPUtils.ubyte2int(ipv4_bytes[3]));
             String hi_str = IPUtils.int16bit2hex(hi_word);

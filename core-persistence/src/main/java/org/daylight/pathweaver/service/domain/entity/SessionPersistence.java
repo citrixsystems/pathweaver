@@ -37,7 +37,9 @@ public class SessionPersistence extends Entity implements Serializable {
     }
 
     public void setPersistenceType(String persistenceType) {
-        if (!PathweaverTypeHelper.isValidPersistenceType(persistenceType)) throw new RuntimeException("Persistence type not supported.");
+        if (!PathweaverTypeHelper.isValidPersistenceType(persistenceType)) {
+            throw new RuntimeException("Persistence type not supported.");
+        }
         this.persistenceType = persistenceType;
     }
 

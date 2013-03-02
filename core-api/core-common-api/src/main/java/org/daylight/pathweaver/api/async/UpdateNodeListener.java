@@ -26,7 +26,7 @@ import javax.jms.Message;
 
 @Component
 public class UpdateNodeListener extends BaseListener {
-    private final Log LOG = LogFactory.getLog(UpdateNodeListener.class);
+    private final Log logger = LogFactory.getLog(UpdateNodeListener.class);
 
     @Autowired
     private NotificationService notificationService;
@@ -34,8 +34,8 @@ public class UpdateNodeListener extends BaseListener {
     private LoadBalancerRepository loadBalancerRepository;
 
     public void doOnMessage(final Message message) throws Exception {
-        LOG.debug("Entering " + getClass());
-        LOG.debug(message);
+        logger.debug("Entering " + getClass());
+        logger.debug(message);
         LoadBalancer dbLoadBalancer;
 
         MessageDataContainer dataContainer = getDataContainerFromMessage(message);
@@ -45,7 +45,7 @@ public class UpdateNodeListener extends BaseListener {
             dbLoadBalancer = loadBalancerRepository.getByIdAndAccountId(queueLb.getId(), queueLb.getAccountId());
         } catch (EntityNotFoundException enfe) {
             String alertDescription = String.format("Load balancer '%d' not found in database.", queueLb.getId());
-            LOG.error(alertDescription, enfe);
+            logger.error(alertDescription, enfe);
             notificationService.saveAlert(queueLb.getAccountId(), queueLb.getId(), enfe, DATABASE_FAILURE.name(), alertDescription);
             sendErrorToEventResource(queueLb);
             return;
@@ -54,15 +54,15 @@ public class UpdateNodeListener extends BaseListener {
         Node nodeToUpdate = getNodeToUpdate(queueLb);
 
         try {
-            LOG.info(String.format("Updating nodes for load balancer '%d' in LB Device...", dbLoadBalancer.getId()));
-            reverseProxyLoadBalancerService.updateNode(dbLoadBalancer.getAccountId(), dbLoadBalancer.getId(), nodeToUpdate);
-            LOG.info(String.format("Successfully updated nodes for load balancer '%d' in LB Device.", dbLoadBalancer.getId()));
+            logger.info(String.format("Updating nodes for load balancer '%d' in LB Device...", dbLoadBalancer.getId()));
+            getReverseProxyLoadBalancerService().updateNode(dbLoadBalancer.getAccountId(), dbLoadBalancer.getId(), nodeToUpdate);
+            logger.info(String.format("Successfully updated nodes for load balancer '%d' in LB Device.", dbLoadBalancer.getId()));
         } catch (Exception e) {
             dbLoadBalancer.setStatus(ERROR);
             NodesHelper.setNodesToStatus(dbLoadBalancer, OFFLINE);
             loadBalancerRepository.update(dbLoadBalancer);
             String alertDescription = String.format("Error updating node '%d' in LB Device for loadbalancer '%d'.", nodeToUpdate.getId(), dbLoadBalancer.getId());
-            LOG.error(alertDescription, e);
+            logger.error(alertDescription, e);
             notificationService.saveAlert(dbLoadBalancer.getAccountId(), dbLoadBalancer.getId(), e, LBDEVICE_FAILURE.name(), alertDescription);
             sendErrorToEventResource(queueLb, nodeToUpdate);
             return;
@@ -77,7 +77,7 @@ public class UpdateNodeListener extends BaseListener {
         String atomSummary = createAtomSummary(nodeToUpdate).toString();
         notificationService.saveNodeEvent(queueLb.getUserName(), dbLoadBalancer.getAccountId(), dbLoadBalancer.getId(), nodeToUpdate.getId(), atomTitle, atomSummary, UPDATE_NODE, UPDATE, INFO);
 
-        LOG.info(String.format("Update node operation complete for load balancer '%d'.", dbLoadBalancer.getId()));
+        logger.info(String.format("Update node operation complete for load balancer '%d'.", dbLoadBalancer.getId()));
     }
 
     private Node getNodeToUpdate(LoadBalancer queueLb) {

@@ -20,7 +20,6 @@ public class AtomFeedAdapter implements FeedSourceAdapter {
 
     @Override
     public Feed getFeed(Map<String, Object> attributes) throws UnsupportedOperationException {
-        FeedType feedType = (FeedType) attributes.get("feedType");
         final String baseUri = configuration.getString(PublicApiServiceConfigurationKeys.base_uri);
         final Feed feed = createNewFeed(attributes, baseUri);
 
@@ -171,10 +170,11 @@ public class AtomFeedAdapter implements FeedSourceAdapter {
         }
 
         if (nextLink != null) {
-            if(page == null)
+            if(page == null) {
                 nextLink.setHref(nextLink.getHref() + "?page=2");
-            else
+            } else {
                 nextLink.setHref(nextLink.getHref() + "?page=" + (page + 1));
+            }
         }
 
         feed.addAuthor("daylight Cloud");

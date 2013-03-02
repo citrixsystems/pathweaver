@@ -22,9 +22,9 @@ import java.util.*;
 @Repository
 @Transactional(value="core_transactionManager")
 public class VirtualIpRepositoryImpl implements VirtualIpRepository {
-    private final Log LOG = LogFactory.getLog(VirtualIpRepositoryImpl.class);
+    private final Log logger = LogFactory.getLog(VirtualIpRepositoryImpl.class);
     @PersistenceContext(unitName = "loadbalancing")
-    protected EntityManager entityManager;
+    private EntityManager entityManager;
 
     public void persist(Object obj) {
         entityManager.persist(obj);
@@ -58,8 +58,7 @@ public class VirtualIpRepositoryImpl implements VirtualIpRepository {
     @Override
     public List<VirtualIp> getVipsByAccountId(Integer accountId) {
         String query = "select distinct(j.virtualIp) from LoadBalancerJoinVip j where j.loadBalancer.accountId = :accountId";
-        List<VirtualIp> vips = entityManager.createQuery(query).setParameter("accountId", accountId).getResultList();
-        return vips;
+        return entityManager.createQuery(query).setParameter("accountId", accountId).getResultList();
     }
 
     @Override

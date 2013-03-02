@@ -13,8 +13,8 @@ import static org.daylight.pathweaver.api.validation.ValidatorBuilder.build;
 @Component
 @Scope("request")
 public class ConnectHealthMonitorValidator implements ResourceValidator<HealthMonitor> {
-    protected Validator<HealthMonitor> validator;
-    protected ConnectMonitorValidatorBuilder ruleBuilder;
+    private Validator<HealthMonitor> validator;
+    private ConnectMonitorValidatorBuilder ruleBuilder;
 
     @Autowired
     public ConnectHealthMonitorValidator(ConnectMonitorValidatorBuilder ruleBuilder) {

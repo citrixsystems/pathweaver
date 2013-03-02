@@ -29,7 +29,17 @@ import static org.daylight.pathweaver.common.converters.PrimitiveConverters.inte
 @Transactional(value="core_transactionManager")
 public class AlertRepository {
 
-    final Log LOG = LogFactory.getLog(AlertRepository.class);
+    private final Log logger = LogFactory.getLog(AlertRepository.class);
+
+    private static final String START_DATE = "startDate";
+    private static final String END_DATE = "endDate";
+    private static final String INVALID_START_DATE = "Invalid startDate";
+    private static final String INVALID_END_DATE = "Invalid endDate";
+
+    private static final Integer MAX_RESULTS_LIMIT = 10;
+    private static final Integer MAX_LIMIT_VALUE = 100;
+    private static final Integer DAYS_KEEP_ALERTS = 90;
+
     @PersistenceContext(unitName = "loadbalancing")
     private EntityManager entityManager;
 
@@ -50,14 +60,13 @@ public class AlertRepository {
         Alert cl = entityManager.find(Alert.class, id);
         if (cl == null) {
             String errMsg = String.format("Cannot access alert {id=%d}", id);
-            LOG.warn(errMsg);
+            logger.warn(errMsg);
             throw new EntityNotFoundException(errMsg);
         }
         return cl;
     }
 
     public List<Alert> getByLoadBalancersByIds(List<Integer> loadBalancerIds, String startDate, String endDate) throws BadRequestException {
-        List<Alert> alerts;
         CustomQuery cq;
         String intsAsString;
         String qStr;
@@ -69,22 +78,22 @@ public class AlertRepository {
             intsAsString = integerList2cdString(loadBalancerIds);
         } catch (ConverterException ex) {
             Logger.getLogger(AlertRepository.class.getName()).log(Level.SEVERE, null, ex);
-            throw new BadRequestException("loadBalancerIds can not be Null");
+            throw new BadRequestException("loadBalancerIds can not be Null", ex);
         }
         qformat = "SELECT al From Alert al where al.loadbalancerId "
                 + "IN (%s)";
 
         qStr = String.format(qformat, intsAsString);
         cq = new CustomQuery(qStr);
-        cq.setWherePrefix(""); // The where prefix was included above
+        cq.setWherePrefix("");
         if (startDate != null) {
             try {
                 startCal = isoTocal(startDate);
             } catch (ConverterException ex) {
                 Logger.getLogger(AlertRepository.class.getName()).log(Level.SEVERE, null, ex);
-                throw new BadRequestException("Invalid startDate", ex);
+                throw new BadRequestException(INVALID_START_DATE, ex);
             }
-            cq.addParam("al.created", ">=", "startDate", startCal);
+            cq.addParam("al.created", ">=", START_DATE, startCal);
         }
 
         if (endDate != null) {
@@ -92,9 +101,9 @@ public class AlertRepository {
                 endCal = isoTocal(endDate);
             } catch (ConverterException ex) {
                 Logger.getLogger(AlertRepository.class.getName()).log(Level.SEVERE, null, ex);
-                throw new BadRequestException("Invalid endDate", ex);
+                throw new BadRequestException(INVALID_END_DATE, ex);
             }
-            cq.addParam("al.created", "<=", "endDate", endCal);
+            cq.addParam("al.created", "<=", END_DATE, endCal);
         }
         if (cq.getQueryParameters().size() > 0) {
             cq.setWherePrefix(" and ");
@@ -109,11 +118,7 @@ public class AlertRepository {
     }
 
     public List<Alert> getByAccountId(Integer accountId, String startDate, String endDate) throws BadRequestException {
-        List<Alert> alerts;
         CustomQuery cq;
-        String intsAsString;
-        String qStr;
-        String qformat;
         Calendar startCal;
         Calendar endCal;
         Query q;
@@ -126,9 +131,9 @@ public class AlertRepository {
                 startCal = isoTocal(startDate);
             } catch (ConverterException ex) {
                 Logger.getLogger(AlertRepository.class.getName()).log(Level.SEVERE, null, ex);
-                throw new BadRequestException("Invalid startDate", ex);
+                throw new BadRequestException(INVALID_START_DATE, ex);
             }
-            cq.addParam("a.created", ">=", "startDate", startCal);
+            cq.addParam("a.created", ">=", START_DATE, startCal);
         }
 
         if (endDate != null) {
@@ -136,9 +141,9 @@ public class AlertRepository {
                 endCal = isoTocal(endDate);
             } catch (ConverterException ex) {
                 Logger.getLogger(AlertRepository.class.getName()).log(Level.SEVERE, null, ex);
-                throw new BadRequestException("Invalid endDate", ex);
+                throw new BadRequestException(INVALID_END_DATE, ex);
             }
-            cq.addParam("a.created", "<=", "endDate", endCal);
+            cq.addParam("a.created", "<=", END_DATE, endCal);
         }
 
         q = entityManager.createQuery(cq.getQueryString());
@@ -157,11 +162,8 @@ public class AlertRepository {
     }
 
     public List<Alert> getByClusterId(Integer clusterId, String startDate, String endDate) throws BadRequestException {
-        List<Alert> alerts;
         CustomQuery cq;
-        String intsAsString;
         String qStr;
-        String qformat;
         Calendar startCal;
         Calendar endCal;
         Query q;
@@ -171,15 +173,15 @@ public class AlertRepository {
 
         cq = new CustomQuery(qStr);
         cq.addUnquotedParam("cid", clusterId);
-        cq.setWherePrefix(""); // The where prefix was included above
+        cq.setWherePrefix("");
         if (startDate != null) {
             try {
                 startCal = isoTocal(startDate);
             } catch (ConverterException ex) {
                 Logger.getLogger(AlertRepository.class.getName()).log(Level.SEVERE, null, ex);
-                throw new BadRequestException("Invalid startDate", ex);
+                throw new BadRequestException(INVALID_START_DATE, ex);
             }
-            cq.addParam("a.created", ">=", "startDate", startCal);
+            cq.addParam("a.created", ">=", START_DATE, startCal);
         }
 
         if (endDate != null) {
@@ -187,9 +189,9 @@ public class AlertRepository {
                 endCal = isoTocal(endDate);
             } catch (ConverterException ex) {
                 Logger.getLogger(AlertRepository.class.getName()).log(Level.SEVERE, null, ex);
-                throw new BadRequestException("Invalid endDate", ex);
+                throw new BadRequestException(INVALID_END_DATE, ex);
             }
-            cq.addParam("a.created", "<=", "endDate", endCal);
+            cq.addParam("a.created", "<=", END_DATE, endCal);
         }
         if (cq.getQueryParameters().size() > 0) {
             cq.setWherePrefix(" and ");
@@ -210,10 +212,12 @@ public class AlertRepository {
     }
 
     public Alert update(Alert alert) {
-        LOG.info("Updating Alert " + alert.getId() + "...");
-        alert = entityManager.merge(alert);
+        Alert resultAlert;
+
+        logger.info("Updating Alert " + alert.getId() + "...");
+        resultAlert = entityManager.merge(alert);
         entityManager.flush();
-        return alert;
+        return resultAlert;
     }
 
     public List<Alert> getForAccount() {
@@ -222,9 +226,7 @@ public class AlertRepository {
 
     public List<Alert> getForLoadBalancer(Integer loadbalancerId) {
         String queryStr = "SELECT ht FROM Alert ht where  ht.loadbalancerId = :loadbalancerId";
-        List<Alert> reslts = entityManager.createQuery(queryStr).setParameter("loadbalancerId", loadbalancerId).getResultList();
-        return reslts;
-
+        return entityManager.createQuery(queryStr).setParameter("loadbalancerId", loadbalancerId).getResultList();
     }
 
     public List<Alert> getByAccountId(Integer marker, Integer limit, Integer accountId, String startDate, String endDate) throws BadRequestException {
@@ -235,7 +237,7 @@ public class AlertRepository {
         }
 
         if (limit == null) {
-            limit = 10;
+            limit = MAX_RESULTS_LIMIT;
         }
 
         if (endDate == null) {
@@ -245,7 +247,7 @@ public class AlertRepository {
                 endCal = isoTocal(endDate);
             } catch (ConverterException ex) {
                 Logger.getLogger(AlertRepository.class.getName()).log(Level.SEVERE, null, ex);
-                throw new BadRequestException("Invalid endDate", ex);
+                throw new BadRequestException(INVALID_END_DATE, ex);
             }
         }
 
@@ -256,13 +258,13 @@ public class AlertRepository {
                 startCal = isoTocal(startDate);
             } catch (ConverterException ex) {
                 Logger.getLogger(AlertRepository.class.getName()).log(Level.SEVERE, null, ex);
-                throw new BadRequestException("Invalid startDate", ex);
+                throw new BadRequestException(INVALID_START_DATE, ex);
             }
         }
 
         String queryStr = "SELECT ht FROM Alert ht WHERE ht.accountId = :accountId AND ht.created <= :endDate AND ht.created >= :startDate";
 
-        List<Alert> results = entityManager.createQuery(queryStr).setFirstResult(marker).setMaxResults(limit).setParameter("accountId", accountId).setParameter("startDate", startCal).setParameter("endDate", endCal).getResultList();
+        List<Alert> results = entityManager.createQuery(queryStr).setFirstResult(marker).setMaxResults(limit).setParameter("accountId", accountId).setParameter(START_DATE, startCal).setParameter(END_DATE, endCal).getResultList();
         
         return results;
     }
@@ -289,8 +291,8 @@ public class AlertRepository {
         if (p.length >= 2) {
             Integer marker = p[0];
             Integer limit = p[1];
-            if (limit == null || limit > 100) {
-                limit = 100;
+            if (limit == null || limit > MAX_LIMIT_VALUE) {
+                limit = MAX_LIMIT_VALUE;
             }
             if (marker == null) {
                 marker = 0;
@@ -307,8 +309,8 @@ public class AlertRepository {
         if (p.length >= 2) {
             Integer marker = p[0];
             Integer limit = p[1];
-            if (limit == null || limit > 100) {
-                limit = 100;
+            if (limit == null || limit > MAX_LIMIT_VALUE) {
+                limit = MAX_LIMIT_VALUE;
             }
             if (marker == null) {
                 marker = 0;
@@ -321,7 +323,7 @@ public class AlertRepository {
 
     public void removeAlertEntries() {
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -90);
+        cal.add(Calendar.DATE, -DAYS_KEEP_ALERTS);
         entityManager.createQuery("DELETE FROM Alert a where a.created <= :days and a.status ='ACKNOWLEDGED'").setParameter("days", cal).executeUpdate();
     }
 }

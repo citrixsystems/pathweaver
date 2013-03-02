@@ -24,9 +24,9 @@ import java.util.*;
 @Transactional(value="core_transactionManager")
 public class LoadBalancerRepositoryImpl implements LoadBalancerRepository {
 
-    final Log LOG = LogFactory.getLog(LoadBalancerRepositoryImpl.class);
+    private final Log logger = LogFactory.getLog(LoadBalancerRepositoryImpl.class);
     @PersistenceContext(unitName = "loadbalancing")
-    protected EntityManager entityManager;
+    private EntityManager entityManager;
 
     @Override
     public LoadBalancer getById(Integer id) throws EntityNotFoundException {
@@ -207,7 +207,9 @@ public class LoadBalancerRepositoryImpl implements LoadBalancerRepository {
         }
 
         LoadBalancer lb = lbList.get(0);
-        if (lb.getStatus().equals(CoreLoadBalancerStatus.DELETED)) throw new UnprocessableEntityException(Constants.LoadBalancerDeleted);
+        if (lb.getStatus().equals(CoreLoadBalancerStatus.DELETED)) {
+            throw new UnprocessableEntityException(Constants.LoadBalancerDeleted);
+        }
         final boolean isActive = lb.getStatus().equals(CoreLoadBalancerStatus.ACTIVE);
         final boolean isPendingOrActive = lb.getStatus().equals(CoreLoadBalancerStatus.PENDING_UPDATE) || isActive;
 

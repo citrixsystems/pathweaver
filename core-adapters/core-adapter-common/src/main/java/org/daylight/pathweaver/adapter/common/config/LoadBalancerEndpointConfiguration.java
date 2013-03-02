@@ -25,7 +25,6 @@ public class LoadBalancerEndpointConfiguration {
         try {
             this.endpointUrl = new URL(soapEndpoint.getEndpoint());
         } catch (MalformedURLException e) {
-            e.printStackTrace();
             throw new RuntimeException("Invalid endpoint...", e);
         }
         this.username = username;
@@ -39,7 +38,6 @@ public class LoadBalancerEndpointConfiguration {
         try {
             this.endpointUrl = new URL(soapEndpoint.getEndpoint());
         } catch (MalformedURLException e) {
-            e.printStackTrace();
             throw new RuntimeException("Invalid endpoint...", e);
         }
         this.username = username;

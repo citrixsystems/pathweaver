@@ -13,8 +13,8 @@ import static org.daylight.pathweaver.api.validation.ValidatorBuilder.build;
 @Component
 @Scope("request")
 public class ConnectionThrottleValidator implements ResourceValidator<ConnectionThrottle> {
-    protected Validator<ConnectionThrottle> validator;
-    protected ConnectionThrottleValidatorBuilder ruleBuilder;
+    private Validator<ConnectionThrottle> validator;
+    private ConnectionThrottleValidatorBuilder ruleBuilder;
 
     @Autowired
     public ConnectionThrottleValidator(ConnectionThrottleValidatorBuilder ruleBuilder) {

@@ -16,13 +16,10 @@ import static org.daylight.pathweaver.api.validation.context.HttpRequestType.PUT
 @Component
 @Scope("request")
 public class LoadBalancerValidatorBuilder extends ValidatorBuilder<LoadBalancer> {
-    protected final int MIN_PORT = 1;
-    protected final int MAX_PORT = 65535;
-    protected final int LB_NAME_LENGTH = 128;
-    protected final int MIN_NODES = 1;
-    protected final int MAX_NODES = 25;
-    protected AlgorithmType algorithmType;
-    protected ProtocolType protocolType;
+    private final int MIN_PORT = 1;
+    private final int MAX_PORT = 65535;
+    private final int LB_NAME_LENGTH = 128;
+
 
     @Autowired
     public LoadBalancerValidatorBuilder(AlgorithmType algorithmType,
@@ -33,8 +30,7 @@ public class LoadBalancerValidatorBuilder extends ValidatorBuilder<LoadBalancer>
                                         ConnectionThrottleValidatorBuilder connectionThrottleValidatorBuilder,
                                         SessionPersistenceValidatorBuilder sessionPersistenceValidatorBuilder) {
         super(LoadBalancer.class);
-        this.algorithmType = algorithmType;
-        this.protocolType = protocolType;
+
 
         // SHARED EXPECTATIONS
         result(validationTarget().getId()).must().not().exist().withMessage("Load balancer id field cannot be modified.");

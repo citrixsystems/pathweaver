@@ -23,20 +23,20 @@ import java.util.Set;
 
 @Service
 public class LoadBalancerServiceImpl implements LoadBalancerService {
-    protected final Log LOG = LogFactory.getLog(LoadBalancerServiceImpl.class);
+    private final Log logger= LogFactory.getLog(LoadBalancerServiceImpl.class);
 
     @Autowired
-    protected AccountLimitService accountLimitService;
+    private AccountLimitService accountLimitService;
 
     @Autowired
-    protected BlacklistService blacklistService;
+    private BlacklistService blacklistService;
 
 
     @Autowired
-    protected LoadBalancerRepository loadBalancerRepository;
+    private LoadBalancerRepository loadBalancerRepository;
 
     @Autowired
-    protected VirtualIpService virtualIpService;
+    private VirtualIpService virtualIpService;
 
     @Override
     @Transactional(value="core_transactionManager")
@@ -45,7 +45,6 @@ public class LoadBalancerServiceImpl implements LoadBalancerService {
         try {
             virtualIpService.addAccountRecord(loadBalancer.getAccountId());
         } catch (NoSuchAlgorithmException e) {
-;
             throw new PersistenceServiceException(e);
         }
 
@@ -109,12 +108,12 @@ public class LoadBalancerServiceImpl implements LoadBalancerService {
 
     protected void setPropertiesForUpdate(LoadBalancer loadBalancer, LoadBalancer dbLoadBalancer) throws BadRequestException {
         if (loadBalancer.getAlgorithm() != null && !loadBalancer.getAlgorithm().equals(dbLoadBalancer.getAlgorithm())) {
-            LOG.debug("Updating loadbalancer algorithm to " + loadBalancer.getAlgorithm());
+            logger.debug("Updating loadbalancer algorithm to " + loadBalancer.getAlgorithm());
             dbLoadBalancer.setAlgorithm(loadBalancer.getAlgorithm());
         }
 
         if (loadBalancer.getName() != null && !loadBalancer.getName().equals(dbLoadBalancer.getName())) {
-            LOG.debug("Updating loadbalancer name to " + loadBalancer.getName());
+            logger.debug("Updating loadbalancer name to " + loadBalancer.getName());
             dbLoadBalancer.setName(loadBalancer.getName());
         }
     }
@@ -126,7 +125,7 @@ public class LoadBalancerServiceImpl implements LoadBalancerService {
             try {
                 LoadBalancer dbLoadBalancer = loadBalancerRepository.getByIdAndAccountId(loadBalancerId, accountId);
                 if (!dbLoadBalancer.getStatus().equals(CoreLoadBalancerStatus.ACTIVE)) {
-                    LOG.warn(StringHelper.immutableLoadBalancer(dbLoadBalancer));
+                    logger.warn(StringHelper.immutableLoadBalancer(dbLoadBalancer));
                     if (!dbLoadBalancer.getStatus().equals(CoreLoadBalancerStatus.ERROR)) {
                         badLbIds.add(loadBalancerId); 
                     }

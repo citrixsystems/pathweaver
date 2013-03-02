@@ -16,7 +16,7 @@ import java.util.List;
 
 @Service
 public class HostServiceImpl implements HostService {
-    private final Log LOG = LogFactory.getLog(HostServiceImpl.class);
+    private final Log logger = LogFactory.getLog(HostServiceImpl.class);
 
     @Autowired
     private HostRepository hostRepository;
@@ -27,8 +27,7 @@ public class HostServiceImpl implements HostService {
     public final LoadBalancerHost createLoadBalancerHost(LoadBalancerHost lbHost) throws PersistenceServiceException {
 
         try {
-            LoadBalancerHost dbLoadBalancerHost = hostRepository.createLoadBalancerHost(lbHost);
-            return dbLoadBalancerHost;
+            return hostRepository.createLoadBalancerHost(lbHost);
         } catch (Exception e) {
             throw new PersistenceServiceException(e);
         }
