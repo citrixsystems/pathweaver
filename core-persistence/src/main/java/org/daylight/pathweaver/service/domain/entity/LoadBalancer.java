@@ -197,26 +197,7 @@ public class LoadBalancer extends Entity implements Serializable {
     }
 
 
-    private static String valueOrNull(Object obj) {
-        return obj == null ? "null" : obj.toString();
-    }
 
-    public boolean isUsingSsl() {
-        return (protocol.equals(CoreProtocolType.HTTPS));
-    }
-
-    public void getIpv6Servicenet(String throwaway) {
-    }
-
-    public void setIpv6Public(String throwaway) {
-
-    }
-
-    public void setIpv4Servicenet(String throwaway) {
-    }
-
-    public void setIpv4Public(String throwaway) {
-    }
 
     public VirtualIpDozerWrapper getVirtualIpDozerWrapper() {
         return new VirtualIpDozerWrapper(loadBalancerJoinVipSet);

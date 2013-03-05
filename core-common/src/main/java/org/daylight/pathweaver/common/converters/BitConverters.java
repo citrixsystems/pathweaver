@@ -49,78 +49,23 @@ public class BitConverters {
         return out;
     }
 
+
+
     public static int nibble2Int(byte nibble) {
-        int out;
-        switch (nibble) {
-            case '0':
-                out = 0;
-                break;
-            case '1':
-                out = 1;
-                break;
-            case '2':
-                out = 2;
-                break;
-            case '3':
-                out = 3;
-                break;
-            case '4':
-                out = 4;
-                break;
-            case '5':
-                out = 5;
-                break;
-            case '6':
-                out = 6;
-                break;
-            case '7':
-                out = 7;
-                break;
-            case '8':
-                out = 8;
-                break;
-            case '9':
-                out = 9;
-                break;
-            case 'a':
-                out = 10;
-                break;
-            case 'b':
-                out = 11;
-                break;
-            case 'c':
-                out = 12;
-                break;
-            case 'd':
-                out = 13;
-                break;
-            case 'e':
-                out = 14;
-                break;
-            case 'f':
-                out = 15;
-                break;
-            case 'A':
-                out = 10;
-                break;
-            case 'B':
-                out = 11;
-                break;
-            case 'C':
-                out = 12;
-                break;
-            case 'D':
-                out = 13;
-                break;
-            case 'E':
-                out = 14;
-                break;
-            case 'F':
-                out = 15;
-                break;
-            default:
-                out = -1;
-                break;
+        final char[] hexBytes = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+
+        int out = -1;
+
+        for (final int i : hexBytes) {
+                if (hexBytes[i] == nibble) {
+                    out = Character.digit(nibble,16);
+                    break;
+                }
+        }
+
+        if (out < 0) {
+            out = -1;
+
         }
         return out;
     }

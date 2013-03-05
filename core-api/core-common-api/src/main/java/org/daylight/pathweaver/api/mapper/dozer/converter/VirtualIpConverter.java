@@ -28,54 +28,50 @@ public class VirtualIpConverter implements CustomConverter {
 
 
 
-    @Override
-    public Object convert(Object existingDestinationFieldValue, Object sourceFieldValue, Class<?> destinationClass, Class<?> sourceClass) {
+    private VirtualIps getDataModelVirtualIps(Object sourceFieldValue) {
+        VirtualIpDozerWrapper dozerWrapper = (VirtualIpDozerWrapper) sourceFieldValue;
 
-        if (sourceFieldValue == null) {
-            return null;
-        }
+        VirtualIps vips = new VirtualIps();
 
-        if (sourceFieldValue instanceof VirtualIpDozerWrapper) {
-            VirtualIpDozerWrapper dozerWrapper = (VirtualIpDozerWrapper) sourceFieldValue;
-
-            VirtualIps vips = new VirtualIps();
-
-             try {
-                for (LoadBalancerJoinVip loadBalancerJoinVip : dozerWrapper.getLoadBalancerJoinVipSet()) {
-                    VirtualIp vip = new VirtualIp();
-                    vip.setId(loadBalancerJoinVip.getVirtualIp().getId());
-                    vip.setAddress(loadBalancerJoinVip.getVirtualIp().getAddress());
-                    switch (loadBalancerJoinVip.getVirtualIp().getIpVersion()) {
-                        case IPV4:
-                            vip.setIpVersion(IpVersion.IPV4);
-                            break;
-                        case IPV6:
-                            vip.setIpVersion(IpVersion.IPV6);
-                            break;
-                        default:
-                            throw new RuntimeException(String.format("Unsupported vip Ip version '%s' given while mapping.", loadBalancerJoinVip.getVirtualIp().getIpVersion().name()));
-                    }
-
-                    switch (loadBalancerJoinVip.getVirtualIp().getVipType()) {
-                        case PUBLIC:
-                            vip.setType(PUBLIC);
-                            break;
-                        case PRIVATE:
-                            vip.setType(PRIVATE);
-                            break;
-                        default:
-                            throw new RuntimeException(String.format("Unsupported vip type '%s' given while mapping.", loadBalancerJoinVip.getVirtualIp().getVipType().name()));
-                    }
-
-                    vips.getVirtualIps().add(vip);
-
+         try {
+            for (LoadBalancerJoinVip loadBalancerJoinVip : dozerWrapper.getLoadBalancerJoinVipSet()) {
+                VirtualIp vip = new VirtualIp();
+                vip.setId(loadBalancerJoinVip.getVirtualIp().getId());
+                vip.setAddress(loadBalancerJoinVip.getVirtualIp().getAddress());
+                switch (loadBalancerJoinVip.getVirtualIp().getIpVersion()) {
+                    case IPV4:
+                        vip.setIpVersion(IpVersion.IPV4);
+                        break;
+                    case IPV6:
+                        vip.setIpVersion(IpVersion.IPV6);
+                        break;
+                    default:
+                        throw new RuntimeException(String.format("Unsupported vip Ip version '%s' given while mapping.", loadBalancerJoinVip.getVirtualIp().getIpVersion().name()));
                 }
-             } catch (NullPointerException e) {
-                 //Ignore, there is nothing to map
-            }
 
-            return vips;
+                switch (loadBalancerJoinVip.getVirtualIp().getVipType()) {
+                    case PUBLIC:
+                        vip.setType(PUBLIC);
+                        break;
+                    case PRIVATE:
+                        vip.setType(PRIVATE);
+                        break;
+                    default:
+                        throw new RuntimeException(String.format("Unsupported vip type '%s' given while mapping.", loadBalancerJoinVip.getVirtualIp().getVipType().name()));
+                }
+
+                vips.getVirtualIps().add(vip);
+
+            }
+         } catch (NullPointerException e) {
+             //Ignore, there is nothing to map
         }
+
+        return vips;
+    }
+
+
+    private VirtualIpDozerWrapper getEntityVirtualIpDozerWrapper(Object sourceFieldValue) {
 
         if (sourceFieldValue instanceof ArrayList) {
             ArrayList<org.daylight.pathweaver.core.api.v1.VirtualIp> vips = (ArrayList<org.daylight.pathweaver.core.api.v1.VirtualIp>) sourceFieldValue;
@@ -106,9 +102,9 @@ public class VirtualIpConverter implements CustomConverter {
             VirtualIpDozerWrapper dozerWrapper = new VirtualIpDozerWrapper();
             dozerWrapper.setLoadBalancerJoinVipSet(loadBalancerJoinVipSet);
             return dozerWrapper;
-        }
 
-        if (sourceFieldValue instanceof VirtualIps) {
+        } else {
+
             VirtualIps vips = (VirtualIps) sourceFieldValue;
             Set<LoadBalancerJoinVip> loadBalancerJoinVipSet = new HashSet<LoadBalancerJoinVip>();
 
@@ -151,6 +147,23 @@ public class VirtualIpConverter implements CustomConverter {
             dozerWrapper.setLoadBalancerJoinVipSet(loadBalancerJoinVipSet);
             return dozerWrapper;
         }
+    }
+
+    @Override
+    public Object convert(Object existingDestinationFieldValue, Object sourceFieldValue, Class<?> destinationClass, Class<?> sourceClass) {
+
+        if (sourceFieldValue == null) {
+            return null;
+        }
+
+        if (sourceFieldValue instanceof VirtualIpDozerWrapper) {
+                  return getDataModelVirtualIps(sourceFieldValue) ;
+        }
+
+        if (sourceFieldValue instanceof ArrayList || sourceFieldValue instanceof VirtualIps) {
+                  return getEntityVirtualIpDozerWrapper(sourceFieldValue);
+        }
+
 
         throw new NoMappableConstantException("Cannot map source type: " + sourceClass.getName());
     }
