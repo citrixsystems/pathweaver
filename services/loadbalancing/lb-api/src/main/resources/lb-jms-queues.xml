@@ -26,11 +26,11 @@
         <property name="connectionFactory" ref="jmsPooledConnectionFactory"/>
         <property name="messageListener" ref="createLoadBalancerListener"/>
         <property name="destinationName" value="CREATE_LOADBALANCER"/>
-        <property name="concurrentConsumers" value="${lbass.default.concurrent.consumers}"/>
-        <property name="maxConcurrentConsumers" value="${lbaas.default.max.concurrent.consumers}"/>
-        <property name="receiveTimeout" value="${lbaas.default.receive.timeout}"/>
-        <property name="idleTaskExecutionLimit" value="${lbaas.default.idle.task.execution.limit}"/>
-        <property name="idleConsumerLimit" value="${lbaas.default.idle.consumer.limit}"/>
+        <property name="concurrentConsumers" value="${activemq.default.concurrent.consumers}"/>
+        <property name="maxConcurrentConsumers" value="${activemq.default.max.concurrent.consumers}"/>
+        <property name="receiveTimeout" value="${activemq.default.receive.timeout}"/>
+        <property name="idleTaskExecutionLimit" value="${activemq.default.idle.task.execution.limit}"/>
+        <property name="idleConsumerLimit" value="${activemq.default.idle.consumer.limit}"/>
         <property name="sessionTransacted" value="true"/>
     </bean>
 
@@ -39,11 +39,11 @@
         <property name="connectionFactory" ref="jmsPooledConnectionFactory"/>
         <property name="messageListener" ref="updateLoadBalancerListener"/>
         <property name="destinationName" value="UPDATE_LOADBALANCER"/>
-        <property name="concurrentConsumers" value="${lbass.default.concurrent.consumers}"/>
-        <property name="maxConcurrentConsumers" value="${lbaas.default.max.concurrent.consumers}"/>
-        <property name="receiveTimeout" value="${lbaas.default.receive.timeout}"/>
-        <property name="idleTaskExecutionLimit" value="${lbaas.default.idle.task.execution.limit}"/>
-        <property name="idleConsumerLimit" value="${lbaas.default.idle.consumer.limit}"/>
+        <property name="concurrentConsumers" value="${activemq.default.concurrent.consumers}"/>
+        <property name="maxConcurrentConsumers" value="${activemq.default.max.concurrent.consumers}"/>
+        <property name="receiveTimeout" value="${activemq.default.receive.timeout}"/>
+        <property name="idleTaskExecutionLimit" value="${activemq.default.idle.task.execution.limit}"/>
+        <property name="idleConsumerLimit" value="${activemq.default.idle.consumer.limit}"/>
         <property name="sessionTransacted" value="true"/>
     </bean>
 
@@ -52,11 +52,11 @@
         <property name="connectionFactory" ref="jmsPooledConnectionFactory"/>
         <property name="messageListener" ref="deleteLoadBalancerListener"/>
         <property name="destinationName" value="DELETE_LOADBALANCER"/>
-        <property name="concurrentConsumers" value="${lbass.default.concurrent.consumers}"/>
-        <property name="maxConcurrentConsumers" value="${lbaas.default.max.concurrent.consumers}"/>
-        <property name="receiveTimeout" value="${lbaas.default.receive.timeout}"/>
-        <property name="idleTaskExecutionLimit" value="${lbaas.default.idle.task.execution.limit}"/>
-        <property name="idleConsumerLimit" value="${lbaas.default.idle.consumer.limit}"/>
+        <property name="concurrentConsumers" value="${activemq.default.concurrent.consumers}"/>
+        <property name="maxConcurrentConsumers" value="${activemq.default.max.concurrent.consumers}"/>
+        <property name="receiveTimeout" value="${activemq.default.receive.timeout}"/>
+        <property name="idleTaskExecutionLimit" value="${activemq.default.idle.task.execution.limit}"/>
+        <property name="idleConsumerLimit" value="${activemq.default.idle.consumer.limit}"/>
         <property name="sessionTransacted" value="true"/>
     </bean>
 
@@ -65,11 +65,11 @@
         <property name="connectionFactory" ref="jmsPooledConnectionFactory"/>
         <property name="messageListener" ref="createNodesListener"/>
         <property name="destinationName" value="CREATE_NODES"/>
-        <property name="concurrentConsumers" value="${lbass.default.concurrent.consumers}"/>
-        <property name="maxConcurrentConsumers" value="${lbaas.default.max.concurrent.consumers}"/>
-        <property name="receiveTimeout" value="${lbaas.default.receive.timeout}"/>
-        <property name="idleTaskExecutionLimit" value="${lbaas.default.idle.task.execution.limit}"/>
-        <property name="idleConsumerLimit" value="${lbaas.default.idle.consumer.limit}"/>
+        <property name="concurrentConsumers" value="${activemq.default.concurrent.consumers}"/>
+        <property name="maxConcurrentConsumers" value="${activemq.default.max.concurrent.consumers}"/>
+        <property name="receiveTimeout" value="${activemq.default.receive.timeout}"/>
+        <property name="idleTaskExecutionLimit" value="${activemq.default.idle.task.execution.limit}"/>
+        <property name="idleConsumerLimit" value="${activemq.default.idle.consumer.limit}"/>
         <property name="sessionTransacted" value="true"/>
     </bean>
 
@@ -78,11 +78,11 @@
         <property name="connectionFactory" ref="jmsPooledConnectionFactory"/>
         <property name="messageListener" ref="updateNodeListener"/>
         <property name="destinationName" value="UPDATE_NODE"/>
-        <property name="concurrentConsumers" value="${lbass.default.concurrent.consumers}"/>
-        <property name="maxConcurrentConsumers" value="${lbaas.default.max.concurrent.consumers}"/>
-        <property name="receiveTimeout" value="${lbaas.default.receive.timeout}"/>
-        <property name="idleTaskExecutionLimit" value="${lbaas.default.idle.task.execution.limit}"/>
-        <property name="idleConsumerLimit" value="${lbaas.default.idle.consumer.limit}"/>
+        <property name="concurrentConsumers" value="${activemq.default.concurrent.consumers}"/>
+        <property name="maxConcurrentConsumers" value="${activemq.default.max.concurrent.consumers}"/>
+        <property name="receiveTimeout" value="${activemq.default.receive.timeout}"/>
+        <property name="idleTaskExecutionLimit" value="${activemq.default.idle.task.execution.limit}"/>
+        <property name="idleConsumerLimit" value="${activemq.default.idle.consumer.limit}"/>
         <property name="sessionTransacted" value="true"/>
     </bean>
 
@@ -91,11 +91,11 @@
         <property name="connectionFactory" ref="jmsPooledConnectionFactory"/>
         <property name="messageListener" ref="deleteNodeListener"/>
         <property name="destinationName" value="DELETE_NODES"/>
-        <property name="concurrentConsumers" value="${lbass.default.concurrent.consumers}"/>
-        <property name="maxConcurrentConsumers" value="${lbaas.default.max.concurrent.consumers}"/>
-        <property name="receiveTimeout" value="${lbaas.default.receive.timeout}"/>
-        <property name="idleTaskExecutionLimit" value="${lbaas.default.idle.task.execution.limit}"/>
-        <property name="idleConsumerLimit" value="${lbaas.default.idle.consumer.limit}"/>
+        <property name="concurrentConsumers" value="${activemq.default.concurrent.consumers}"/>
+        <property name="maxConcurrentConsumers" value="${activemq.default.max.concurrent.consumers}"/>
+        <property name="receiveTimeout" value="${activemq.default.receive.timeout}"/>
+        <property name="idleTaskExecutionLimit" value="${activemq.default.idle.task.execution.limit}"/>
+        <property name="idleConsumerLimit" value="${activemq.default.idle.consumer.limit}"/>
         <property name="sessionTransacted" value="true"/>
     </bean>
 
@@ -104,11 +104,11 @@
         <property name="connectionFactory" ref="jmsPooledConnectionFactory"/>
         <property name="messageListener" ref="setSessionPersistenceListener"/>
         <property name="destinationName" value="UPDATE_SESSION_PERSISTENCE"/>
-        <property name="concurrentConsumers" value="${lbass.default.concurrent.consumers}"/>
-        <property name="maxConcurrentConsumers" value="${lbaas.default.max.concurrent.consumers}"/>
-        <property name="receiveTimeout" value="${lbaas.default.receive.timeout}"/>
-        <property name="idleTaskExecutionLimit" value="${lbaas.default.idle.task.execution.limit}"/>
-        <property name="idleConsumerLimit" value="${lbaas.default.idle.consumer.limit}"/>
+        <property name="concurrentConsumers" value="${activemq.default.concurrent.consumers}"/>
+        <property name="maxConcurrentConsumers" value="${activemq.default.max.concurrent.consumers}"/>
+        <property name="receiveTimeout" value="${activemq.default.receive.timeout}"/>
+        <property name="idleTaskExecutionLimit" value="${activemq.default.idle.task.execution.limit}"/>
+        <property name="idleConsumerLimit" value="${activemq.default.idle.consumer.limit}"/>
         <property name="sessionTransacted" value="true"/>
     </bean>
 
@@ -117,11 +117,11 @@
         <property name="connectionFactory" ref="jmsPooledConnectionFactory"/>
         <property name="messageListener" ref="deleteSessionPersistenceListener"/>
         <property name="destinationName" value="DELETE_SESSION_PERSISTENCE"/>
-        <property name="concurrentConsumers" value="${lbass.default.concurrent.consumers}"/>
-        <property name="maxConcurrentConsumers" value="${lbaas.default.max.concurrent.consumers}"/>
-        <property name="receiveTimeout" value="${lbaas.default.receive.timeout}"/>
-        <property name="idleTaskExecutionLimit" value="${lbaas.default.idle.task.execution.limit}"/>
-        <property name="idleConsumerLimit" value="${lbaas.default.idle.consumer.limit}"/>
+        <property name="concurrentConsumers" value="${activemq.default.concurrent.consumers}"/>
+        <property name="maxConcurrentConsumers" value="${activemq.default.max.concurrent.consumers}"/>
+        <property name="receiveTimeout" value="${activemq.default.receive.timeout}"/>
+        <property name="idleTaskExecutionLimit" value="${activemq.default.idle.task.execution.limit}"/>
+        <property name="idleConsumerLimit" value="${activemq.default.idle.consumer.limit}"/>
         <property name="sessionTransacted" value="true"/>
     </bean>
 
@@ -130,11 +130,11 @@
         <property name="connectionFactory" ref="jmsPooledConnectionFactory"/>
         <property name="messageListener" ref="setConnectionThrottleListener"/>
         <property name="destinationName" value="UPDATE_CONNECTION_THROTTLE"/>
-        <property name="concurrentConsumers" value="${lbass.default.concurrent.consumers}"/>
-        <property name="maxConcurrentConsumers" value="${lbaas.default.max.concurrent.consumers}"/>
-        <property name="receiveTimeout" value="${lbaas.default.receive.timeout}"/>
-        <property name="idleTaskExecutionLimit" value="${lbaas.default.idle.task.execution.limit}"/>
-        <property name="idleConsumerLimit" value="${lbaas.default.idle.consumer.limit}"/>
+        <property name="concurrentConsumers" value="${activemq.default.concurrent.consumers}"/>
+        <property name="maxConcurrentConsumers" value="${activemq.default.max.concurrent.consumers}"/>
+        <property name="receiveTimeout" value="${activemq.default.receive.timeout}"/>
+        <property name="idleTaskExecutionLimit" value="${activemq.default.idle.task.execution.limit}"/>
+        <property name="idleConsumerLimit" value="${activemq.default.idle.consumer.limit}"/>
         <property name="sessionTransacted" value="true"/>
     </bean>
 
@@ -143,11 +143,11 @@
         <property name="connectionFactory" ref="jmsPooledConnectionFactory"/>
         <property name="messageListener" ref="deleteConnectionThrottleListener"/>
         <property name="destinationName" value="DELETE_CONNECTION_THROTTLE"/>
-        <property name="concurrentConsumers" value="${lbass.default.concurrent.consumers}"/>
-        <property name="maxConcurrentConsumers" value="${lbaas.default.max.concurrent.consumers}"/>
-        <property name="receiveTimeout" value="${lbaas.default.receive.timeout}"/>
-        <property name="idleTaskExecutionLimit" value="${lbaas.default.idle.task.execution.limit}"/>
-        <property name="idleConsumerLimit" value="${lbaas.default.idle.consumer.limit}"/>
+        <property name="concurrentConsumers" value="${activemq.default.concurrent.consumers}"/>
+        <property name="maxConcurrentConsumers" value="${activemq.default.max.concurrent.consumers}"/>
+        <property name="receiveTimeout" value="${activemq.default.receive.timeout}"/>
+        <property name="idleTaskExecutionLimit" value="${activemq.default.idle.task.execution.limit}"/>
+        <property name="idleConsumerLimit" value="${activemq.default.idle.consumer.limit}"/>
         <property name="sessionTransacted" value="true"/>
     </bean>
 
@@ -156,11 +156,11 @@
         <property name="connectionFactory" ref="jmsPooledConnectionFactory"/>
         <property name="messageListener" ref="setHealthMonitorListener"/>
         <property name="destinationName" value="UPDATE_HEALTH_MONITOR"/>
-        <property name="concurrentConsumers" value="${lbass.default.concurrent.consumers}"/>
-        <property name="maxConcurrentConsumers" value="${lbaas.default.max.concurrent.consumers}"/>
-        <property name="receiveTimeout" value="${lbaas.default.receive.timeout}"/>
-        <property name="idleTaskExecutionLimit" value="${lbaas.default.idle.task.execution.limit}"/>
-        <property name="idleConsumerLimit" value="${lbaas.default.idle.consumer.limit}"/>
+        <property name="concurrentConsumers" value="${activemq.default.concurrent.consumers}"/>
+        <property name="maxConcurrentConsumers" value="${activemq.default.max.concurrent.consumers}"/>
+        <property name="receiveTimeout" value="${activemq.default.receive.timeout}"/>
+        <property name="idleTaskExecutionLimit" value="${activemq.default.idle.task.execution.limit}"/>
+        <property name="idleConsumerLimit" value="${activemq.default.idle.consumer.limit}"/>
         <property name="sessionTransacted" value="true"/>
     </bean>
 
@@ -169,11 +169,11 @@
         <property name="connectionFactory" ref="jmsPooledConnectionFactory"/>
         <property name="messageListener" ref="deleteHealthMonitorListener"/>
         <property name="destinationName" value="DELETE_HEALTH_MONITOR"/>
-        <property name="concurrentConsumers" value="${lbass.default.concurrent.consumers}"/>
-        <property name="maxConcurrentConsumers" value="${lbaas.default.max.concurrent.consumers}"/>
-        <property name="receiveTimeout" value="${lbaas.default.receive.timeout}"/>
-        <property name="idleTaskExecutionLimit" value="${lbaas.default.idle.task.execution.limit}"/>
-        <property name="idleConsumerLimit" value="${lbaas.default.idle.consumer.limit}"/>
+        <property name="concurrentConsumers" value="${activemq.default.concurrent.consumers}"/>
+        <property name="maxConcurrentConsumers" value="${activemq.default.max.concurrent.consumers}"/>
+        <property name="receiveTimeout" value="${activemq.default.receive.timeout}"/>
+        <property name="idleTaskExecutionLimit" value="${activemq.default.idle.task.execution.limit}"/>
+        <property name="idleConsumerLimit" value="${activemq.default.idle.consumer.limit}"/>
         <property name="sessionTransacted" value="true"/>
     </bean>
 
@@ -182,11 +182,11 @@
         <property name="connectionFactory" ref="jmsPooledConnectionFactory"/>
         <property name="messageListener" ref="usageEventListener"/>
         <property name="destinationName" value="USAGE_EVENT"/>
-        <property name="concurrentConsumers" value="${lbass.default.concurrent.consumers}"/>
-        <property name="maxConcurrentConsumers" value="${lbaas.default.max.concurrent.consumers}"/>
-        <property name="receiveTimeout" value="${lbaas.default.receive.timeout}"/>
-        <property name="idleTaskExecutionLimit" value="${lbaas.default.idle.task.execution.limit}"/>
-        <property name="idleConsumerLimit" value="${lbaas.default.idle.consumer.limit}"/>
+        <property name="concurrentConsumers" value="${activemq.default.concurrent.consumers}"/>
+        <property name="maxConcurrentConsumers" value="${activemq.default.max.concurrent.consumers}"/>
+        <property name="receiveTimeout" value="${activemq.default.receive.timeout}"/>
+        <property name="idleTaskExecutionLimit" value="${activemq.default.idle.task.execution.limit}"/>
+        <property name="idleConsumerLimit" value="${activemq.default.idle.consumer.limit}"/>
         <property name="sessionTransacted" value="true"/>
     </bean>
 </beans>
