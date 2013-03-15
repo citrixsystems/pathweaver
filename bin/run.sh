@@ -8,6 +8,6 @@ home=`cd "$bin/..";pwd`
 pushd .
 cd $home
 
-java -jar server/target/pathweaver-1.1.0-SNAPSHOT.jar start
+java -jar controller/controller-server/target/pathweaver-1.1.0-SNAPSHOT.jar   start
 
 popd

@@ -22,7 +22,7 @@ http://wiki.daylight.org/Pathweaver
 
     * Create a MySQL database named 'loadbalancing'. 
     
-    * Optionally create another database called 'loadbalancingadapter' if your adapter extends the default LoadBalancerAdapterBase class (instead of simply implementing the LoadBalancerAdapter interface). See the null (fake) adapter as an example for an adapter that uses the default base implementation.
+    * Optionally create another database called 'loadbalancingplugin' if your plugin extends the default LoadBalancerPluginBase class (instead of simply implementing the LoadBalancerPlugin interface). See the null (fake) plugin as an example for an plugin that uses the default base implementation.
 
 5. Glassfish == 3.0.1 (Optional as Pathweaver comes with an embedded jetty server)
 
@@ -46,7 +46,7 @@ http://wiki.daylight.org/Pathweaver
     Make sure you update /etc/daylight/pathweaver/public-api.conf with:
     
       * your database username/password.
-      * If you are not using null (fake) adapter which is the default one configured, choose another adapter.
+      * If you are not using null (fake) plugin which is the default one configured, choose another plugin.
     
 
 3. Start pathweaver:
@@ -61,9 +61,9 @@ http://wiki.daylight.org/Pathweaver
 
    * Seed the 'loadbalancing' database with some fake data. A sample for testing is here: pathweaver/core-api/core-public-web/src/deb/contrib/db/ directory.
    
-   * If your adapter is relying on the default strategy for managing its devices (extending LoadBalancerAdapterBase), also seed the 'loadbalancingadapter' database with some fake data (your vips, your devices, etc.). A sample for testing used by the netscaler adapter can be found here: ./core-adapters/core-netscaler-adapter/src/main/resources/core-netscaler-adapter-seed.sql
+   * If your plugin is relying on the default strategy for managing its devices (extending LoadBalancerPluginBase), also seed the 'loadbalancingplugin' database with some fake data (your vips, your devices, etc.). A sample for testing used by the netscaler plugin can be found here: ./core-plugins/core-netscaler-plugin/src/main/resources/core-netscaler-plugin-seed.sql
    
-   You should modify the SQL data in these files to match your deployment details. For the 'loadbalancingadapter' DB, the passwords of your hosts (loadbalancing devices) are stored in an encrypted form in your 'adapter_host' table. You can use the 'cryptotool.sh to encrypt a password and store in the database using the following command:
+   You should modify the SQL data in these files to match your deployment details. For the 'loadbalancingplugin' DB, the passwords of your hosts (loadbalancing devices) are stored in an encrypted form in your 'plugin_host' table. You can use the 'cryptotool.sh to encrypt a password and store in the database using the following command:
    
        bin/cryptotool.sh -enc <password_in_clear>
     

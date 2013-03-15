@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       http://cxf.apache.org/jaxrs
+       http://cxf.apache.org/schemas/jaxrs.xsd">
+
+    <!--<import resource="classpath:api-context.xml" />-->
+
+    <jaxrs:server id="PathweaverPublic" address="/" staticSubresourceResolution="false">
+        <jaxrs:serviceFactories>
+            <ref bean="PathweaverPublicImplFactory"/>
+        </jaxrs:serviceFactories>
+        <jaxrs:extensionMappings>
+            <entry key="xml" value="application/xml"/>
+            <entry key="json" value="application/json"/>
+        </jaxrs:extensionMappings>
+        <jaxrs:providers>
+            <ref bean="jsonProvider"/>
+            <!--<ref bean="atomProvider"/>-->
+        </jaxrs:providers>
+    </jaxrs:server>
+
+    <bean id="PathweaverPublicImplFactory" class="org.apache.cxf.jaxrs.spring.SpringResourceFactory">
+        <property name="beanId" value="PathweaverPublicImpl"/>
+    </bean>
+
+
+    <bean id="PathweaverPublicImpl" class="org.daylight.pathweaver.api.resource.RootResource" scope="request"/>
+</beans>

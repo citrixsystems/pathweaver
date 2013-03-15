@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema elementFormDefault="qualified"
+            targetNamespace="http://docs.daylight.org/pathweaver/api/v1.1"
+            xmlns:tns="http://docs.daylight.org/pathweaver/api/v1.1"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+            jaxb:version="2.1"
+            xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+            jaxb:extensionBindingPrefixes="xjc">
+
+
+    <xsd:element name="serviceschain">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="service" type="tns:service" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:complexType name="service">
+        <xsd:attribute name="name" type="xsd:int"/>
+        <xsd:attribute name="type" type="xsd:string"/>
+        <xsd:anyAttribute namespace="##other" processContents="strict"/>
+    </xsd:complexType>
+</xsd:schema>

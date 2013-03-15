@@ -1,7 +1,7 @@
 drop database loadbalancing;
-drop database loadbalancingadapter;
+drop database loadbalancingplugin;
 drop database helios_loadbalancing;
 
 create database loadbalancing;
-create database loadbalancingadapter;
+create database loadbalancingplugin;
 create database helios_loadbalancing;
