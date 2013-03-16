@@ -12,12 +12,4 @@
     <artifactId>services-firewall-data-model</artifactId>
     <name>Daylight :: Pathweaver :: Services :: Firewall :: Data Model</name>
     <packaging>jar</packaging>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-        </dependency>
-    </dependencies>
-
 </project>

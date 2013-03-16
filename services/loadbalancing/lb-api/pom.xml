@@ -17,11 +17,6 @@
         <!--Internal Dependencies-->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>services-loadbalancing-common</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
             <artifactId>services-loadbalancing-data-model</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -33,12 +28,6 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>services-loadbalancing-plugin-interface</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>services-utils</artifactId>
             <version>${project.version}</version>
         </dependency>
 

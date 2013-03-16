@@ -16,10 +16,6 @@ public class PluginContextLoaderListener extends ContextLoaderListener {
         List<String> contexts = new ArrayList<String>();
         contexts.addAll(Arrays.asList(wac.getConfigLocations()));
 
-        //List<String>  commonContexts = PluginConfiguration.getCommonContexts();
-        //commonContexts = PluginConfiguration.classpathify(commonContexts);
-        //contexts.addAll(commonContexts);
-
         String extensionName = PluginConfiguration.getExtensionPrefix();
         String pluginName = PluginConfiguration.getPluginPrefix();
         if (StringUtils.isEmpty(extensionName)) {

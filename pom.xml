@@ -23,7 +23,7 @@
         <jetty.version>7.2.2.v20101205</jetty.version>
         <spring.version>3.0.4.RELEASE</spring.version>
         <cxf.version>2.3.1</cxf.version>
-        <slf4j-log4j12.version>1.6.0</slf4j-log4j12.version>
+        <slf4j.version>1.6.0</slf4j.version>
         <mockito.version>1.8.5</mockito.version>
         <camel.version>2.5.0</camel.version>
         <javaee.version>7.0-72</javaee.version>
@@ -89,13 +89,13 @@
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-log4j12</artifactId>
-                <version>1.6.0</version>
+                <version>${slf4j.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
-                <version>1.6.0</version>
+                <version>${slf4j.version}</version>
             </dependency>
 
             <dependency>
@@ -523,12 +523,7 @@
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
-                <version>1.6.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-log4j12</artifactId>
-                <version>1.6.0</version>
+                <version>${slf4j.version}</version>
             </dependency>
             <dependency>
                 <groupId>quartz</groupId>

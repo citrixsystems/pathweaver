@@ -12,7 +12,4 @@
     <name>Daylight :: Pathweaver :: Services :: Utils </name>
     <artifactId>services-utils</artifactId>
     <packaging>jar</packaging>
-
-
-
 </project>

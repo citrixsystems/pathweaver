@@ -25,26 +25,6 @@
             <artifactId>services-loadbalancing-api</artifactId>
             <version>${project.version}</version>
         </dependency>
-
-
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>services-loadbalancing-data-model</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>services-loadbalancing-persistence</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>1.4</version>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
 
     <build>
