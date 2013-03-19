@@ -16,7 +16,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.daylight.pathweaver</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>services-utils</artifactId>
             <version>${project.version}</version>
         </dependency>
