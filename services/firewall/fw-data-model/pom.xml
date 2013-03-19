@@ -2,14 +2,73 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>org.daylight.pathweaver</groupId>
         <artifactId>pathweaver-services-firewall</artifactId>
         <version>${project.version}</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>services-firewall-data-model</artifactId>
     <name>Daylight :: Pathweaver :: Services :: Firewall :: Data Model</name>
-    <packaging>jar</packaging>
+    <artifactId>services-firewall-data-model</artifactId>
+
+    <dependencies>
+
+        <!-- Internal Project Dependencies -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>services-firewall-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+    <!--
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxb2-maven-plugin</artifactId>
+                <version>1.3</version>
+                <executions>
+                     <execution>
+                        <id>generate-core-api-sources</id>
+                        <configuration>
+                            <staleFile>target/coreApi.staleFile</staleFile>
+                            <extension>true</extension>
+                            <schemaDirectory>
+                                ${basedir}/src/main/resources/META-INF/xsd
+                            </schemaDirectory>
+                            <clearOutputDir>false</clearOutputDir>
+                            <schemaFiles>CoreApi.xsd</schemaFiles>
+                            <packageName>org.daylight.pathweaver.core.api.v1</packageName>
+                            <bindingDirectory>src/main/resources/META-INF/xsd</bindingDirectory>
+                            <bindingFiles>IpVersionBinding.xjb</bindingFiles>
+                        </configuration>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>generate-core-exception-sources</id>
+                        <configuration>
+                            <staleFile>target/coreException.staleFile</staleFile>
+                            <extension>true</extension>
+                            <schemaDirectory>
+                                ${basedir}/src/main/resources/META-INF/xsd
+                            </schemaDirectory>
+                            <clearOutputDir>false</clearOutputDir>
+                            <schemaFiles>CoreExceptions.xsd</schemaFiles>
+                            <packageName>org.daylight.pathweaver.core.api.v1.exceptions</packageName>
+                        </configuration>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    -->
 </project>

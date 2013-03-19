@@ -2,38 +2,27 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <artifactId>pathweaver-services-loadbalancing</artifactId>
         <groupId>org.daylight.pathweaver</groupId>
         <version>${project.version}</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
 
 
     <name>Daylight :: Pathweaver :: Services :: LoadBalancing :: Package </name>
     <artifactId>pathweaver-loadbalancing-service</artifactId>
 
-
-    <properties>
-        <project.groupId>org.daylight.pathweaver</project.groupId>
-        <project.version>1.1.0-SNAPSHOT</project.version>
-    </properties>
-
     <dependencies>
+
+        <!-- Internal Project Dependencies -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>services-loadbalancing-api</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

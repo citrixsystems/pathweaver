@@ -2,19 +2,21 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <artifactId>pathweaver-controller</artifactId>
         <groupId>org.daylight.pathweaver</groupId>
         <version>${project.version}</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
-
 
     <name>Daylight :: Pathweaver :: Controller :: Server </name>
     <artifactId>pathweaver-controller-server</artifactId>
 
-
     <dependencies>
+
+        <!-- Internal Project Dependencies -->
         <dependency>
             <groupId>org.daylight.pathweaver</groupId>
             <artifactId>pathweaver-controller-war</artifactId>
@@ -22,29 +24,17 @@
             <type>war</type>
         </dependency>
 
+        <!-- External Project Dependencies -->
         <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-server</artifactId>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
         </dependency>
 
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-webapp</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-servlet</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-        </dependency>
-
     </dependencies>
-
-
 
     <build>
         <finalName>${bundle.name}</finalName>
@@ -72,4 +62,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>

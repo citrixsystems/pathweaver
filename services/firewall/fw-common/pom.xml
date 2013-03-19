@@ -6,13 +6,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>pathweaver-services-loadbalancing</artifactId>
         <groupId>org.daylight.pathweaver</groupId>
+        <artifactId>pathweaver-services-firewall</artifactId>
         <version>${project.version}</version>
     </parent>
 
-    <name>Daylight :: Pathweaver :: Services :: LoadBalancing :: Common </name>
-    <artifactId>services-loadbalancing-common</artifactId>
+    <name>Daylight :: Pathweaver :: Services :: Firewall :: Common </name>
+    <artifactId>services-firewall-common</artifactId>
 
 
     <dependencies>
