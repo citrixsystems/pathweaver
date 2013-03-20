@@ -10,7 +10,7 @@ http://wiki.daylight.org/Pathweaver
 ----------------
 1. Java >= 1.5  (note: Java 1.7 seems to have a compatibility issue with JAXB, so until we fix this, better to be avoided).
 
-2. Apache Maven == 2.2.1
+2. Apache Maven >= 2.2.1
 
 3. Apache ActiveMQ == 5.5.0
 
@@ -88,7 +88,15 @@ Alternative to the step 3 above, if you want to use an Application Server like G
 
     cp pathweaver/core-api/core-public-web/target/core-public-web-1.1.0-SNAPSHOT.war /glassfish/glassfish/domains/domain1/autodeploy
 
+    connect to glassfish web admin console (e.g. http://localhost:4848) and then:
+      - On the left hand menu choose the Applications node
+      - Select the pathweaver application
+      - Edit the application to specify the application's "Context Root" (e.g. /v1.1 )
+      - Check the "Enabled" checkbox for Status.
+      - Save the configuration
+
+Now you can access the Pathweaver REST API eg. do a GET on [http://localhost:8080/v1.1/1000/loadbalancers](http://localhost:8080/v1.1/1000/loadbalancers)
+where 1000 is a tenant_id.
 
 
 For more information about daylight, go to [daylight.org](http://daylight.org)
-
