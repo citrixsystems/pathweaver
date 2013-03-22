@@ -45,9 +45,9 @@
         <javassist.version>	3.17.1-GA</javassist.version>
         <jersey-client.version>1.17.1</jersey-client.version>
         <jetty.version>8.1.10.v20130312</jetty.version>
-        <joda-time.version>1.6.2</joda-time.version>
-        <junit.version>4.8.1</junit.version>
-        <log4j.version>1.2.16</log4j.version>
+        <joda-time.version>2.2</joda-time.version>
+        <junit.version>4.11</junit.version>
+        <log4j.version>1.2.17</log4j.version>
         <mysql.version>5.1.6</mysql.version>
         <osgi.version>4.2.0</osgi.version>
         <reflections.version>0.9.5</reflections.version>
