@@ -48,9 +48,9 @@
         <joda-time.version>2.2</joda-time.version>
         <junit.version>4.11</junit.version>
         <log4j.version>1.2.17</log4j.version>
-        <mysql.version>5.1.6</mysql.version>
-        <osgi.version>4.2.0</osgi.version>
-        <reflections.version>0.9.5</reflections.version>
+        <mysql.version>5.1.19</mysql.version>
+        <osgi.version>5.0.0</osgi.version>
+        <reflections.version>0.9.8</reflections.version>
         <slf4j.version>1.6.0</slf4j.version>
         <spring.version>3.0.4.RELEASE</spring.version>
     </properties>
