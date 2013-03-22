@@ -51,8 +51,8 @@
         <mysql.version>5.1.19</mysql.version>
         <osgi.version>5.0.0</osgi.version>
         <reflections.version>0.9.8</reflections.version>
-        <slf4j.version>1.6.0</slf4j.version>
-        <spring.version>3.0.4.RELEASE</spring.version>
+        <slf4j.version>1.7.4</slf4j.version>
+        <spring.version>3.2.2.RELEASE</spring.version>
     </properties>
 
 
